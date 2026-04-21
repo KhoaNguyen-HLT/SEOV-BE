@@ -192,18 +192,18 @@ public class AuthenticationService {
     }
 
 
-    public RoleResponse createPermission(RoleUpdateRequest request){
-        Role role = new Role();
-        role.setName(request.getName());
-        role.setDescription(request.getDescription());
+    public RoleResponse createPermission(PermissionRequest request){
+        Permissions permissions = new Permissions();
+        permissions.setName(request.getName());
+        permissions.setCode(request.getCode());
         // 1. Save
-        Role savedRole = roleRepository.save(role);
+        Permissions savePermission = permissionRepository.save(permissions);
 
         // 2. Convert sang response
         return RoleResponse.builder()
-                .id(savedRole.getId())
-                .name(savedRole.getName())
-                .description(savedRole.getDescription())
+                .id(savePermission.getId())
+                .name(savePermission.getName())
+                .description(savePermission.getCode())
                 .build();
 
     }

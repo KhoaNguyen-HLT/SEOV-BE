@@ -86,7 +86,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/permissions")
-    public ResponseEntity<ApiResponse<RoleResponse>> createPermission(@RequestBody RoleUpdateRequest request) {
+    public ResponseEntity<ApiResponse<RoleResponse>> createPermission(@RequestBody PermissionRequest request) {
         RoleResponse roleResponse =  authenticationService.createPermission(request);
         ApiResponse<RoleResponse> response = ApiResponse.<RoleResponse>builder()
                 .code(200)
