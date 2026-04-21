@@ -64,4 +64,35 @@ public class AuthenticationController {
         return ResponseEntity.ok(response);
     }
 
+
+
+    @GetMapping("/roles")
+    public List<Object> getPermission() {
+        List<Object> result = authenticationService.getPermission();
+        return result;
+
+    }
+
+    @PutMapping("/roles/{id}")
+    public ResponseEntity<ApiResponse<RoleResponse>> updatePermission(@PathVariable Long id, @RequestBody RoleUpdateRequest request) {
+        RoleResponse roleResponse =  authenticationService.updatePermission(id, request);
+        ApiResponse<RoleResponse> response = ApiResponse.<RoleResponse>builder()
+                .code(200)
+                .message("success")
+                .data(roleResponse)
+                .build();
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/roles")
+    public ResponseEntity<ApiResponse<RoleResponse>> createPermission(@RequestBody RoleUpdateRequest request) {
+        RoleResponse roleResponse =  authenticationService.createPermission(request);
+        ApiResponse<RoleResponse> response = ApiResponse.<RoleResponse>builder()
+                .code(200)
+                .message("success")
+                .data(roleResponse)
+                .build();
+        return ResponseEntity.ok(response);
+    }
+
 }
