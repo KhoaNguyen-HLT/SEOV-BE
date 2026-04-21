@@ -2,6 +2,7 @@ package seov.auth.controller;
 
 import org.springframework.web.bind.annotation.*;
 import seov.auth.dto.request.AuthenticationRequest;
+import seov.auth.dto.request.PermissionRequest;
 import seov.auth.dto.request.RoleUpdateRequest;
 import seov.auth.dto.respone.ApiResponse;
 import seov.auth.dto.respone.AuthenticationResponse;
@@ -66,15 +67,15 @@ public class AuthenticationController {
 
 
 
-    @GetMapping("/roles")
+    @GetMapping("/permissions")
     public List<Object> getPermission() {
         List<Object> result = authenticationService.getPermission();
         return result;
 
     }
 
-    @PutMapping("/roles/{id}")
-    public ResponseEntity<ApiResponse<RoleResponse>> updatePermission(@PathVariable Long id, @RequestBody RoleUpdateRequest request) {
+    @PutMapping("/permissions/{id}")
+    public ResponseEntity<ApiResponse<RoleResponse>> updatePermission(@PathVariable Long id, @RequestBody PermissionRequest request) {
         RoleResponse roleResponse =  authenticationService.updatePermission(id, request);
         ApiResponse<RoleResponse> response = ApiResponse.<RoleResponse>builder()
                 .code(200)
@@ -84,7 +85,7 @@ public class AuthenticationController {
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping("/roles")
+    @PostMapping("/permissions")
     public ResponseEntity<ApiResponse<RoleResponse>> createPermission(@RequestBody RoleUpdateRequest request) {
         RoleResponse roleResponse =  authenticationService.createPermission(request);
         ApiResponse<RoleResponse> response = ApiResponse.<RoleResponse>builder()

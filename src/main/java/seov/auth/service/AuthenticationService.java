@@ -5,6 +5,7 @@ import seov.auth.dto.request.AuthenticationRequest;
 import seov.auth.dto.request.PermissionRequest;
 import seov.auth.dto.request.RoleUpdateRequest;
 import seov.auth.dto.respone.RoleResponse;
+import seov.auth.repository.permissionRepository;
 import seov.auth.repository.roleRepository;
 import seov.user.entity.User;
 import seov.user.repository.UserRepository;
@@ -33,7 +34,7 @@ public class AuthenticationService {
     @Autowired
     roleRepository roleRepository;
     @Autowired
-    PermissionRepository permissionRepository;
+    permissionRepository permissionRepository;
     @NonFinal
     static final String SIGNER_KEY  = "63af975db954bc2318eff8b6bc65aa33f7cb6315ea02c6f5924d38bd0a17f0f8fd79ecfafbec11b9279b8e0f737ebc4d623a34489612afbb357f90592f73a959";
 
@@ -171,17 +172,17 @@ public class AuthenticationService {
     }
 
     public List<Object> getPermission() {
-        List<Object> listRole = Collections.singletonList(roleRepository.findAll());
-        return listRole;
+        List<Object> listPermission = Collections.singletonList(permissionRepository.findAll());
+        return listPermission;
     }
 
 
     public RoleResponse updatePermission(Long id, PermissionRequest request){
-        Permissions permission = .findById(id).orElseThrow(() -> new RuntimeException("Role not found"));
+        Permissions permission = permissionRepository.findById(id).orElseThrow(() -> new RuntimeException("Role not found"));
         permission.setName(request.getName());
         permission.setCode(request.getCode());
 
-        roleRepository.save(permission);
+        permissionRepository.save(permission);
 
         return RoleResponse.builder()
                 .id(permission.getId())
