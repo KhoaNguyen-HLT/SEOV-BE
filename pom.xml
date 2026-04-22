@@ -12,7 +12,7 @@
 	</parent>
 	<groupId>com.seov</groupId>
 	<artifactId>seov-be</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>001</version>
 	<name>seov</name>
 	<description>seov-be</description>
 	<properties>

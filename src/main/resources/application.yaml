@@ -16,7 +16,8 @@ server:
     show-sql: true
 spring:
   datasource:
-    url: "jdbc:mysql://localhost:3306/identity_service"
+#    url: "jdbc:mysql://localhost:3306/identity_service"
+    url: "jdbc:mysql://host.docker.internal:3306/identity_service"
     driverClassName: "com.mysql.cj.jdbc.Driver"
     username: root
     password: Khoa@1105
