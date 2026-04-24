@@ -1,4 +1,4 @@
-package seov.andon.dto.respon;
+package seov.se_app.andon.dto.respon;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
