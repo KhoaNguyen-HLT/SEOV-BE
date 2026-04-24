@@ -5,15 +5,23 @@ server:
 
 spring:
   datasource:
-    url: "jdbc:mariadb://host.docker.internal:3306/seovdb"
+    jdbc-url: "jdbc:mariadb://localhost:3306/seovdb"
+#    jdbc-url: "jdbc:mariadb://host.docker.internal:3306/seovdb"
     driver-class-name: org.mariadb.jdbc.Driver
     username: seov_user
     password: seov2026
 
-  jpa:
-    hibernate:
-      ddl-auto: update
-    show-sql: true
+#  jpa:
+#    hibernate:
+#      ddl-auto: update
+#    show-sql: true
+
+#   👉 SECONDARY DB (SQL Server)
+  datasource-secondary:
+    jdbc-url: jdbc:sqlserver://172.17.47.178:1433;databaseName=ANDON_v2;encrypt=true;trustServerCertificate=true
+    username: sa
+    password: Admin@123
+    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
 
 
 
