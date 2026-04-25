@@ -6,18 +6,18 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class andonDataRequest {
     private String siteCode;
-    private String LineName;
-    private String Description;
-    private String ErrorStage;
-    private String Team;
+    private String lineName;
+    private String description;
+    private String errorStage;
+    private String team;
     private String userCode;
+    private String status;
     private LocalDate datetime;
     private LocalDate created_at;
     private LocalDate updated_at;

@@ -8,10 +8,14 @@ import seov.se_app.andon.dto.respon.andonDataRespone;
 import seov.se_app.andon.dto.respon.getLinesRespone;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
+
 import org.springframework.jdbc.core.JdbcTemplate;
 import seov.se_app.andon.entity.andondata;
 import seov.se_app.andon.repository.andonRepository;
+import seov.se_app.common.ApiResponse;
 
 @Service
 public class AndonService {
@@ -21,7 +25,6 @@ public class AndonService {
     private SimpMessagingTemplate messagingTemplate;
     @Autowired
     private JdbcTemplate jdbcTemplate;
-    LocalDate now = LocalDate.now();
     @Autowired
     private andonRepository andonRepository;
 
@@ -42,6 +45,7 @@ public class AndonService {
     }
 
     public andondata callgroup(andonDataRequest request){
+        LocalDateTime now = LocalDateTime.now();
         andondata andondata = new andondata();
         andondata.setSiteCode(request.getSiteCode());
         andondata.setLineName(request.getLineName());
@@ -52,7 +56,6 @@ public class AndonService {
         andondata.setCreated_at(now);
         andondata.setUpdated_at(now);
         andondata andondata1 = andonRepository.save(andondata);
-
     return andondata1;
     }
 

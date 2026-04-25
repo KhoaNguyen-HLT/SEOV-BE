@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import seov.auth.entity.Role;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Entity
@@ -22,14 +23,16 @@ public class andondata {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String siteCode;
-    private String LineName;
-    private String Description;
-    private String ErrorStage;
-    private String Team;
+    private String lineName;
+    private String description;
+    private String errorStage;
+    private String team;
     private String userCode;
-    private LocalDate datetime;
-    private LocalDate created_at;
-    private LocalDate updated_at;
+    private String status;
+    private String flag;
+    private LocalDateTime datetime;
+    private LocalDateTime created_at;
+    private LocalDateTime updated_at;
 
 
 }
