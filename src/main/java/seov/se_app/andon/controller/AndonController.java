@@ -49,4 +49,27 @@ public class AndonController {
         }
         }
 
+    @PutMapping("/updateProcessingStatus")
+    ResponseEntity<ApiResponse<andondata>> updateProcessingStatus(@RequestBody andonDataRequest request) {
+        try {
+            andondata data = andonService.callgroup(request);
+
+            return ResponseEntity.ok(
+                    ApiResponse.<andondata>builder()
+                            .code(200)
+                            .message("success")
+                            .data(data)
+                            .build()
+            );
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(
+                    ApiResponse.<andondata>builder()
+                            .code(500)
+                            .message("error")
+                            .data(null)
+                            .build()
+            );
+        }
+    }
+
 }
