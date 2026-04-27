@@ -49,4 +49,56 @@ public class AndonController {
         }
         }
 
+
+    @PutMapping("/updateProcessingStatus/{id}")
+    ResponseEntity<ApiResponse<andondata>> updateProcessingStatus(@PathVariable Long id) {
+        try {
+            andondata data = andonService.updateProcessingStatus(id);
+
+            return ResponseEntity.ok(
+                    ApiResponse.<andondata>builder()
+                            .code(200)
+                            .message("success")
+                            .data(data)
+                            .build()
+            );
+
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(
+                    ApiResponse.<andondata>builder()
+                            .code(500)
+                            .message("error")
+                            .data(null)
+                            .build()
+            );
+        }
+    }
+
+    @PutMapping("/updateDoneStatus/{id}")
+    ResponseEntity<ApiResponse<andondata>> updateDoneStatus(@PathVariable Long id) {
+        try {
+            andondata data = andonService.updateDoneStatus(id);
+
+            return ResponseEntity.ok(
+                    ApiResponse.<andondata>builder()
+                            .code(200)
+                            .message("success")
+                            .data(data)
+                            .build()
+            );
+
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(
+                    ApiResponse.<andondata>builder()
+                            .code(500)
+                            .message("error")
+                            .data(null)
+                            .build()
+            );
+        }
+    }
+
+
+
+
 }

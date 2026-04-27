@@ -3,21 +3,21 @@ server:
   servlet:
     context-path: /seov
 
-#spring:
-#  datasource:
-#    jdbc-url: "jdbc:mariadb://localhost:3306/seovdb"
-##    jdbc-url: "jdbc:mariadb://host.docker.internal:3306/seovdb"
-#    driver-class-name: org.mariadb.jdbc.Driver
-#    username: seov_user
-#    password: seov2026
-
-#    ------------------------------------------
 spring:
   datasource:
-    jdbc-url: "jdbc:mariadb://localhost:3306/identity_service"
+    jdbc-url: "jdbc:mariadb://localhost:3306/seovdb"
+#    jdbc-url: "jdbc:mariadb://host.docker.internal:3306/seovdb"
     driver-class-name: org.mariadb.jdbc.Driver
-    username: root
-    password: Khoa@1105
+    username: seov_user
+    password: seov2026
+
+#    ------------------------------------------
+#spring:
+#  datasource:
+#    jdbc-url: "jdbc:mariadb://localhost:3306/identity_service"
+#    driver-class-name: org.mariadb.jdbc.Driver
+#    username: root
+#    password: Khoa@1105
   jpa:
     hibernate:
       ddl-auto: update

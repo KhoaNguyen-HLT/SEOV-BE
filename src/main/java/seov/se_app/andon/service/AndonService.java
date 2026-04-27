@@ -71,7 +71,17 @@ public class AndonService {
 
         data.setStatus("PROCESSING");
         data.setProcessingAt(LocalDateTime.now());
+        return data; // JPA sẽ tự update vì dùng transection.
+    }
 
+    @Transactional
+    public andondata updateDoneStatus(Long id){
+
+        andondata data = andonRepository.findById(id)
+                .orElseThrow();
+
+        data.setStatus("OK");
+        data.setCompletedAt(LocalDateTime.now());
         return data; // JPA sẽ tự update vì dùng transection.
     }
 
