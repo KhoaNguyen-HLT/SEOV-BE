@@ -1,9 +1,11 @@
 package seov.se_app.andon.service;
 
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import seov.se_app.andon.dto.request.andonDataRequest;
+import seov.se_app.andon.dto.request.andonUpdateRequest;
 import seov.se_app.andon.dto.respon.andonDataRespone;
 import seov.se_app.andon.dto.respon.getLinesRespone;
 
@@ -53,10 +55,24 @@ public class AndonService {
         andondata.setUserCode(request.getUserCode());
         andondata.setTeam(request.getTeam());
         andondata.setDescription(request.getDescription());
+        andondata.setStatus(request.getStatus());
         andondata.setCreated_at(now);
         andondata.setUpdated_at(now);
         andondata andondata1 = andonRepository.save(andondata);
     return andondata1;
+    }
+
+
+    @Transactional
+    public andondata updateProcessingStatus(Long id){
+
+        andondata data = andonRepository.findById(id)
+                .orElseThrow();
+
+        data.setStatus("PROCESSING");
+        data.setProcessingAt(LocalDateTime.now());
+
+        return data; // JPA sẽ tự update vì dùng transection.
     }
 
 

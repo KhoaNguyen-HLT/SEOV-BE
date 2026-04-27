@@ -30,8 +30,9 @@ public class andondata {
     private String userCode;
     private String status;
     private String flag;
-    private LocalDateTime datetime;
     private LocalDateTime created_at;
+    private LocalDateTime processingAt;
+    private LocalDateTime completedAt;
     private LocalDateTime updated_at;
 
 

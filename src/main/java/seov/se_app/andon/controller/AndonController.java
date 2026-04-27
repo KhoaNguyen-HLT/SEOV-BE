@@ -2,6 +2,7 @@ package seov.se_app.andon.controller;
 
 import org.springframework.http.ResponseEntity;
 import seov.auth.dto.respone.RoleResponse;
+import seov.se_app.andon.dto.request.andonUpdateRequest;
 import seov.se_app.andon.dto.respon.andonDataRespone;
 import seov.se_app.andon.dto.request.andonDataRequest;
 import seov.se_app.andon.dto.respon.getLinesRespone;
@@ -48,5 +49,29 @@ public class AndonController {
             );
         }
         }
+
+    @PutMapping("/updateProcessingStatus/{id}")
+    ResponseEntity<ApiResponse<andondata>> updateProcessingStatus(@PathVariable Long id) {
+        try {
+            andondata data = andonService.updateProcessingStatus(id);
+
+            return ResponseEntity.ok(
+                    ApiResponse.<andondata>builder()
+                            .code(200)
+                            .message("success")
+                            .data(data)
+                            .build()
+            );
+
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(
+                    ApiResponse.<andondata>builder()
+                            .code(500)
+                            .message("error")
+                            .data(null)
+                            .build()
+            );
+        }
+    }
 
 }
