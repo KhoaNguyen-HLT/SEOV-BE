@@ -14,6 +14,7 @@ import java.util.Set;
 
 @Entity
 @Data
+@Table(name = "andondata")
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -26,7 +27,8 @@ public class andondata {
     private String lineName;
     private String description;
     private String errorStage;
-    private String team;
+    @Column(name = "team")
+    private Integer team;
     private String userCode;
     private String status;
     private String flag;
@@ -34,6 +36,15 @@ public class andondata {
     private LocalDateTime processingAt;
     private LocalDateTime completedAt;
     private LocalDateTime updated_at;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(
+            name = "team",
+            referencedColumnName = "group_code",
+            insertable = false,
+            updatable = false
+    )
+    private andonGroup group;
 
 
 }

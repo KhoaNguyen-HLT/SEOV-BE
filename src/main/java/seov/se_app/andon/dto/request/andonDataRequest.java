@@ -15,7 +15,7 @@ public class andonDataRequest {
     private String lineName;
     private String description;
     private String errorStage;
-    private String team;
+    private Integer team;
     private String userCode;
     private String status;
     private LocalDate datetime;

@@ -25,13 +25,14 @@ public class AndonController {
         return andonService.getLines();
     }
 
-    @PostMapping("/callgroup")
-    ResponseEntity<ApiResponse<andondata>> getLines(@RequestBody andonDataRequest request) {
+
+    @GetMapping("/getDataPending/{siteCode}")
+    ResponseEntity<ApiResponse<List<andonDataRespone>>> getDataPending(@PathVariable String siteCode) {
         try {
-            andondata data = andonService.callgroup(request);
+            List<andonDataRespone> data = andonService.getDataPending(siteCode);
 
             return ResponseEntity.ok(
-                    ApiResponse.<andondata>builder()
+                    ApiResponse.<List<andonDataRespone>>builder()
                             .code(200)
                             .message("success")
                             .data(data)
@@ -40,7 +41,33 @@ public class AndonController {
 
         } catch (Exception e) {
             return ResponseEntity.status(500).body(
-                    ApiResponse.<andondata>builder()
+                    ApiResponse.<List<andonDataRespone>>builder()
+                            .code(500)
+                            .message("error")
+                            .data(null)
+                            .build()
+            );
+        }
+    }
+
+
+
+    @PostMapping("/callgroup")
+    ResponseEntity<ApiResponse<andonDataRespone>> callgroup(@RequestBody andonDataRequest request) {
+        try {
+            andonDataRespone data = andonService.callgroup(request);
+
+            return ResponseEntity.ok(
+                    ApiResponse.<andonDataRespone>builder()
+                            .code(200)
+                            .message("success")
+                            .data(data)
+                            .build()
+            );
+
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(
+                    ApiResponse.<andonDataRespone>builder()
                             .code(500)
                             .message("error")
                             .data(null)
