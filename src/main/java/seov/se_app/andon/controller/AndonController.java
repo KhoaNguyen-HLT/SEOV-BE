@@ -2,6 +2,9 @@ package seov.se_app.andon.controller;
 
 import org.springframework.http.ResponseEntity;
 import seov.auth.dto.respone.RoleResponse;
+import seov.se_app.andon.dto.request.andonChangeGroupRequest;
+import seov.se_app.andon.dto.request.andonGetDataRequest;
+import seov.se_app.andon.dto.request.andonHandlingDetailRequest;
 import seov.se_app.andon.dto.respon.andonDataRespone;
 import seov.se_app.andon.dto.request.andonDataRequest;
 import seov.se_app.andon.dto.respon.getLinesRespone;
@@ -22,8 +25,17 @@ public class AndonController {
 
     @GetMapping("/getLines")
     List<getLinesRespone> getLines() {
+
         return andonService.getLines();
     }
+
+
+    @PostMapping("/andonGetData")
+    List<Map<String, Object>> andonGetData(@RequestBody andonGetDataRequest request) {
+
+        return andonService.andonGetData(request);
+    }
+
 
 
     @GetMapping("/getDataPending/{siteCode}")
@@ -102,9 +114,9 @@ public class AndonController {
     }
 
     @PutMapping("/updateDoneStatus/{id}")
-    ResponseEntity<ApiResponse<andondata>> updateDoneStatus(@PathVariable Long id) {
+    ResponseEntity<ApiResponse<andondata>> updateDoneStatus(@PathVariable Long id, @RequestBody andonHandlingDetailRequest request) {
         try {
-            andondata data = andonService.updateDoneStatus(id);
+            andondata data = andonService.updateDoneStatus(id, request);
 
             return ResponseEntity.ok(
                     ApiResponse.<andondata>builder()
@@ -117,6 +129,30 @@ public class AndonController {
         } catch (Exception e) {
             return ResponseEntity.status(500).body(
                     ApiResponse.<andondata>builder()
+                            .code(500)
+                            .message("error")
+                            .data(null)
+                            .build()
+            );
+        }
+    }
+
+    @PutMapping("/changeGroup")
+    ResponseEntity<ApiResponse<andonDataRespone>> changeGroup(@RequestBody andonChangeGroupRequest request) {
+        try {
+            andonDataRespone data = andonService.changeGroup(request);
+
+            return ResponseEntity.ok(
+                    ApiResponse.<andonDataRespone>builder()
+                            .code(200)
+                            .message("success")
+                            .data(data)
+                            .build()
+            );
+
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(
+                    ApiResponse.<andonDataRespone>builder()
                             .code(500)
                             .message("error")
                             .data(null)

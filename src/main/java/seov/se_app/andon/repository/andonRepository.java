@@ -1,5 +1,6 @@
 package seov.se_app.andon.repository;
 
+import org.antlr.v4.runtime.atn.SemanticContext;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -39,4 +40,7 @@ public interface andonRepository extends JpaRepository<andondata, Long> {
     List<Map<String, Object>> findDataPendingByLine(@Param("siteCode") String siteCode);
 
 
+    @Query(value = " select A.*, B.`method`, B.old_device , B.new_device , B.old_status , B.replace_reason  from andondata A left join andon_handling_detail B  on \n" +
+            "A.id = B.request_id where A.site_code LIKE CONCAT('%', :siteCode, '%')  and A.created_at between :fromDate  and :toDate " , nativeQuery = true)
+    List<Map<String, Object>> andonGetData(String siteCode, String fromDate, String toDate);
 }
