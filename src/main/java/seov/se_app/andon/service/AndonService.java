@@ -177,8 +177,10 @@ public class AndonService {
         andondata.setTeam(request.getTo_team());
         andondata.setUpdated_at(now);
 
-        andonRepository.save(andondata);
-
+//        andonRepository.save(andondata);
+//        Flush đảm bảo việc save thành công rồi mới gọi lại data.
+        andonRepository.saveAndFlush(andondata);
+        entityManager.refresh(andondata);
         // 4. query lại đúng ID
         andondata data = andonRepository.findWithGroup(request.getId());
 
