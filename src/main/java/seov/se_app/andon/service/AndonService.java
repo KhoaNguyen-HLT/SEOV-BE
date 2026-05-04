@@ -3,10 +3,14 @@ package seov.se_app.andon.service;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import seov.se_app.andon.dto.request.*;
 import seov.se_app.andon.dto.respon.andonDataRespone;
+import seov.se_app.andon.dto.respon.andonSenRequestRespone;
 import seov.se_app.andon.dto.respon.getLinesRespone;
 
 import java.time.LocalDate;
@@ -25,6 +29,8 @@ import seov.se_app.common.ApiResponse;
 
 @Service
 public class AndonService {
+    @Autowired
+    private JavaMailSender mailSender;
 
     @Autowired
     private EntityManager entityManager;
@@ -63,6 +69,23 @@ public class AndonService {
         List<Map<String, Object>> data = andonRepository.andonGetData(request.getLine(), request.getFromDate(), request.getToDate());
         return data;
     }
+
+    public ResponseEntity<andonSenRequestRespone> sendRequest(String username) {
+        try {
+            SimpleMailMessage message = new SimpleMailMessage();
+            message.setTo("khoa-nv@gr.sei.co.jp");
+            message.setSubject("khoatest");
+            message.setText("khoatest");
+
+            mailSender.send(message);
+
+            return ResponseEntity.ok(new andonSenRequestRespone(200, "Send email success", null));
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body( new andonSenRequestRespone(500, "Send email failed", e.getMessage()));
+        }
+    }
+
+
 
 
 

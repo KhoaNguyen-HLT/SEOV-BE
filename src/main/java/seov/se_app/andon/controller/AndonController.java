@@ -7,6 +7,7 @@ import seov.se_app.andon.dto.request.andonGetDataRequest;
 import seov.se_app.andon.dto.request.andonHandlingDetailRequest;
 import seov.se_app.andon.dto.respon.andonDataRespone;
 import seov.se_app.andon.dto.request.andonDataRequest;
+import seov.se_app.andon.dto.respon.andonSenRequestRespone;
 import seov.se_app.andon.dto.respon.getLinesRespone;
 import seov.se_app.andon.entity.andondata;
 import seov.se_app.andon.service.AndonService;
@@ -34,6 +35,12 @@ public class AndonController {
     List<Map<String, Object>> andonGetData(@RequestBody andonGetDataRequest request) {
 
         return andonService.andonGetData(request);
+    }
+
+
+    @PostMapping("/sendRequest/{id}")
+    ResponseEntity<andonSenRequestRespone> sendRequest(@PathVariable String id) {
+       return andonService.sendRequest(id);
     }
 
 
@@ -160,6 +167,8 @@ public class AndonController {
             );
         }
     }
+
+
 
 
 
