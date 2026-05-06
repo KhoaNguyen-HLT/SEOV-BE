@@ -1,7 +1,6 @@
 package seov.se_app.andon.controller;
 
 import org.springframework.http.ResponseEntity;
-import seov.auth.dto.respone.RoleResponse;
 import seov.se_app.andon.dto.request.andonChangeGroupRequest;
 import seov.se_app.andon.dto.request.andonGetDataRequest;
 import seov.se_app.andon.dto.request.andonHandlingDetailRequest;
@@ -13,7 +12,7 @@ import seov.se_app.andon.entity.andondata;
 import seov.se_app.andon.service.AndonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import seov.se_app.common.ApiResponse;
+import seov.se_app.common.dto.response.ApiResponse;
 
 import java.util.List;
 import java.util.Map;

@@ -1,4 +1,4 @@
-package seov.se_app.common;
+package seov.se_app.common.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

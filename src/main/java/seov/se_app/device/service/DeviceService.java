@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import seov.se_app.device.dto.request.DeviceCreateRequest;
+import seov.se_app.device.dto.request.DeviceGetRequest;
+import seov.se_app.device.dto.request.DeviceUpdateRequest;
 import seov.se_app.device.entity.Device;
 import seov.se_app.device.mapper.DeviceMapper;
 import seov.se_app.device.repository.DeviceRepository;
@@ -27,12 +29,14 @@ public class DeviceService {
         device.setUpdatedAt(now);
         return deviceRepository.save(device);
     }
-//    public User updateUser(User request){
-//        User userUpate = getUserid(request.getId());
-//       userMapper.updateUser(userUpate, request);
-////        userUpate.setPassword(request.getPassword());
-//        return userRepository.save(userUpate);
-//    }
+    public Device updateDevice(DeviceUpdateRequest request){
+        Device device = deviceRepository.findById(request.getId())
+                .orElseThrow(() -> new RuntimeException("Not found"));
+
+        deviceMapper.updateDevice(request, device);
+
+        return deviceRepository.save(device);
+    }
 //
 //    public void getUser1() {
 //        List<User> list = userRepository.findAll();
@@ -40,8 +44,8 @@ public class DeviceService {
 //    }
 //
 //
-    public List<Device> getDevices(){
-        return deviceRepository.findAll();
+    public List<Device> getDevices(DeviceGetRequest request){
+        return deviceRepository.getDevices(request.getLocation(), request.getFromDate(), request.getToDate());
     }
 //    public User getUserid(Long username){
 //        return userRepository.findAllById(username);
@@ -53,11 +57,12 @@ public class DeviceService {
 //
 //
 //
-//    public User deleteUser(Long userId) {
-//        User user = getUserid(userId);
-//        userRepository.delete(user);
-//        return user;
-//    }
+    public Device deleteDevice(Long id) {
+        Device device = deviceRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Not found"));
+        deviceRepository.delete(device);
+        return device;
+    }
 
 
 
