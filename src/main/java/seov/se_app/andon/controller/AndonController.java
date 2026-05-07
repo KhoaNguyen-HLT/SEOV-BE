@@ -4,10 +4,9 @@ import org.springframework.http.ResponseEntity;
 import seov.se_app.andon.dto.request.andonChangeGroupRequest;
 import seov.se_app.andon.dto.request.andonGetDataRequest;
 import seov.se_app.andon.dto.request.andonHandlingDetailRequest;
-import seov.se_app.andon.dto.respon.andonDataRespone;
+import seov.se_app.andon.dto.respon.*;
 import seov.se_app.andon.dto.request.andonDataRequest;
-import seov.se_app.andon.dto.respon.andonSenRequestRespone;
-import seov.se_app.andon.dto.respon.getLinesRespone;
+import seov.se_app.andon.entity.andonProcessLog;
 import seov.se_app.andon.entity.andondata;
 import seov.se_app.andon.service.AndonService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,24 +44,28 @@ public class AndonController {
 
 
     @GetMapping("/getDataPending/{siteCode}")
-    ResponseEntity<ApiResponse<List<andonDataRespone>>> getDataPending(@PathVariable String siteCode) {
+    ResponseEntity<andonPendingResponse<List<andonDataRespone>>> getDataPending(@PathVariable String siteCode) {
         try {
             List<andonDataRespone> data = andonService.getDataPending(siteCode);
+            List<Map<String, Object>> dataPendingLog =
+                    andonService.getDataDataPendingLog(siteCode);
 
             return ResponseEntity.ok(
-                    ApiResponse.<List<andonDataRespone>>builder()
+                    andonPendingResponse.<List<andonDataRespone>>builder()
                             .code(200)
                             .message("success")
                             .data(data)
+                            .changeGroupData(dataPendingLog)
                             .build()
             );
 
         } catch (Exception e) {
             return ResponseEntity.status(500).body(
-                    ApiResponse.<List<andonDataRespone>>builder()
+                    andonPendingResponse.<List<andonDataRespone>>builder()
                             .code(500)
                             .message("error")
                             .data(null)
+                            .changeGroupData(null)
                             .build()
             );
         }
@@ -144,24 +147,35 @@ public class AndonController {
     }
 
     @PutMapping("/changeGroup")
-    ResponseEntity<ApiResponse<andonDataRespone>> changeGroup(@RequestBody andonChangeGroupRequest request) {
+    ResponseEntity<andonChangeGroupResponse<andonDataRespone>> changeGroup(
+            @RequestBody andonChangeGroupRequest request) {
+
         try {
+
             andonDataRespone data = andonService.changeGroup(request);
 
+            List<Map<String, Object>> dataChangeGroup =
+                    andonService.getChangeGroupData(request);
+
             return ResponseEntity.ok(
-                    ApiResponse.<andonDataRespone>builder()
+                    andonChangeGroupResponse
+                            .<andonDataRespone>builder()
                             .code(200)
                             .message("success")
                             .data(data)
+                            .changeGroupData(dataChangeGroup)
                             .build()
             );
 
         } catch (Exception e) {
+
             return ResponseEntity.status(500).body(
-                    ApiResponse.<andonDataRespone>builder()
+                    andonChangeGroupResponse
+                            .<andonDataRespone>builder()
                             .code(500)
                             .message("error")
                             .data(null)
+                            .changeGroupData(null)
                             .build()
             );
         }

@@ -263,5 +263,18 @@ public class AndonService {
     }
 
 
+    public List<Map<String, Object>> getChangeGroupData(andonChangeGroupRequest request) {
+        List<Map<String, Object>> data =  andonProcessLogRepository.getChangeGroupData((Long) request.getId());
+        return data;
+    }
+
+    public List<Map<String, Object>> getDataDataPendingLog(String siteCode) {
+        List<Map<String, Object>> data = andonRepository.getDataDataPendingLog(siteCode);
+        return data;
+    }
+
+
+
+
 
 }
