@@ -155,7 +155,7 @@ public class AndonController {
             andonDataRespone data = andonService.changeGroup(request);
 
             List<Map<String, Object>> dataChangeGroup =
-                    andonService.getChangeGroupData(request);
+                    andonService.getDataDataPendingLog(data.getSiteCode());
 
             return ResponseEntity.ok(
                     andonChangeGroupResponse

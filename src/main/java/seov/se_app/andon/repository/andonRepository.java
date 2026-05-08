@@ -41,14 +41,43 @@ public interface andonRepository extends JpaRepository<andondata, Long> {
 
 
     @Query(value = """
-            select ROW_NUMBER() OVER (
-                    PARTITION BY request_id\s
-                    ORDER BY created_at
-                ) AS RN ,A.request_id as id, A.description, A.action_type, A.from_user, A.user_name, A.from_team, A.to_team,A.from_team_name, A.to_team_name  , A.status, A.start_time, A.end_time, A.created_at , A.updated_at , A.is_active   from (select A.*, B.name user_name , C.group_name as from_team_name, D.group_name as to_team_name from andon_process_log A
-            left join `user` B on A.from_user = B.username
-            left join andon_group C on A.from_team = C.id\s
-            left join andon_group D on A.to_team  = D.id\s
-            where A.request_id in (select a.id as id  FROM andondata a WHERE a.status != 'OK' AND a.site_code = 2) order by A.created_at ) A
+                    select\s
+            ROW_NUMBER() OVER (
+                PARTITION BY A.request_id\s
+                ORDER BY A.created_at
+            ) AS RN,
+            A.request_id as id,
+            A.description,
+            A.action_type,
+            A.from_user,
+            A.user_name,
+            A.from_team,
+            A.to_team,
+            A.from_team_name,
+            A.to_team_name,
+            A.status,
+            A.start_time,
+            A.end_time,
+            A.created_at,
+            A.updated_at,
+            A.is_active
+        from (
+            select\s
+                A.*,
+                B.name as user_name,
+                C.group_name as from_team_name,
+                D.group_name as to_team_name
+            from andon_process_log A
+            left join user B on A.from_user = B.username
+            left join andon_group C on A.from_team = C.id
+            left join andon_group D on A.to_team = D.id
+            where A.request_id in (
+                select a.id\s
+                from andondata a\s
+                where a.status != 'OK'\s
+                  and a.site_code = :siteCode
+            )
+        ) A
 """, nativeQuery = true)
     List<Map<String, Object>> getDataDataPendingLog(@Param("siteCode") String siteCode);
 
