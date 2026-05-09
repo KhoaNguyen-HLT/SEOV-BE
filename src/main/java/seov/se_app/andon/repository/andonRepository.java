@@ -69,8 +69,8 @@ public interface andonRepository extends JpaRepository<andondata, Long> {
                 D.group_name as to_team_name
             from andon_process_log A
             left join user B on A.from_user = B.username
-            left join andon_group C on A.from_team = C.id
-            left join andon_group D on A.to_team = D.id
+            left join andon_group C on A.from_team = C.group_code
+            left join andon_group D on A.to_team = D.group_code
             where A.request_id in (
                 select a.id\s
                 from andondata a\s

@@ -27,9 +27,9 @@ public interface andonProcessLogRepository extends JpaRepository<andonProcessLog
     LEFT JOIN user B 
         ON A.from_user = B.username
     LEFT JOIN andon_group C 
-        ON A.from_team = C.id
+        ON A.from_team = C.group_code
     LEFT JOIN andon_group D 
-        ON A.to_team = D.id
+        ON A.to_team = D.group_code
     WHERE A.request_id = :id
 """, nativeQuery = true)
     List<Map<String, Object>> getChangeGroupData(@Param("id") Long id);

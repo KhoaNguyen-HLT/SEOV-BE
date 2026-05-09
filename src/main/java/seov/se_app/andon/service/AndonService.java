@@ -231,6 +231,7 @@ public class AndonService {
 
         data.setStatus("PROCESSING");
         data.setProcessingAt(LocalDateTime.now());
+        data.setUpdated_at(LocalDateTime.now());
         return data; // JPA sẽ tự update vì dùng transection.
     }
 
