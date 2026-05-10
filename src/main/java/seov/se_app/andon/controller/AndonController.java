@@ -1,11 +1,8 @@
 package seov.se_app.andon.controller;
 
 import org.springframework.http.ResponseEntity;
-import seov.se_app.andon.dto.request.andonChangeGroupRequest;
-import seov.se_app.andon.dto.request.andonGetDataRequest;
-import seov.se_app.andon.dto.request.andonHandlingDetailRequest;
+import seov.se_app.andon.dto.request.*;
 import seov.se_app.andon.dto.respon.*;
-import seov.se_app.andon.dto.request.andonDataRequest;
 import seov.se_app.andon.entity.andonProcessLog;
 import seov.se_app.andon.entity.andondata;
 import seov.se_app.andon.service.AndonService;
@@ -176,6 +173,33 @@ public class AndonController {
                             .message("error")
                             .data(null)
                             .changeGroupData(null)
+                            .build()
+            );
+        }
+    }
+
+
+//    get dashboardData
+
+    @PostMapping("/andonDashboardData")
+    ResponseEntity<andonDashboardDataRespone<List<Map<String, Object>>>> andonDashboardData(@RequestBody andonGetDashboardData request) {
+        try {
+            List<Map<String, Object>> data = andonService.andonDashboardData(request);
+
+            return ResponseEntity.ok(
+                    andonDashboardDataRespone.<List<Map<String, Object>>>builder()
+                            .code(200)
+                            .message("success")
+                            .data(data)
+                            .build()
+            );
+
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(
+                    andonDashboardDataRespone.<List<Map<String, Object>>>builder()
+                            .code(500)
+                            .message("error")
+                            .data(null)
                             .build()
             );
         }

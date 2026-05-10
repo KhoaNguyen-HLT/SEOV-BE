@@ -275,6 +275,15 @@ public class AndonService {
     }
 
 
+    public List<Map<String, Object>> andonDashboardData(andonGetDashboardData request) {
+        List<Map<String, Object>> data = andonRepository.andonDashboardData();
+        return data;
+    }
+
+
+
+
+
 
 
 
