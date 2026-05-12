@@ -4,6 +4,10 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
+###log###
+!**/seov.log
+!**/seov.log.2026-05-11.0.gz
+
 ### STS ###
 .apt_generated
 .classpath
