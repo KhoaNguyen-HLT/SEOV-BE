@@ -1,6 +1,8 @@
 package seov.se_app.device.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import seov.auth.dto.respone.ApiResponse;
@@ -49,4 +51,17 @@ public class DeviceController {
                 new ApiResponse<>(200, "success", device)
         );
     };
+
+
+    @GetMapping("printData/{location}")
+    public ResponseEntity<byte[]> printData(@PathVariable("location") String location) throws Exception {
+
+        byte[] data = deviceService.printData(location);
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION,
+                        "attachment; filename=form.xlsx")
+                .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                .body(data);
+    }
 }

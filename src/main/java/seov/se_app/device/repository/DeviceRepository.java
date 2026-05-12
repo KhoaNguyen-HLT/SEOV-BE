@@ -21,4 +21,13 @@ public interface DeviceRepository extends JpaRepository<Device, Long> {
             @Param("fromDate") LocalDate fromDate,
             @Param("toDate") LocalDate toDate
     );
+
+
+    @Query("""
+    SELECT d FROM Device d
+    WHERE d.location LIKE CONCAT('%', :location, '%')
+""")
+    List<Device> getDevicesByLocaltion(
+            @Param("location") String location
+    );
 }

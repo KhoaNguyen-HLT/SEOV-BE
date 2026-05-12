@@ -9,6 +9,7 @@ import seov.se_app.device.dto.request.DeviceUpdateRequest;
 import seov.se_app.device.entity.Device;
 import seov.se_app.device.mapper.DeviceMapper;
 import seov.se_app.device.repository.DeviceRepository;
+import seov.se_app.common.service.printExcelData;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -20,6 +21,9 @@ public class DeviceService {
     private DeviceRepository deviceRepository;
     @Autowired
     private DeviceMapper deviceMapper;
+    @Autowired
+    private printExcelData printExcelData;
+
     @Autowired
     private SimpMessagingTemplate messagingTemplate;
     public Device createRequest(DeviceCreateRequest request){
@@ -62,6 +66,14 @@ public class DeviceService {
                 .orElseThrow(() -> new RuntimeException("Not found"));
         deviceRepository.delete(device);
         return device;
+    }
+
+    public byte[] printData(String location) throws Exception {
+        List<Device> devices = deviceRepository.getDevicesByLocaltion(location);
+        if(devices.isEmpty()){
+            throw new RuntimeException("Not found");
+        }
+        return printExcelData.exportExcel(devices);
     }
 
 
