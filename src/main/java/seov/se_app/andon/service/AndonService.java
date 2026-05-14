@@ -13,7 +13,9 @@ import seov.se_app.andon.dto.respon.andonDataRespone;
 import seov.se_app.andon.dto.respon.andonSenRequestRespone;
 import seov.se_app.andon.dto.respon.getLinesRespone;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 
@@ -63,9 +65,20 @@ public class AndonService {
 
 
     public List<Map<String, Object>> andonGetData(andonGetDataRequest request) {
+        DateTimeFormatter formatter =
+                DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
-        List<Map<String, Object>> data = andonRepository.andonGetData(request.getLine(), request.getFromDate(), request.getToDate());
-        return data;
+        LocalDateTime fromDate =
+                LocalDateTime.parse(request.getFromDate(), formatter);
+
+        LocalDateTime toDate =
+                LocalDateTime.parse(request.getToDate(), formatter);
+
+        return andonRepository.andonGetData(
+                request.getLine(),
+                fromDate,
+                toDate
+        );
     }
 
     public ResponseEntity<andonSenRequestRespone> sendRequest(String username) {

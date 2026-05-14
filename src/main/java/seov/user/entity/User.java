@@ -13,6 +13,7 @@ import java.util.Set;
 
 @Entity
 @Data
+@Table(name = "users")
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder

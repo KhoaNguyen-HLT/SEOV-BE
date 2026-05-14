@@ -7,6 +7,8 @@ import org.springframework.data.repository.query.Param;
 import seov.se_app.andon.dto.respon.andonDataRespone;
 import seov.se_app.andon.entity.andondata;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -68,7 +70,7 @@ public interface andonRepository extends JpaRepository<andondata, Long> {
                 C.group_name as from_team_name,
                 D.group_name as to_team_name
             from andon_process_log A
-            left join user B on A.from_user = B.username
+            left join users B on A.from_user = B.username
             left join andon_group C on A.from_team = C.group_code
             left join andon_group D on A.to_team = D.group_code
             where A.request_id in (
@@ -83,9 +85,9 @@ public interface andonRepository extends JpaRepository<andondata, Long> {
 
 
 
-    @Query(value = " select A.*, B.`method`, B.old_device , B.new_device , B.old_status , B.replace_reason  from andondata A left join andon_handling_detail B  on \n" +
-            "A.id = B.request_id where A.site_code LIKE CONCAT('%', :siteCode, '%')  and A.created_at between :fromDate  and :toDate " , nativeQuery = true)
-    List<Map<String, Object>> andonGetData(String siteCode, String fromDate, String toDate);
+    @Query(value = " select A.*, B.method, B.old_device , B.new_device , B.old_status , B.replace_reason  from andondata A left join andon_handling_detail B  on \n" +
+            "A.id = B.request_id where A.site_code LIKE '%' || :siteCode || '%'   and A.created_at between :fromDate  and :toDate " , nativeQuery = true)
+    List<Map<String, Object>> andonGetData(String siteCode, LocalDateTime fromDate, LocalDateTime toDate);
 
 
     @Query(value = " select a.* from andondata a " , nativeQuery = true)
