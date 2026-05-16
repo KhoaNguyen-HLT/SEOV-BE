@@ -37,7 +37,7 @@ public interface andonRepository extends JpaRepository<andondata, Long> {
             LEFT JOIN andon_group b\s
                 ON a.team = b.group_code
             WHERE a.status != 'OK'
-              AND a.site_code =:siteCode
+              AND a.site_code =:siteCode order by a.id;
 """, nativeQuery = true)
     List<Map<String, Object>> findDataPendingByLine(@Param("siteCode") String siteCode);
 

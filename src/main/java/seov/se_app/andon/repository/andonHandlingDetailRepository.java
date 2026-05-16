@@ -7,7 +7,15 @@ import org.springframework.data.repository.query.Param;
 import seov.se_app.andon.entity.andonHandlingDetail;
 
 public interface andonHandlingDetailRepository extends JpaRepository<andonHandlingDetail, Long> {
-    @Query(value = "SELECT EXISTS (SELECT 1 FROM andon_handling_detail WHERE request_id = :id)", nativeQuery = true)
-    Integer existsByRequestId(@Param("id") Long id);
+//    @Query(value = "SELECT EXISTS (SELECT 1 FROM andon_handling_detail WHERE request_id = :id)", nativeQuery = true)
+//    Integer existsByRequestId(@Param("id") Long id);
+    @Query(value = """
+    SELECT EXISTS (
+        SELECT 1
+        FROM andon_handling_detail
+        WHERE request_id = :id
+    )
+    """, nativeQuery = true)
+    Boolean existsByRequestId(@Param("id") Long id);
 
 }

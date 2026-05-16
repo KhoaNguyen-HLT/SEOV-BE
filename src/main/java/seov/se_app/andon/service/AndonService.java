@@ -257,7 +257,7 @@ public class AndonService {
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy Andon"));
 
         // 2. Check duplicate
-        if (andonHandlingDetailRepository.existsByRequestId(id) == 1) {
+        if (andonHandlingDetailRepository.existsByRequestId(id)) {
             throw new RuntimeException("Đã có detail rồi");
         }
         andonHandlingDetail detail = new andonHandlingDetail();
