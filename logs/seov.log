@@ -13920,3 +13920,1145 @@ This generated password is for development use only. Your security configuration
 2026-05-16T15:52:47.657+07:00  INFO 13748 --- [seov] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
 2026-05-16T15:53:00.307+07:00  INFO 23696 --- [seov] [MessageBroker-1] o.s.w.s.c.WebSocketMessageBrokerStats    : WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], sockJsScheduler[pool size = 1, active threads = 1, queued tasks = 0, completed tasks = 0]
 2026-05-16T16:23:00.327+07:00  INFO 23696 --- [seov] [MessageBroker-1] o.s.w.s.c.WebSocketMessageBrokerStats    : WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], sockJsScheduler[pool size = 2, active threads = 1, queued tasks = 0, completed tasks = 1]
+2026-05-17T21:29:56.949+07:00  INFO 17400 --- [seov] [main] seov.SeovApplication                     : Starting SeovApplication using Java 20.0.1 with PID 17400 (D:\KHOAHLT\Seov\seov-be\target\classes started by KHOAHLT in D:\KHOAHLT\Seov\seov-be)
+2026-05-17T21:29:56.951+07:00  INFO 17400 --- [seov] [main] seov.SeovApplication                     : No active profile set, falling back to 1 default profile: "default"
+2026-05-17T21:29:57.537+07:00  INFO 17400 --- [seov] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-05-17T21:29:57.607+07:00  INFO 17400 --- [seov] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 63 ms. Found 9 JPA repository interfaces.
+2026-05-17T21:29:58.136+07:00  INFO 17400 --- [seov] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8081 (http)
+2026-05-17T21:29:58.148+07:00  INFO 17400 --- [seov] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-05-17T21:29:58.148+07:00  INFO 17400 --- [seov] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.19]
+2026-05-17T21:29:58.237+07:00  INFO 17400 --- [seov] [main] o.a.c.c.C.[Tomcat].[localhost].[/seov]   : Initializing Spring embedded WebApplicationContext
+2026-05-17T21:29:58.237+07:00  INFO 17400 --- [seov] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1247 ms
+2026-05-17T21:29:58.370+07:00  INFO 17400 --- [seov] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-05-17T21:29:58.427+07:00  INFO 17400 --- [seov] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.4.4.Final
+2026-05-17T21:29:58.455+07:00  INFO 17400 --- [seov] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2026-05-17T21:29:58.665+07:00  INFO 17400 --- [seov] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-05-17T21:29:58.690+07:00  INFO 17400 --- [seov] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-05-17T21:29:58.908+07:00  INFO 17400 --- [seov] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@67ceeffd
+2026-05-17T21:29:58.909+07:00  INFO 17400 --- [seov] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-05-17T21:29:58.940+07:00  WARN 17400 --- [seov] [main] org.hibernate.orm.deprecation            : HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-05-17T21:29:59.786+07:00  INFO 17400 --- [seov] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-05-17T21:29:59.825+07:00 DEBUG 17400 --- [seov] [main] org.hibernate.SQL                        : 
+    create table andon_group (
+        id bigserial not null,
+        active varchar(255),
+        description varchar(255),
+        group_code integer,
+        group_name varchar(255),
+        primary key (id)
+    )
+2026-05-17T21:29:59.834+07:00 DEBUG 17400 --- [seov] [main] org.hibernate.SQL                        : 
+    create table andon_handling_detail (
+        id bigserial not null,
+        created_at timestamp(6),
+        method varchar(255),
+        new_device varchar(255),
+        old_device varchar(255),
+        old_status varchar(255),
+        repair_notes varchar(255),
+        replace_reason varchar(255),
+        request_id bigint,
+        primary key (id)
+    )
+2026-05-17T21:29:59.838+07:00 DEBUG 17400 --- [seov] [main] org.hibernate.SQL                        : 
+    create table andon_process_log (
+        id bigserial not null,
+        action_type varchar(255),
+        created_at timestamp(6),
+        created_by varchar(255),
+        description varchar(255),
+        duration bigint,
+        end_time timestamp(6),
+        from_team integer,
+        from_user varchar(255),
+        is_active boolean,
+        request_id bigint,
+        start_time timestamp(6),
+        status varchar(255),
+        to_team integer,
+        updated_at timestamp(6),
+        primary key (id)
+    )
+2026-05-17T21:29:59.843+07:00 DEBUG 17400 --- [seov] [main] org.hibernate.SQL                        : 
+    create table andondata (
+        id bigserial not null,
+        completed_at timestamp(6),
+        created_at timestamp(6),
+        description varchar(255),
+        error_stage varchar(255),
+        flag varchar(255),
+        line_name varchar(255),
+        processing_at timestamp(6),
+        site_code varchar(255),
+        status varchar(255),
+        team integer,
+        updated_at timestamp(6),
+        user_code varchar(255),
+        primary key (id)
+    )
+2026-05-17T21:29:59.847+07:00 DEBUG 17400 --- [seov] [main] org.hibernate.SQL                        : 
+    create table devices (
+        id bigserial not null,
+        code varchar(255),
+        created_at timestamp(6),
+        date_time date,
+        date_time_used timestamp(6),
+        fa varchar(255),
+        fa_code varchar(255),
+        gscm_name varchar(255),
+        kian_no varchar(255),
+        location varchar(255),
+        po_number varchar(255),
+        serial_number varchar(255),
+        status varchar(255),
+        supplier varchar(255),
+        updated_at timestamp(6),
+        primary key (id)
+    )
+2026-05-17T21:29:59.852+07:00 DEBUG 17400 --- [seov] [main] org.hibernate.SQL                        : 
+    create table machines (
+        id varchar(255) not null,
+        created_at timestamp(6),
+        machine_code varchar(255),
+        machine_name varchar(255),
+        model varchar(255),
+        remark varchar(255),
+        status varchar(255),
+        updated_at timestamp(6),
+        primary key (id)
+    )
+2026-05-17T21:29:59.856+07:00 DEBUG 17400 --- [seov] [main] org.hibernate.SQL                        : 
+    create table machines_data (
+        id varchar(255) not null,
+        created_at timestamp(6),
+        machine_code varchar(255),
+        machine_name varchar(255),
+        qty integer not null,
+        shift varchar(255),
+        updated_at timestamp(6),
+        primary key (id)
+    )
+2026-05-17T21:29:59.859+07:00 DEBUG 17400 --- [seov] [main] org.hibernate.SQL                        : 
+    create table permissions (
+        id bigserial not null,
+        code varchar(255),
+        name varchar(255),
+        primary key (id)
+    )
+2026-05-17T21:29:59.863+07:00 DEBUG 17400 --- [seov] [main] org.hibernate.SQL                        : 
+    create table role_permissions (
+        role_id bigint not null,
+        permission_id bigint not null,
+        primary key (role_id, permission_id)
+    )
+2026-05-17T21:29:59.865+07:00 DEBUG 17400 --- [seov] [main] org.hibernate.SQL                        : 
+    create table roles (
+        id bigserial not null,
+        description varchar(255),
+        name varchar(255),
+        primary key (id)
+    )
+2026-05-17T21:29:59.869+07:00 DEBUG 17400 --- [seov] [main] org.hibernate.SQL                        : 
+    create table user_roles (
+        user_id bigint not null,
+        role_id bigint not null,
+        primary key (user_id, role_id)
+    )
+2026-05-17T21:29:59.871+07:00 DEBUG 17400 --- [seov] [main] org.hibernate.SQL                        : 
+    create table users (
+        id bigserial not null,
+        created_at date,
+        email varchar(255),
+        join_date date,
+        name varchar(255),
+        password varchar(255),
+        position varchar(255),
+        section varchar(255),
+        updated_at date,
+        username varchar(255),
+        primary key (id)
+    )
+2026-05-17T21:29:59.876+07:00 DEBUG 17400 --- [seov] [main] org.hibernate.SQL                        : 
+    alter table if exists andon_group 
+       drop constraint if exists UK_cmree0qhngravj29tuqnspge0
+2026-05-17T21:29:59.878+07:00  WARN 17400 --- [seov] [main] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Warning Code: 0, SQLState: 00000
+2026-05-17T21:29:59.878+07:00  WARN 17400 --- [seov] [main] o.h.engine.jdbc.spi.SqlExceptionHelper   : constraint "uk_cmree0qhngravj29tuqnspge0" of relation "andon_group" does not exist, skipping
+2026-05-17T21:29:59.878+07:00 DEBUG 17400 --- [seov] [main] org.hibernate.SQL                        : 
+    alter table if exists andon_group 
+       add constraint UK_cmree0qhngravj29tuqnspge0 unique (group_code)
+2026-05-17T21:29:59.880+07:00 DEBUG 17400 --- [seov] [main] org.hibernate.SQL                        : 
+    alter table if exists andondata 
+       add constraint FKq2a226pbfit5v1bi0n08xhdfe 
+       foreign key (team) 
+       references andon_group (group_code)
+2026-05-17T21:29:59.883+07:00 DEBUG 17400 --- [seov] [main] org.hibernate.SQL                        : 
+    alter table if exists role_permissions 
+       add constraint FKegdk29eiy7mdtefy5c7eirr6e 
+       foreign key (permission_id) 
+       references permissions
+2026-05-17T21:29:59.884+07:00 DEBUG 17400 --- [seov] [main] org.hibernate.SQL                        : 
+    alter table if exists role_permissions 
+       add constraint FKn5fotdgk8d1xvo8nav9uv3muc 
+       foreign key (role_id) 
+       references roles
+2026-05-17T21:29:59.885+07:00 DEBUG 17400 --- [seov] [main] org.hibernate.SQL                        : 
+    alter table if exists user_roles 
+       add constraint FKh8ciramu9cc9q3qcqiv4ue8a6 
+       foreign key (role_id) 
+       references roles
+2026-05-17T21:29:59.886+07:00 DEBUG 17400 --- [seov] [main] org.hibernate.SQL                        : 
+    alter table if exists user_roles 
+       add constraint FKhfh9dx7w3ubf1co1vdev94g3f 
+       foreign key (user_id) 
+       references users
+2026-05-17T21:29:59.889+07:00  INFO 17400 --- [seov] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-05-17T21:30:00.130+07:00  INFO 17400 --- [seov] [main] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-05-17T21:30:00.740+07:00  WARN 17400 --- [seov] [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-05-17T21:30:00.767+07:00  WARN 17400 --- [seov] [main] .s.s.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: 3097d792-5a60-40fa-abbf-07c7ff7de9c4
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2026-05-17T21:30:00.989+07:00  INFO 17400 --- [seov] [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@14d9d042, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@28261231, org.springframework.security.web.context.SecurityContextHolderFilter@5bee88e3, org.springframework.security.web.header.HeaderWriterFilter@65c2610f, org.springframework.web.filter.CorsFilter@5f709e71, org.springframework.security.web.authentication.logout.LogoutFilter@3116e9d2, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@586f1bef, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@546ab02b, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@6a2b30b9, org.springframework.security.web.access.ExceptionTranslationFilter@780ccdc9, org.springframework.security.web.access.intercept.AuthorizationFilter@5a9ccbfb]
+2026-05-17T21:30:01.202+07:00  INFO 17400 --- [seov] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8081 (http) with context path '/seov'
+2026-05-17T21:30:01.204+07:00  INFO 17400 --- [seov] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : Starting...
+2026-05-17T21:30:01.204+07:00  INFO 17400 --- [seov] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@66f965a]]
+2026-05-17T21:30:01.204+07:00  INFO 17400 --- [seov] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : Started.
+2026-05-17T21:30:01.212+07:00  INFO 17400 --- [seov] [main] seov.SeovApplication                     : Started SeovApplication in 4.744 seconds (process running for 5.757)
+2026-05-17T21:31:01.196+07:00  INFO 17400 --- [seov] [MessageBroker-1] o.s.w.s.c.WebSocketMessageBrokerStats    : WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], sockJsScheduler[pool size = 1, active threads = 1, queued tasks = 0, completed tasks = 0]
+2026-05-17T21:37:07.311+07:00  INFO 17400 --- [seov] [http-nio-0.0.0.0-8081-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/seov]   : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-05-17T21:37:07.311+07:00  INFO 17400 --- [seov] [http-nio-0.0.0.0-8081-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-05-17T21:37:07.312+07:00  INFO 17400 --- [seov] [http-nio-0.0.0.0-8081-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2026-05-17T21:37:14.340+07:00 DEBUG 17400 --- [seov] [http-nio-0.0.0.0-8081-exec-4] org.hibernate.SQL                        : 
+    select
+        u1_0.id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.join_date,
+        u1_0.name,
+        u1_0.password,
+        u1_0.position,
+        u1_0.section,
+        u1_0.updated_at,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.username=?
+2026-05-17T21:37:14.342+07:00 TRACE 17400 --- [seov] [http-nio-0.0.0.0-8081-exec-4] org.hibernate.orm.jdbc.bind              : binding parameter (1:VARCHAR) <- [07521]
+2026-05-17T21:37:14.443+07:00 DEBUG 17400 --- [seov] [http-nio-0.0.0.0-8081-exec-4] org.hibernate.SQL                        : 
+    select
+        u1_0.id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.join_date,
+        u1_0.name,
+        u1_0.password,
+        u1_0.position,
+        r1_0.user_id,
+        r1_1.id,
+        r1_1.description,
+        r1_1.name,
+        p1_0.role_id,
+        p1_1.id,
+        p1_1.code,
+        p1_1.name,
+        u1_0.section,
+        u1_0.updated_at,
+        u1_0.username 
+    from
+        users u1_0 
+    join
+        user_roles r1_0 
+            on u1_0.id=r1_0.user_id 
+    join
+        roles r1_1 
+            on r1_1.id=r1_0.role_id 
+    join
+        role_permissions p1_0 
+            on r1_1.id=p1_0.role_id 
+    join
+        permissions p1_1 
+            on p1_1.id=p1_0.permission_id 
+    where
+        u1_0.username=?
+2026-05-17T21:37:14.443+07:00 TRACE 17400 --- [seov] [http-nio-0.0.0.0-8081-exec-4] org.hibernate.orm.jdbc.bind              : binding parameter (1:VARCHAR) <- [07521]
+2026-05-17T21:37:14.450+07:00 ERROR 17400 --- [seov] [http-nio-0.0.0.0-8081-exec-4] o.a.c.c.C.[.[.[.[dispatcherServlet]      : Servlet.service() for servlet [dispatcherServlet] in context with path [/seov] threw exception [Request processing failed: java.lang.RuntimeException: User not found] with root cause
+
+java.lang.RuntimeException: User not found
+	at seov.auth.service.AuthenticationService.lambda$authenticate$0(AuthenticationService.java:52) ~[classes/:na]
+	at java.base/java.util.Optional.orElseThrow(Optional.java:403) ~[na:na]
+	at seov.auth.service.AuthenticationService.authenticate(AuthenticationService.java:52) ~[classes/:na]
+	at seov.auth.controller.AuthenticationController.authenticate(AuthenticationController.java:25) ~[classes/:na]
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104) ~[na:na]
+	at java.base/java.lang.reflect.Method.invoke(Method.java:578) ~[na:na]
+	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:259) ~[spring-web-6.1.4.jar:6.1.4]
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:192) ~[spring-web-6.1.4.jar:6.1.4]
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:118) ~[spring-webmvc-6.1.4.jar:6.1.4]
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:920) ~[spring-webmvc-6.1.4.jar:6.1.4]
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:830) ~[spring-webmvc-6.1.4.jar:6.1.4]
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87) ~[spring-webmvc-6.1.4.jar:6.1.4]
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1089) ~[spring-webmvc-6.1.4.jar:6.1.4]
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:979) ~[spring-webmvc-6.1.4.jar:6.1.4]
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014) ~[spring-webmvc-6.1.4.jar:6.1.4]
+	at org.springframework.web.servlet.FrameworkServlet.doPost(FrameworkServlet.java:914) ~[spring-webmvc-6.1.4.jar:6.1.4]
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:590) ~[tomcat-embed-core-10.1.19.jar:6.0]
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885) ~[spring-webmvc-6.1.4.jar:6.1.4]
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658) ~[tomcat-embed-core-10.1.19.jar:6.0]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:205) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51) ~[tomcat-embed-websocket-10.1.19.jar:10.1.19]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:108) ~[spring-web-6.1.4.jar:6.1.4]
+	at org.springframework.security.web.FilterChainProxy.lambda$doFilterInternal$3(FilterChainProxy.java:231) ~[spring-security-web-6.2.2.jar:6.2.2]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:365) ~[spring-security-web-6.2.2.jar:6.2.2]
+	at org.springframework.security.web.access.intercept.AuthorizationFilter.doFilter(AuthorizationFilter.java:100) ~[spring-security-web-6.2.2.jar:6.2.2]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374) ~[spring-security-web-6.2.2.jar:6.2.2]
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:126) ~[spring-security-web-6.2.2.jar:6.2.2]
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:120) ~[spring-security-web-6.2.2.jar:6.2.2]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374) ~[spring-security-web-6.2.2.jar:6.2.2]
+	at org.springframework.security.web.authentication.AnonymousAuthenticationFilter.doFilter(AnonymousAuthenticationFilter.java:100) ~[spring-security-web-6.2.2.jar:6.2.2]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374) ~[spring-security-web-6.2.2.jar:6.2.2]
+	at org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter.doFilter(SecurityContextHolderAwareRequestFilter.java:179) ~[spring-security-web-6.2.2.jar:6.2.2]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374) ~[spring-security-web-6.2.2.jar:6.2.2]
+	at org.springframework.security.web.savedrequest.RequestCacheAwareFilter.doFilter(RequestCacheAwareFilter.java:63) ~[spring-security-web-6.2.2.jar:6.2.2]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374) ~[spring-security-web-6.2.2.jar:6.2.2]
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:107) ~[spring-security-web-6.2.2.jar:6.2.2]
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:93) ~[spring-security-web-6.2.2.jar:6.2.2]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374) ~[spring-security-web-6.2.2.jar:6.2.2]
+	at org.springframework.web.filter.CorsFilter.doFilterInternal(CorsFilter.java:91) ~[spring-web-6.1.4.jar:6.1.4]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.1.4.jar:6.1.4]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374) ~[spring-security-web-6.2.2.jar:6.2.2]
+	at org.springframework.security.web.header.HeaderWriterFilter.doHeadersAfter(HeaderWriterFilter.java:90) ~[spring-security-web-6.2.2.jar:6.2.2]
+	at org.springframework.security.web.header.HeaderWriterFilter.doFilterInternal(HeaderWriterFilter.java:75) ~[spring-security-web-6.2.2.jar:6.2.2]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.1.4.jar:6.1.4]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374) ~[spring-security-web-6.2.2.jar:6.2.2]
+	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:82) ~[spring-security-web-6.2.2.jar:6.2.2]
+	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:69) ~[spring-security-web-6.2.2.jar:6.2.2]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374) ~[spring-security-web-6.2.2.jar:6.2.2]
+	at org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter.doFilterInternal(WebAsyncManagerIntegrationFilter.java:62) ~[spring-security-web-6.2.2.jar:6.2.2]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.1.4.jar:6.1.4]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374) ~[spring-security-web-6.2.2.jar:6.2.2]
+	at org.springframework.security.web.session.DisableEncodeUrlFilter.doFilterInternal(DisableEncodeUrlFilter.java:42) ~[spring-security-web-6.2.2.jar:6.2.2]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.1.4.jar:6.1.4]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374) ~[spring-security-web-6.2.2.jar:6.2.2]
+	at org.springframework.security.web.FilterChainProxy.doFilterInternal(FilterChainProxy.java:233) ~[spring-security-web-6.2.2.jar:6.2.2]
+	at org.springframework.security.web.FilterChainProxy.doFilter(FilterChainProxy.java:191) ~[spring-security-web-6.2.2.jar:6.2.2]
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113) ~[spring-web-6.1.4.jar:6.1.4]
+	at org.springframework.web.servlet.handler.HandlerMappingIntrospector.lambda$createCacheFilter$3(HandlerMappingIntrospector.java:195) ~[spring-webmvc-6.1.4.jar:6.1.4]
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113) ~[spring-web-6.1.4.jar:6.1.4]
+	at org.springframework.web.filter.CompositeFilter.doFilter(CompositeFilter.java:74) ~[spring-web-6.1.4.jar:6.1.4]
+	at org.springframework.security.config.annotation.web.configuration.WebMvcSecurityConfiguration$CompositeFilterChainProxy.doFilter(WebMvcSecurityConfiguration.java:230) ~[spring-security-config-6.2.2.jar:6.2.2]
+	at org.springframework.web.filter.DelegatingFilterProxy.invokeDelegate(DelegatingFilterProxy.java:352) ~[spring-web-6.1.4.jar:6.1.4]
+	at org.springframework.web.filter.DelegatingFilterProxy.doFilter(DelegatingFilterProxy.java:268) ~[spring-web-6.1.4.jar:6.1.4]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100) ~[spring-web-6.1.4.jar:6.1.4]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.1.4.jar:6.1.4]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93) ~[spring-web-6.1.4.jar:6.1.4]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.1.4.jar:6.1.4]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201) ~[spring-web-6.1.4.jar:6.1.4]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.1.4.jar:6.1.4]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:482) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:115) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:391) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:896) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1744) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1191) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+	at java.base/java.lang.Thread.run(Thread.java:1623) ~[na:na]
+
+2026-05-17T21:37:20.152+07:00 DEBUG 17400 --- [seov] [http-nio-0.0.0.0-8081-exec-5] org.hibernate.SQL                        : 
+    select
+        u1_0.id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.join_date,
+        u1_0.name,
+        u1_0.password,
+        u1_0.position,
+        u1_0.section,
+        u1_0.updated_at,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.username=?
+2026-05-17T21:37:20.154+07:00 TRACE 17400 --- [seov] [http-nio-0.0.0.0-8081-exec-5] org.hibernate.orm.jdbc.bind              : binding parameter (1:VARCHAR) <- [07521]
+2026-05-17T21:37:20.227+07:00 DEBUG 17400 --- [seov] [http-nio-0.0.0.0-8081-exec-5] org.hibernate.SQL                        : 
+    select
+        u1_0.id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.join_date,
+        u1_0.name,
+        u1_0.password,
+        u1_0.position,
+        r1_0.user_id,
+        r1_1.id,
+        r1_1.description,
+        r1_1.name,
+        p1_0.role_id,
+        p1_1.id,
+        p1_1.code,
+        p1_1.name,
+        u1_0.section,
+        u1_0.updated_at,
+        u1_0.username 
+    from
+        users u1_0 
+    join
+        user_roles r1_0 
+            on u1_0.id=r1_0.user_id 
+    join
+        roles r1_1 
+            on r1_1.id=r1_0.role_id 
+    join
+        role_permissions p1_0 
+            on r1_1.id=p1_0.role_id 
+    join
+        permissions p1_1 
+            on p1_1.id=p1_0.permission_id 
+    where
+        u1_0.username=?
+2026-05-17T21:37:20.227+07:00 TRACE 17400 --- [seov] [http-nio-0.0.0.0-8081-exec-5] org.hibernate.orm.jdbc.bind              : binding parameter (1:VARCHAR) <- [07521]
+2026-05-17T21:37:20.231+07:00 ERROR 17400 --- [seov] [http-nio-0.0.0.0-8081-exec-5] o.a.c.c.C.[.[.[.[dispatcherServlet]      : Servlet.service() for servlet [dispatcherServlet] in context with path [/seov] threw exception [Request processing failed: java.lang.RuntimeException: User not found] with root cause
+
+java.lang.RuntimeException: User not found
+	at seov.auth.service.AuthenticationService.lambda$authenticate$0(AuthenticationService.java:52) ~[classes/:na]
+	at java.base/java.util.Optional.orElseThrow(Optional.java:403) ~[na:na]
+	at seov.auth.service.AuthenticationService.authenticate(AuthenticationService.java:52) ~[classes/:na]
+	at seov.auth.controller.AuthenticationController.authenticate(AuthenticationController.java:25) ~[classes/:na]
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104) ~[na:na]
+	at java.base/java.lang.reflect.Method.invoke(Method.java:578) ~[na:na]
+	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:259) ~[spring-web-6.1.4.jar:6.1.4]
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:192) ~[spring-web-6.1.4.jar:6.1.4]
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:118) ~[spring-webmvc-6.1.4.jar:6.1.4]
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:920) ~[spring-webmvc-6.1.4.jar:6.1.4]
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:830) ~[spring-webmvc-6.1.4.jar:6.1.4]
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87) ~[spring-webmvc-6.1.4.jar:6.1.4]
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1089) ~[spring-webmvc-6.1.4.jar:6.1.4]
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:979) ~[spring-webmvc-6.1.4.jar:6.1.4]
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014) ~[spring-webmvc-6.1.4.jar:6.1.4]
+	at org.springframework.web.servlet.FrameworkServlet.doPost(FrameworkServlet.java:914) ~[spring-webmvc-6.1.4.jar:6.1.4]
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:590) ~[tomcat-embed-core-10.1.19.jar:6.0]
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885) ~[spring-webmvc-6.1.4.jar:6.1.4]
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658) ~[tomcat-embed-core-10.1.19.jar:6.0]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:205) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51) ~[tomcat-embed-websocket-10.1.19.jar:10.1.19]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:108) ~[spring-web-6.1.4.jar:6.1.4]
+	at org.springframework.security.web.FilterChainProxy.lambda$doFilterInternal$3(FilterChainProxy.java:231) ~[spring-security-web-6.2.2.jar:6.2.2]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:365) ~[spring-security-web-6.2.2.jar:6.2.2]
+	at org.springframework.security.web.access.intercept.AuthorizationFilter.doFilter(AuthorizationFilter.java:100) ~[spring-security-web-6.2.2.jar:6.2.2]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374) ~[spring-security-web-6.2.2.jar:6.2.2]
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:126) ~[spring-security-web-6.2.2.jar:6.2.2]
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:120) ~[spring-security-web-6.2.2.jar:6.2.2]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374) ~[spring-security-web-6.2.2.jar:6.2.2]
+	at org.springframework.security.web.authentication.AnonymousAuthenticationFilter.doFilter(AnonymousAuthenticationFilter.java:100) ~[spring-security-web-6.2.2.jar:6.2.2]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374) ~[spring-security-web-6.2.2.jar:6.2.2]
+	at org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter.doFilter(SecurityContextHolderAwareRequestFilter.java:179) ~[spring-security-web-6.2.2.jar:6.2.2]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374) ~[spring-security-web-6.2.2.jar:6.2.2]
+	at org.springframework.security.web.savedrequest.RequestCacheAwareFilter.doFilter(RequestCacheAwareFilter.java:63) ~[spring-security-web-6.2.2.jar:6.2.2]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374) ~[spring-security-web-6.2.2.jar:6.2.2]
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:107) ~[spring-security-web-6.2.2.jar:6.2.2]
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:93) ~[spring-security-web-6.2.2.jar:6.2.2]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374) ~[spring-security-web-6.2.2.jar:6.2.2]
+	at org.springframework.web.filter.CorsFilter.doFilterInternal(CorsFilter.java:91) ~[spring-web-6.1.4.jar:6.1.4]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.1.4.jar:6.1.4]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374) ~[spring-security-web-6.2.2.jar:6.2.2]
+	at org.springframework.security.web.header.HeaderWriterFilter.doHeadersAfter(HeaderWriterFilter.java:90) ~[spring-security-web-6.2.2.jar:6.2.2]
+	at org.springframework.security.web.header.HeaderWriterFilter.doFilterInternal(HeaderWriterFilter.java:75) ~[spring-security-web-6.2.2.jar:6.2.2]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.1.4.jar:6.1.4]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374) ~[spring-security-web-6.2.2.jar:6.2.2]
+	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:82) ~[spring-security-web-6.2.2.jar:6.2.2]
+	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:69) ~[spring-security-web-6.2.2.jar:6.2.2]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374) ~[spring-security-web-6.2.2.jar:6.2.2]
+	at org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter.doFilterInternal(WebAsyncManagerIntegrationFilter.java:62) ~[spring-security-web-6.2.2.jar:6.2.2]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.1.4.jar:6.1.4]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374) ~[spring-security-web-6.2.2.jar:6.2.2]
+	at org.springframework.security.web.session.DisableEncodeUrlFilter.doFilterInternal(DisableEncodeUrlFilter.java:42) ~[spring-security-web-6.2.2.jar:6.2.2]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.1.4.jar:6.1.4]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374) ~[spring-security-web-6.2.2.jar:6.2.2]
+	at org.springframework.security.web.FilterChainProxy.doFilterInternal(FilterChainProxy.java:233) ~[spring-security-web-6.2.2.jar:6.2.2]
+	at org.springframework.security.web.FilterChainProxy.doFilter(FilterChainProxy.java:191) ~[spring-security-web-6.2.2.jar:6.2.2]
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113) ~[spring-web-6.1.4.jar:6.1.4]
+	at org.springframework.web.servlet.handler.HandlerMappingIntrospector.lambda$createCacheFilter$3(HandlerMappingIntrospector.java:195) ~[spring-webmvc-6.1.4.jar:6.1.4]
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113) ~[spring-web-6.1.4.jar:6.1.4]
+	at org.springframework.web.filter.CompositeFilter.doFilter(CompositeFilter.java:74) ~[spring-web-6.1.4.jar:6.1.4]
+	at org.springframework.security.config.annotation.web.configuration.WebMvcSecurityConfiguration$CompositeFilterChainProxy.doFilter(WebMvcSecurityConfiguration.java:230) ~[spring-security-config-6.2.2.jar:6.2.2]
+	at org.springframework.web.filter.DelegatingFilterProxy.invokeDelegate(DelegatingFilterProxy.java:352) ~[spring-web-6.1.4.jar:6.1.4]
+	at org.springframework.web.filter.DelegatingFilterProxy.doFilter(DelegatingFilterProxy.java:268) ~[spring-web-6.1.4.jar:6.1.4]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100) ~[spring-web-6.1.4.jar:6.1.4]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.1.4.jar:6.1.4]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93) ~[spring-web-6.1.4.jar:6.1.4]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.1.4.jar:6.1.4]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201) ~[spring-web-6.1.4.jar:6.1.4]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.1.4.jar:6.1.4]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:482) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:115) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:391) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:896) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1744) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1191) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+	at java.base/java.lang.Thread.run(Thread.java:1623) ~[na:na]
+
+2026-05-17T21:38:42.068+07:00 DEBUG 17400 --- [seov] [http-nio-0.0.0.0-8081-exec-6] org.hibernate.SQL                        : 
+    select
+        u1_0.id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.join_date,
+        u1_0.name,
+        u1_0.password,
+        u1_0.position,
+        u1_0.section,
+        u1_0.updated_at,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.username=?
+2026-05-17T21:38:42.069+07:00 TRACE 17400 --- [seov] [http-nio-0.0.0.0-8081-exec-6] org.hibernate.orm.jdbc.bind              : binding parameter (1:VARCHAR) <- [07521]
+2026-05-17T21:38:42.156+07:00 DEBUG 17400 --- [seov] [http-nio-0.0.0.0-8081-exec-6] org.hibernate.SQL                        : 
+    select
+        u1_0.id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.join_date,
+        u1_0.name,
+        u1_0.password,
+        u1_0.position,
+        r1_0.user_id,
+        r1_1.id,
+        r1_1.description,
+        r1_1.name,
+        p1_0.role_id,
+        p1_1.id,
+        p1_1.code,
+        p1_1.name,
+        u1_0.section,
+        u1_0.updated_at,
+        u1_0.username 
+    from
+        users u1_0 
+    join
+        user_roles r1_0 
+            on u1_0.id=r1_0.user_id 
+    join
+        roles r1_1 
+            on r1_1.id=r1_0.role_id 
+    join
+        role_permissions p1_0 
+            on r1_1.id=p1_0.role_id 
+    join
+        permissions p1_1 
+            on p1_1.id=p1_0.permission_id 
+    where
+        u1_0.username=?
+2026-05-17T21:38:42.156+07:00 TRACE 17400 --- [seov] [http-nio-0.0.0.0-8081-exec-6] org.hibernate.orm.jdbc.bind              : binding parameter (1:VARCHAR) <- [07521]
+2026-05-17T21:39:31.059+07:00 DEBUG 17400 --- [seov] [http-nio-0.0.0.0-8081-exec-9] org.hibernate.SQL                        : 
+    SELECT
+        a.id as id,
+        a.site_code as siteCode,
+        a.line_name as lineName,
+        b.active as active,
+        b.group_code as groupCode,
+        b.group_name as groupName,
+        a.description as description,
+        a.error_stage as errorStage,
+        a.team as team,
+        a.flag as flag,
+        a.status as status,
+        a.processing_at as processingAt,
+        a.completed_at as completedAt,
+        a.created_at as createdAt,
+        a.updated_at as updatedAt             
+    FROM
+        andondata a             
+    LEFT JOIN
+        andon_group b                  
+            ON a.team = b.group_code             
+    WHERE
+        a.status != 'OK'               
+        AND a.site_code =? 
+    order by
+        a.id; 
+2026-05-17T21:39:31.059+07:00 TRACE 17400 --- [seov] [http-nio-0.0.0.0-8081-exec-9] org.hibernate.orm.jdbc.bind              : binding parameter (1:VARCHAR) <- [2]
+2026-05-17T21:39:31.071+07:00 DEBUG 17400 --- [seov] [http-nio-0.0.0.0-8081-exec-9] org.hibernate.SQL                        : 
+    select
+        ROW_NUMBER() OVER (                 PARTITION 
+    BY
+        A.request_id                  
+    ORDER BY
+        A.created_at             ) AS RN,
+        A.request_id as id,
+        A.description,
+        A.action_type,
+        A.from_user,
+        A.user_name,
+        A.from_team,
+        A.to_team,
+        A.from_team_name,
+        A.to_team_name,
+        A.status,
+        A.start_time,
+        A.end_time,
+        A.created_at,
+        A.updated_at,
+        A.is_active         
+    from
+        (             select
+            A.*,
+            B.name as user_name,
+            C.group_name as from_team_name,
+            D.group_name as to_team_name             
+        from
+            andon_process_log A             
+        left join
+            users B 
+                on A.from_user = B.username             
+        left join
+            andon_group C 
+                on A.from_team = C.group_code             
+        left join
+            andon_group D 
+                on A.to_team = D.group_code             
+        where
+            A.request_id in (                 select
+                a.id                  
+            from
+                andondata a                  
+            where
+                a.status != 'OK'                    
+                and a.site_code = ?             )         ) A 
+2026-05-17T21:39:31.071+07:00 TRACE 17400 --- [seov] [http-nio-0.0.0.0-8081-exec-9] org.hibernate.orm.jdbc.bind              : binding parameter (1:VARCHAR) <- [2]
+2026-05-17T21:39:37.846+07:00 DEBUG 17400 --- [seov] [http-nio-0.0.0.0-8081-exec-1] org.hibernate.SQL                        : 
+    insert 
+    into
+        andondata
+        (completed_at, created_at, description, error_stage, flag, line_name, processing_at, site_code, status, team, updated_at, user_code) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+2026-05-17T21:39:37.847+07:00 TRACE 17400 --- [seov] [http-nio-0.0.0.0-8081-exec-1] org.hibernate.orm.jdbc.bind              : binding parameter (1:TIMESTAMP) <- [null]
+2026-05-17T21:39:37.847+07:00 TRACE 17400 --- [seov] [http-nio-0.0.0.0-8081-exec-1] org.hibernate.orm.jdbc.bind              : binding parameter (2:TIMESTAMP) <- [2026-05-17T21:39:37.829538300]
+2026-05-17T21:39:37.848+07:00 TRACE 17400 --- [seov] [http-nio-0.0.0.0-8081-exec-1] org.hibernate.orm.jdbc.bind              : binding parameter (3:VARCHAR) <- [aaâ]
+2026-05-17T21:39:37.848+07:00 TRACE 17400 --- [seov] [http-nio-0.0.0.0-8081-exec-1] org.hibernate.orm.jdbc.bind              : binding parameter (4:VARCHAR) <- [SMART_CHECK]
+2026-05-17T21:39:37.848+07:00 TRACE 17400 --- [seov] [http-nio-0.0.0.0-8081-exec-1] org.hibernate.orm.jdbc.bind              : binding parameter (5:VARCHAR) <- [true]
+2026-05-17T21:39:37.848+07:00 TRACE 17400 --- [seov] [http-nio-0.0.0.0-8081-exec-1] org.hibernate.orm.jdbc.bind              : binding parameter (6:VARCHAR) <- [M103]
+2026-05-17T21:39:37.848+07:00 TRACE 17400 --- [seov] [http-nio-0.0.0.0-8081-exec-1] org.hibernate.orm.jdbc.bind              : binding parameter (7:TIMESTAMP) <- [null]
+2026-05-17T21:39:37.848+07:00 TRACE 17400 --- [seov] [http-nio-0.0.0.0-8081-exec-1] org.hibernate.orm.jdbc.bind              : binding parameter (8:VARCHAR) <- [2]
+2026-05-17T21:39:37.848+07:00 TRACE 17400 --- [seov] [http-nio-0.0.0.0-8081-exec-1] org.hibernate.orm.jdbc.bind              : binding parameter (9:VARCHAR) <- [CALLING]
+2026-05-17T21:39:37.848+07:00 TRACE 17400 --- [seov] [http-nio-0.0.0.0-8081-exec-1] org.hibernate.orm.jdbc.bind              : binding parameter (10:INTEGER) <- [2]
+2026-05-17T21:39:37.850+07:00 TRACE 17400 --- [seov] [http-nio-0.0.0.0-8081-exec-1] org.hibernate.orm.jdbc.bind              : binding parameter (11:TIMESTAMP) <- [2026-05-17T21:39:37.829538300]
+2026-05-17T21:39:37.851+07:00 TRACE 17400 --- [seov] [http-nio-0.0.0.0-8081-exec-1] org.hibernate.orm.jdbc.bind              : binding parameter (12:VARCHAR) <- [07521]
+2026-05-17T21:39:37.866+07:00 DEBUG 17400 --- [seov] [http-nio-0.0.0.0-8081-exec-1] org.hibernate.SQL                        : 
+    select
+        a1_0.id,
+        a1_0.completed_at,
+        a1_0.created_at,
+        a1_0.description,
+        a1_0.error_stage,
+        a1_0.flag,
+        g1_0.id,
+        g1_0.active,
+        g1_0.description,
+        g1_0.group_code,
+        g1_0.group_name,
+        a1_0.line_name,
+        a1_0.processing_at,
+        a1_0.site_code,
+        a1_0.status,
+        a1_0.team,
+        a1_0.updated_at,
+        a1_0.user_code 
+    from
+        andondata a1_0 
+    join
+        andon_group g1_0 
+            on g1_0.group_code=a1_0.team 
+    where
+        a1_0.id=?
+2026-05-17T21:39:37.867+07:00 TRACE 17400 --- [seov] [http-nio-0.0.0.0-8081-exec-1] org.hibernate.orm.jdbc.bind              : binding parameter (1:BIGINT) <- [1]
+2026-05-17T21:39:43.570+07:00 DEBUG 17400 --- [seov] [http-nio-0.0.0.0-8081-exec-3] org.hibernate.SQL                        : 
+    select
+        a1_0.id,
+        a1_0.completed_at,
+        a1_0.created_at,
+        a1_0.description,
+        a1_0.error_stage,
+        a1_0.flag,
+        a1_0.team,
+        a1_0.line_name,
+        a1_0.processing_at,
+        a1_0.site_code,
+        a1_0.status,
+        a1_0.updated_at,
+        a1_0.user_code 
+    from
+        andondata a1_0 
+    where
+        a1_0.id=?
+2026-05-17T21:39:43.570+07:00 TRACE 17400 --- [seov] [http-nio-0.0.0.0-8081-exec-3] org.hibernate.orm.jdbc.bind              : binding parameter (1:BIGINT) <- [1]
+2026-05-17T21:39:43.573+07:00 DEBUG 17400 --- [seov] [http-nio-0.0.0.0-8081-exec-3] org.hibernate.SQL                        : 
+    select
+        ag1_0.id,
+        ag1_0.active,
+        ag1_0.description,
+        ag1_0.group_code,
+        ag1_0.group_name 
+    from
+        andon_group ag1_0 
+    where
+        ag1_0.group_code=?
+2026-05-17T21:39:43.574+07:00 TRACE 17400 --- [seov] [http-nio-0.0.0.0-8081-exec-3] org.hibernate.orm.jdbc.bind              : binding parameter (1:INTEGER) <- [2]
+2026-05-17T21:39:43.582+07:00 DEBUG 17400 --- [seov] [http-nio-0.0.0.0-8081-exec-3] org.hibernate.SQL                        : 
+    update
+        andondata 
+    set
+        completed_at=?,
+        created_at=?,
+        description=?,
+        error_stage=?,
+        flag=?,
+        line_name=?,
+        processing_at=?,
+        site_code=?,
+        status=?,
+        team=?,
+        updated_at=?,
+        user_code=? 
+    where
+        id=?
+2026-05-17T21:39:43.583+07:00 TRACE 17400 --- [seov] [http-nio-0.0.0.0-8081-exec-3] org.hibernate.orm.jdbc.bind              : binding parameter (1:TIMESTAMP) <- [null]
+2026-05-17T21:39:43.583+07:00 TRACE 17400 --- [seov] [http-nio-0.0.0.0-8081-exec-3] org.hibernate.orm.jdbc.bind              : binding parameter (2:TIMESTAMP) <- [2026-05-17T21:39:37.829538]
+2026-05-17T21:39:43.583+07:00 TRACE 17400 --- [seov] [http-nio-0.0.0.0-8081-exec-3] org.hibernate.orm.jdbc.bind              : binding parameter (3:VARCHAR) <- [aaâ]
+2026-05-17T21:39:43.583+07:00 TRACE 17400 --- [seov] [http-nio-0.0.0.0-8081-exec-3] org.hibernate.orm.jdbc.bind              : binding parameter (4:VARCHAR) <- [SMART_CHECK]
+2026-05-17T21:39:43.583+07:00 TRACE 17400 --- [seov] [http-nio-0.0.0.0-8081-exec-3] org.hibernate.orm.jdbc.bind              : binding parameter (5:VARCHAR) <- [true]
+2026-05-17T21:39:43.583+07:00 TRACE 17400 --- [seov] [http-nio-0.0.0.0-8081-exec-3] org.hibernate.orm.jdbc.bind              : binding parameter (6:VARCHAR) <- [M103]
+2026-05-17T21:39:43.583+07:00 TRACE 17400 --- [seov] [http-nio-0.0.0.0-8081-exec-3] org.hibernate.orm.jdbc.bind              : binding parameter (7:TIMESTAMP) <- [2026-05-17T21:39:43.575582]
+2026-05-17T21:39:43.583+07:00 TRACE 17400 --- [seov] [http-nio-0.0.0.0-8081-exec-3] org.hibernate.orm.jdbc.bind              : binding parameter (8:VARCHAR) <- [2]
+2026-05-17T21:39:43.583+07:00 TRACE 17400 --- [seov] [http-nio-0.0.0.0-8081-exec-3] org.hibernate.orm.jdbc.bind              : binding parameter (9:VARCHAR) <- [PROCESSING]
+2026-05-17T21:39:43.583+07:00 TRACE 17400 --- [seov] [http-nio-0.0.0.0-8081-exec-3] org.hibernate.orm.jdbc.bind              : binding parameter (10:INTEGER) <- [2]
+2026-05-17T21:39:43.584+07:00 TRACE 17400 --- [seov] [http-nio-0.0.0.0-8081-exec-3] org.hibernate.orm.jdbc.bind              : binding parameter (11:TIMESTAMP) <- [2026-05-17T21:39:43.575582]
+2026-05-17T21:39:43.584+07:00 TRACE 17400 --- [seov] [http-nio-0.0.0.0-8081-exec-3] org.hibernate.orm.jdbc.bind              : binding parameter (12:VARCHAR) <- [07521]
+2026-05-17T21:39:43.584+07:00 TRACE 17400 --- [seov] [http-nio-0.0.0.0-8081-exec-3] org.hibernate.orm.jdbc.bind              : binding parameter (13:BIGINT) <- [1]
+2026-05-17T21:39:51.213+07:00 DEBUG 17400 --- [seov] [http-nio-0.0.0.0-8081-exec-5] org.hibernate.SQL                        : 
+    insert 
+    into
+        andon_process_log
+        (action_type, created_at, created_by, description, duration, end_time, from_team, from_user, is_active, request_id, start_time, status, to_team, updated_at) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+2026-05-17T21:39:51.213+07:00 TRACE 17400 --- [seov] [http-nio-0.0.0.0-8081-exec-5] org.hibernate.orm.jdbc.bind              : binding parameter (1:VARCHAR) <- [TRANSFER]
+2026-05-17T21:39:51.213+07:00 TRACE 17400 --- [seov] [http-nio-0.0.0.0-8081-exec-5] org.hibernate.orm.jdbc.bind              : binding parameter (2:TIMESTAMP) <- [2026-05-17T21:39:51.212150200]
+2026-05-17T21:39:51.213+07:00 TRACE 17400 --- [seov] [http-nio-0.0.0.0-8081-exec-5] org.hibernate.orm.jdbc.bind              : binding parameter (3:VARCHAR) <- [null]
+2026-05-17T21:39:51.213+07:00 TRACE 17400 --- [seov] [http-nio-0.0.0.0-8081-exec-5] org.hibernate.orm.jdbc.bind              : binding parameter (4:VARCHAR) <- [xxxxx]
+2026-05-17T21:39:51.214+07:00 TRACE 17400 --- [seov] [http-nio-0.0.0.0-8081-exec-5] org.hibernate.orm.jdbc.bind              : binding parameter (5:BIGINT) <- [null]
+2026-05-17T21:39:51.214+07:00 TRACE 17400 --- [seov] [http-nio-0.0.0.0-8081-exec-5] org.hibernate.orm.jdbc.bind              : binding parameter (6:TIMESTAMP) <- [2026-05-17T21:39:51.212150200]
+2026-05-17T21:39:51.214+07:00 TRACE 17400 --- [seov] [http-nio-0.0.0.0-8081-exec-5] org.hibernate.orm.jdbc.bind              : binding parameter (7:INTEGER) <- [2]
+2026-05-17T21:39:51.214+07:00 TRACE 17400 --- [seov] [http-nio-0.0.0.0-8081-exec-5] org.hibernate.orm.jdbc.bind              : binding parameter (8:VARCHAR) <- [07521]
+2026-05-17T21:39:51.214+07:00 TRACE 17400 --- [seov] [http-nio-0.0.0.0-8081-exec-5] org.hibernate.orm.jdbc.bind              : binding parameter (9:BOOLEAN) <- [true]
+2026-05-17T21:39:51.214+07:00 TRACE 17400 --- [seov] [http-nio-0.0.0.0-8081-exec-5] org.hibernate.orm.jdbc.bind              : binding parameter (10:BIGINT) <- [1]
+2026-05-17T21:39:51.214+07:00 TRACE 17400 --- [seov] [http-nio-0.0.0.0-8081-exec-5] org.hibernate.orm.jdbc.bind              : binding parameter (11:TIMESTAMP) <- [2026-05-17T21:39:43.575582]
+2026-05-17T21:39:51.214+07:00 TRACE 17400 --- [seov] [http-nio-0.0.0.0-8081-exec-5] org.hibernate.orm.jdbc.bind              : binding parameter (12:VARCHAR) <- [PROCESSING]
+2026-05-17T21:39:51.214+07:00 TRACE 17400 --- [seov] [http-nio-0.0.0.0-8081-exec-5] org.hibernate.orm.jdbc.bind              : binding parameter (13:INTEGER) <- [0]
+2026-05-17T21:39:51.214+07:00 TRACE 17400 --- [seov] [http-nio-0.0.0.0-8081-exec-5] org.hibernate.orm.jdbc.bind              : binding parameter (14:TIMESTAMP) <- [2026-05-17T21:39:51.212150200]
+2026-05-17T21:39:51.216+07:00 DEBUG 17400 --- [seov] [http-nio-0.0.0.0-8081-exec-5] org.hibernate.SQL                        : 
+    select
+        a1_0.id,
+        a1_0.completed_at,
+        a1_0.created_at,
+        a1_0.description,
+        a1_0.error_stage,
+        a1_0.flag,
+        a1_0.team,
+        a1_0.line_name,
+        a1_0.processing_at,
+        a1_0.site_code,
+        a1_0.status,
+        a1_0.updated_at,
+        a1_0.user_code 
+    from
+        andondata a1_0 
+    where
+        a1_0.id=?
+2026-05-17T21:39:51.216+07:00 TRACE 17400 --- [seov] [http-nio-0.0.0.0-8081-exec-5] org.hibernate.orm.jdbc.bind              : binding parameter (1:BIGINT) <- [1]
+2026-05-17T21:39:51.216+07:00 DEBUG 17400 --- [seov] [http-nio-0.0.0.0-8081-exec-5] org.hibernate.SQL                        : 
+    select
+        ag1_0.id,
+        ag1_0.active,
+        ag1_0.description,
+        ag1_0.group_code,
+        ag1_0.group_name 
+    from
+        andon_group ag1_0 
+    where
+        ag1_0.group_code=?
+2026-05-17T21:39:51.217+07:00 TRACE 17400 --- [seov] [http-nio-0.0.0.0-8081-exec-5] org.hibernate.orm.jdbc.bind              : binding parameter (1:INTEGER) <- [2]
+2026-05-17T21:39:51.221+07:00 DEBUG 17400 --- [seov] [http-nio-0.0.0.0-8081-exec-5] org.hibernate.SQL                        : 
+    update
+        andondata 
+    set
+        completed_at=?,
+        created_at=?,
+        description=?,
+        error_stage=?,
+        flag=?,
+        line_name=?,
+        processing_at=?,
+        site_code=?,
+        status=?,
+        team=?,
+        updated_at=?,
+        user_code=? 
+    where
+        id=?
+2026-05-17T21:39:51.221+07:00 TRACE 17400 --- [seov] [http-nio-0.0.0.0-8081-exec-5] org.hibernate.orm.jdbc.bind              : binding parameter (1:TIMESTAMP) <- [null]
+2026-05-17T21:39:51.221+07:00 TRACE 17400 --- [seov] [http-nio-0.0.0.0-8081-exec-5] org.hibernate.orm.jdbc.bind              : binding parameter (2:TIMESTAMP) <- [2026-05-17T21:39:37.829538]
+2026-05-17T21:39:51.222+07:00 TRACE 17400 --- [seov] [http-nio-0.0.0.0-8081-exec-5] org.hibernate.orm.jdbc.bind              : binding parameter (3:VARCHAR) <- [aaâ]
+2026-05-17T21:39:51.222+07:00 TRACE 17400 --- [seov] [http-nio-0.0.0.0-8081-exec-5] org.hibernate.orm.jdbc.bind              : binding parameter (4:VARCHAR) <- [SMART_CHECK]
+2026-05-17T21:39:51.222+07:00 TRACE 17400 --- [seov] [http-nio-0.0.0.0-8081-exec-5] org.hibernate.orm.jdbc.bind              : binding parameter (5:VARCHAR) <- [true]
+2026-05-17T21:39:51.222+07:00 TRACE 17400 --- [seov] [http-nio-0.0.0.0-8081-exec-5] org.hibernate.orm.jdbc.bind              : binding parameter (6:VARCHAR) <- [M103]
+2026-05-17T21:39:51.222+07:00 TRACE 17400 --- [seov] [http-nio-0.0.0.0-8081-exec-5] org.hibernate.orm.jdbc.bind              : binding parameter (7:TIMESTAMP) <- [2026-05-17T21:39:43.575582]
+2026-05-17T21:39:51.222+07:00 TRACE 17400 --- [seov] [http-nio-0.0.0.0-8081-exec-5] org.hibernate.orm.jdbc.bind              : binding parameter (8:VARCHAR) <- [2]
+2026-05-17T21:39:51.222+07:00 TRACE 17400 --- [seov] [http-nio-0.0.0.0-8081-exec-5] org.hibernate.orm.jdbc.bind              : binding parameter (9:VARCHAR) <- [PROCESSING]
+2026-05-17T21:39:51.222+07:00 TRACE 17400 --- [seov] [http-nio-0.0.0.0-8081-exec-5] org.hibernate.orm.jdbc.bind              : binding parameter (10:INTEGER) <- [0]
+2026-05-17T21:39:51.222+07:00 TRACE 17400 --- [seov] [http-nio-0.0.0.0-8081-exec-5] org.hibernate.orm.jdbc.bind              : binding parameter (11:TIMESTAMP) <- [2026-05-17T21:39:51.212150200]
+2026-05-17T21:39:51.222+07:00 TRACE 17400 --- [seov] [http-nio-0.0.0.0-8081-exec-5] org.hibernate.orm.jdbc.bind              : binding parameter (12:VARCHAR) <- [07521]
+2026-05-17T21:39:51.222+07:00 TRACE 17400 --- [seov] [http-nio-0.0.0.0-8081-exec-5] org.hibernate.orm.jdbc.bind              : binding parameter (13:BIGINT) <- [1]
+2026-05-17T21:39:51.228+07:00 DEBUG 17400 --- [seov] [http-nio-0.0.0.0-8081-exec-5] org.hibernate.SQL                        : 
+    select
+        a1_0.id,
+        a1_0.completed_at,
+        a1_0.created_at,
+        a1_0.description,
+        a1_0.error_stage,
+        a1_0.flag,
+        a1_0.team,
+        a1_0.line_name,
+        a1_0.processing_at,
+        a1_0.site_code,
+        a1_0.status,
+        a1_0.updated_at,
+        a1_0.user_code 
+    from
+        andondata a1_0 
+    where
+        a1_0.id=?
+2026-05-17T21:39:51.228+07:00 TRACE 17400 --- [seov] [http-nio-0.0.0.0-8081-exec-5] org.hibernate.orm.jdbc.bind              : binding parameter (1:BIGINT) <- [1]
+2026-05-17T21:39:51.229+07:00 DEBUG 17400 --- [seov] [http-nio-0.0.0.0-8081-exec-5] org.hibernate.SQL                        : 
+    select
+        ag1_0.id,
+        ag1_0.active,
+        ag1_0.description,
+        ag1_0.group_code,
+        ag1_0.group_name 
+    from
+        andon_group ag1_0 
+    where
+        ag1_0.group_code=?
+2026-05-17T21:39:51.229+07:00 TRACE 17400 --- [seov] [http-nio-0.0.0.0-8081-exec-5] org.hibernate.orm.jdbc.bind              : binding parameter (1:INTEGER) <- [0]
+2026-05-17T21:39:51.232+07:00 DEBUG 17400 --- [seov] [http-nio-0.0.0.0-8081-exec-5] org.hibernate.SQL                        : 
+    select
+        a1_0.id,
+        a1_0.completed_at,
+        a1_0.created_at,
+        a1_0.description,
+        a1_0.error_stage,
+        a1_0.flag,
+        g1_0.id,
+        g1_0.active,
+        g1_0.description,
+        g1_0.group_code,
+        g1_0.group_name,
+        a1_0.line_name,
+        a1_0.processing_at,
+        a1_0.site_code,
+        a1_0.status,
+        a1_0.team,
+        a1_0.updated_at,
+        a1_0.user_code 
+    from
+        andondata a1_0 
+    join
+        andon_group g1_0 
+            on g1_0.group_code=a1_0.team 
+    where
+        a1_0.id=?
+2026-05-17T21:39:51.232+07:00 TRACE 17400 --- [seov] [http-nio-0.0.0.0-8081-exec-5] org.hibernate.orm.jdbc.bind              : binding parameter (1:BIGINT) <- [1]
+2026-05-17T21:39:51.234+07:00 DEBUG 17400 --- [seov] [http-nio-0.0.0.0-8081-exec-5] org.hibernate.SQL                        : 
+    select
+        ROW_NUMBER() OVER (                 PARTITION 
+    BY
+        A.request_id                  
+    ORDER BY
+        A.created_at             ) AS RN,
+        A.request_id as id,
+        A.description,
+        A.action_type,
+        A.from_user,
+        A.user_name,
+        A.from_team,
+        A.to_team,
+        A.from_team_name,
+        A.to_team_name,
+        A.status,
+        A.start_time,
+        A.end_time,
+        A.created_at,
+        A.updated_at,
+        A.is_active         
+    from
+        (             select
+            A.*,
+            B.name as user_name,
+            C.group_name as from_team_name,
+            D.group_name as to_team_name             
+        from
+            andon_process_log A             
+        left join
+            users B 
+                on A.from_user = B.username             
+        left join
+            andon_group C 
+                on A.from_team = C.group_code             
+        left join
+            andon_group D 
+                on A.to_team = D.group_code             
+        where
+            A.request_id in (                 select
+                a.id                  
+            from
+                andondata a                  
+            where
+                a.status != 'OK'                    
+                and a.site_code = ?             )         ) A 
+2026-05-17T21:39:51.234+07:00 TRACE 17400 --- [seov] [http-nio-0.0.0.0-8081-exec-5] org.hibernate.orm.jdbc.bind              : binding parameter (1:VARCHAR) <- [2]
+2026-05-17T21:39:54.033+07:00 DEBUG 17400 --- [seov] [http-nio-0.0.0.0-8081-exec-7] org.hibernate.SQL                        : 
+    select
+        A.*,
+        B.method,
+        B.old_device ,
+        B.new_device ,
+        B.old_status ,
+        B.replace_reason  
+    from
+        andondata A 
+    left join
+        andon_handling_detail B  
+            on  A.id = B.request_id 
+    where
+        A.site_code LIKE '%' || ? || '%'   
+        and A.created_at between ?  and ? 
+2026-05-17T21:39:54.034+07:00 TRACE 17400 --- [seov] [http-nio-0.0.0.0-8081-exec-7] org.hibernate.orm.jdbc.bind              : binding parameter (1:VARCHAR) <- []
+2026-05-17T21:39:54.034+07:00 TRACE 17400 --- [seov] [http-nio-0.0.0.0-8081-exec-7] org.hibernate.orm.jdbc.bind              : binding parameter (2:TIMESTAMP) <- [2026-05-01T00:00]
+2026-05-17T21:39:54.034+07:00 TRACE 17400 --- [seov] [http-nio-0.0.0.0-8081-exec-7] org.hibernate.orm.jdbc.bind              : binding parameter (3:TIMESTAMP) <- [2026-05-31T23:59:59]
+2026-05-17T21:40:02.240+07:00 DEBUG 17400 --- [seov] [http-nio-0.0.0.0-8081-exec-2] org.hibernate.SQL                        : 
+    select
+        a.* 
+    from
+        andondata a 
+2026-05-17T22:01:01.211+07:00  INFO 17400 --- [seov] [MessageBroker-1] o.s.w.s.c.WebSocketMessageBrokerStats    : WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], sockJsScheduler[pool size = 2, active threads = 1, queued tasks = 0, completed tasks = 1]
+2026-05-17T22:05:52.545+07:00 DEBUG 17400 --- [seov] [http-nio-0.0.0.0-8081-exec-5] org.hibernate.SQL                        : 
+    select
+        a.* 
+    from
+        andondata a 
+2026-05-17T22:07:37.461+07:00 DEBUG 17400 --- [seov] [http-nio-0.0.0.0-8081-exec-9] org.hibernate.SQL                        : 
+    select
+        a.* 
+    from
+        andondata a 
+2026-05-17T22:19:46.516+07:00 DEBUG 17400 --- [seov] [http-nio-0.0.0.0-8081-exec-3] org.hibernate.SQL                        : 
+    select
+        a.* 
+    from
+        andondata a 
+2026-05-17T22:20:10.453+07:00 DEBUG 17400 --- [seov] [http-nio-0.0.0.0-8081-exec-5] org.hibernate.SQL                        : 
+    select
+        a.* 
+    from
+        andondata a 
+2026-05-17T22:22:45.538+07:00 DEBUG 17400 --- [seov] [http-nio-0.0.0.0-8081-exec-8] org.hibernate.SQL                        : 
+    select
+        a.* 
+    from
+        andondata a 
+2026-05-17T22:23:07.472+07:00 DEBUG 17400 --- [seov] [http-nio-0.0.0.0-8081-exec-10] org.hibernate.SQL                        : 
+    select
+        a.* 
+    from
+        andondata a 
+2026-05-17T22:23:37.201+07:00 DEBUG 17400 --- [seov] [http-nio-0.0.0.0-8081-exec-2] org.hibernate.SQL                        : 
+    select
+        a.* 
+    from
+        andondata a 
+2026-05-17T22:23:43.737+07:00 DEBUG 17400 --- [seov] [http-nio-0.0.0.0-8081-exec-4] org.hibernate.SQL                        : 
+    SELECT
+        a.id as id,
+        a.site_code as siteCode,
+        a.line_name as lineName,
+        b.active as active,
+        b.group_code as groupCode,
+        b.group_name as groupName,
+        a.description as description,
+        a.error_stage as errorStage,
+        a.team as team,
+        a.flag as flag,
+        a.status as status,
+        a.processing_at as processingAt,
+        a.completed_at as completedAt,
+        a.created_at as createdAt,
+        a.updated_at as updatedAt             
+    FROM
+        andondata a             
+    LEFT JOIN
+        andon_group b                  
+            ON a.team = b.group_code             
+    WHERE
+        a.status != 'OK'               
+        AND a.site_code =? 
+    order by
+        a.id; 
+2026-05-17T22:23:43.738+07:00 TRACE 17400 --- [seov] [http-nio-0.0.0.0-8081-exec-4] org.hibernate.orm.jdbc.bind              : binding parameter (1:VARCHAR) <- [2]
+2026-05-17T22:23:43.743+07:00 DEBUG 17400 --- [seov] [http-nio-0.0.0.0-8081-exec-4] org.hibernate.SQL                        : 
+    select
+        ROW_NUMBER() OVER (                 PARTITION 
+    BY
+        A.request_id                  
+    ORDER BY
+        A.created_at             ) AS RN,
+        A.request_id as id,
+        A.description,
+        A.action_type,
+        A.from_user,
+        A.user_name,
+        A.from_team,
+        A.to_team,
+        A.from_team_name,
+        A.to_team_name,
+        A.status,
+        A.start_time,
+        A.end_time,
+        A.created_at,
+        A.updated_at,
+        A.is_active         
+    from
+        (             select
+            A.*,
+            B.name as user_name,
+            C.group_name as from_team_name,
+            D.group_name as to_team_name             
+        from
+            andon_process_log A             
+        left join
+            users B 
+                on A.from_user = B.username             
+        left join
+            andon_group C 
+                on A.from_team = C.group_code             
+        left join
+            andon_group D 
+                on A.to_team = D.group_code             
+        where
+            A.request_id in (                 select
+                a.id                  
+            from
+                andondata a                  
+            where
+                a.status != 'OK'                    
+                and a.site_code = ?             )         ) A 
+2026-05-17T22:23:43.743+07:00 TRACE 17400 --- [seov] [http-nio-0.0.0.0-8081-exec-4] org.hibernate.orm.jdbc.bind              : binding parameter (1:VARCHAR) <- [2]
+2026-05-17T22:31:01.221+07:00  INFO 17400 --- [seov] [MessageBroker-2] o.s.w.s.c.WebSocketMessageBrokerStats    : WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], sockJsScheduler[pool size = 3, active threads = 1, queued tasks = 0, completed tasks = 2]
+2026-05-17T22:33:12.344+07:00 DEBUG 17400 --- [seov] [http-nio-0.0.0.0-8081-exec-8] org.hibernate.SQL                        : 
+    select
+        u1_0.id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.join_date,
+        u1_0.name,
+        u1_0.password,
+        u1_0.position,
+        u1_0.section,
+        u1_0.updated_at,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.username=?
+2026-05-17T22:33:12.345+07:00 TRACE 17400 --- [seov] [http-nio-0.0.0.0-8081-exec-8] org.hibernate.orm.jdbc.bind              : binding parameter (1:VARCHAR) <- [07521]
+2026-05-17T22:33:12.431+07:00 DEBUG 17400 --- [seov] [http-nio-0.0.0.0-8081-exec-8] org.hibernate.SQL                        : 
+    select
+        u1_0.id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.join_date,
+        u1_0.name,
+        u1_0.password,
+        u1_0.position,
+        r1_0.user_id,
+        r1_1.id,
+        r1_1.description,
+        r1_1.name,
+        p1_0.role_id,
+        p1_1.id,
+        p1_1.code,
+        p1_1.name,
+        u1_0.section,
+        u1_0.updated_at,
+        u1_0.username 
+    from
+        users u1_0 
+    join
+        user_roles r1_0 
+            on u1_0.id=r1_0.user_id 
+    join
+        roles r1_1 
+            on r1_1.id=r1_0.role_id 
+    join
+        role_permissions p1_0 
+            on r1_1.id=p1_0.role_id 
+    join
+        permissions p1_1 
+            on p1_1.id=p1_0.permission_id 
+    where
+        u1_0.username=?
+2026-05-17T22:33:12.434+07:00 TRACE 17400 --- [seov] [http-nio-0.0.0.0-8081-exec-8] org.hibernate.orm.jdbc.bind              : binding parameter (1:VARCHAR) <- [07521]
+2026-05-17T23:01:01.223+07:00  INFO 17400 --- [seov] [MessageBroker-1] o.s.w.s.c.WebSocketMessageBrokerStats    : WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], sockJsScheduler[pool size = 4, active threads = 1, queued tasks = 0, completed tasks = 3]
