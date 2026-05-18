@@ -157,6 +157,7 @@ public class AuthenticationService {
 
     public RoleResponse CreateRole(RoleUpdateRequest request){
         Role role = new Role();
+        role.setCode(request.getCode());
         role.setName(request.getName());
         role.setDescription(request.getDescription());
         // 1. Save
