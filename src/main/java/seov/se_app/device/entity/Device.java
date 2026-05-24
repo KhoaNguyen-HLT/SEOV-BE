@@ -32,7 +32,9 @@ public class Device {
     private String status;
     private LocalDateTime dateTimeUsed;
     private LocalDate dateTime;
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
+    @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
 }
