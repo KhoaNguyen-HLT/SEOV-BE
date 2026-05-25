@@ -1,0 +1,9 @@
+Dự án quản lý nguên vật liệu.
+Tên các bảng trong entity
+Bảng chứa các thông tin nguyên vật liệu.
+Material
+MaterialLot
+Location
+Inventory
+InventoryTransaction
+InventoryTransactionFlow
