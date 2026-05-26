@@ -8,4 +8,6 @@ import seov.se_app.material.entity.InventoryTransactionFlow;
 public interface InventoryTransactionFlowRepository extends JpaRepository<InventoryTransactionFlow, Long> {
     @Query("SELECT a FROM InventoryTransactionFlow a WHERE a.flowCode = :flowCode")
     InventoryTransactionFlow getTransactionFlow(@Param("flowCode") String flowCode);
+
+
 }

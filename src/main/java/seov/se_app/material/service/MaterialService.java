@@ -24,6 +24,13 @@ public class MaterialService {
     }
 
 
+
+
+    public List<MaterialRequest> getMaterialRequest(String flowCode){
+        return materialRequestRepository.getMaterialRequest(flowCode);
+    }
+
+
     public MaterialRequest CreatMaterialRequest(MaterialRqNoRequest request) {
         MaterialRequest materialRequest = new MaterialRequest();
         materialRequest.setRequestNo(request.getRequestNo());

@@ -11,4 +11,7 @@ import java.util.List;
 
 public interface MaterialRequestRepository extends JpaRepository<MaterialRequest, Long> {
 
+    @Query("SELECT a FROM MaterialRequest a WHERE a.flowCode = :flowCode")
+    List<MaterialRequest> getMaterialRequest(@Param("flowCode") String flowCode);
+
 }
