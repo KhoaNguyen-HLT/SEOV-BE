@@ -52,7 +52,7 @@ public class QaService {
         String requestNo = "IQC" + now.format(
                 DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss")
         );
-        String bs = "1315";
+        String bs = "1310";
 
         for (int i = 5; i < 100; i++) {
             Row row = sheet.getRow(i);
