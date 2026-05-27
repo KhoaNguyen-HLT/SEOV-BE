@@ -6357,3 +6357,275 @@ java.lang.RuntimeException: User not found
     where
         u1_0.username=?
 2026-05-26T16:43:38.466+07:00 TRACE 16560 --- [seov] [http-nio-0.0.0.0-8081-exec-3] org.hibernate.orm.jdbc.bind              : binding parameter (1:VARCHAR) <- [07521]
+2026-05-27T08:49:41.259+07:00  INFO 17284 --- [seov] [main] seov.SeovApplication                     : Starting SeovApplication using Java 21.0.9 with PID 17284 (D:\KHOAHLT\SEOV-BE\target\classes started by rs07521 in D:\KHOAHLT\SEOV-BE)
+2026-05-27T08:49:41.262+07:00  INFO 17284 --- [seov] [main] seov.SeovApplication                     : No active profile set, falling back to 1 default profile: "default"
+2026-05-27T08:49:44.080+07:00  INFO 17284 --- [seov] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-05-27T08:49:44.261+07:00  INFO 17284 --- [seov] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 168 ms. Found 13 JPA repository interfaces.
+2026-05-27T08:49:45.153+07:00  INFO 17284 --- [seov] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8081 (http)
+2026-05-27T08:49:45.173+07:00  INFO 17284 --- [seov] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-05-27T08:49:45.173+07:00  INFO 17284 --- [seov] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.19]
+2026-05-27T08:49:45.415+07:00  INFO 17284 --- [seov] [main] o.a.c.c.C.[Tomcat].[localhost].[/seov]   : Initializing Spring embedded WebApplicationContext
+2026-05-27T08:49:45.416+07:00  INFO 17284 --- [seov] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 4104 ms
+2026-05-27T08:49:45.760+07:00  INFO 17284 --- [seov] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-05-27T08:49:45.878+07:00  INFO 17284 --- [seov] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.4.4.Final
+2026-05-27T08:49:45.934+07:00  INFO 17284 --- [seov] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2026-05-27T08:49:46.265+07:00  INFO 17284 --- [seov] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-05-27T08:49:46.299+07:00  INFO 17284 --- [seov] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-05-27T08:49:46.662+07:00  INFO 17284 --- [seov] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@7856f41a
+2026-05-27T08:49:46.664+07:00  INFO 17284 --- [seov] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-05-27T08:49:46.706+07:00  WARN 17284 --- [seov] [main] org.hibernate.orm.deprecation            : HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-05-27T08:49:48.255+07:00  INFO 17284 --- [seov] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-05-27T08:49:48.381+07:00  INFO 17284 --- [seov] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-05-27T08:49:48.871+07:00  INFO 17284 --- [seov] [main] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-05-27T08:49:50.198+07:00  WARN 17284 --- [seov] [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-05-27T08:49:50.251+07:00  WARN 17284 --- [seov] [main] .s.s.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: adb24b07-5a17-4b4f-8a33-de342a5229bb
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2026-05-27T08:49:50.801+07:00  INFO 17284 --- [seov] [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@71b253b, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@765cb6c1, org.springframework.security.web.context.SecurityContextHolderFilter@626e3b18, org.springframework.security.web.header.HeaderWriterFilter@120f441c, org.springframework.web.filter.CorsFilter@19f811a2, org.springframework.security.web.authentication.logout.LogoutFilter@1886e8b9, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@113886b1, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@741d2dda, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@50df710a, org.springframework.security.web.access.ExceptionTranslationFilter@7bce016c, org.springframework.security.web.access.intercept.AuthorizationFilter@2f9bd5ac]
+2026-05-27T08:49:51.318+07:00  INFO 17284 --- [seov] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8081 (http) with context path '/seov'
+2026-05-27T08:49:51.324+07:00  INFO 17284 --- [seov] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : Starting...
+2026-05-27T08:49:51.329+07:00  INFO 17284 --- [seov] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@4518e64]]
+2026-05-27T08:49:51.330+07:00  INFO 17284 --- [seov] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : Started.
+2026-05-27T08:49:51.352+07:00  INFO 17284 --- [seov] [main] seov.SeovApplication                     : Started SeovApplication in 10.759 seconds (process running for 12.168)
+2026-05-27T08:50:51.319+07:00  INFO 17284 --- [seov] [MessageBroker-1] o.s.w.s.c.WebSocketMessageBrokerStats    : WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], sockJsScheduler[pool size = 1, active threads = 1, queued tasks = 0, completed tasks = 0]
+2026-05-27T08:53:00.035+07:00  INFO 17284 --- [seov] [http-nio-0.0.0.0-8081-exec-2] o.a.c.c.C.[Tomcat].[localhost].[/seov]   : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-05-27T08:53:00.051+07:00  INFO 17284 --- [seov] [http-nio-0.0.0.0-8081-exec-2] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-05-27T08:53:00.052+07:00  INFO 17284 --- [seov] [http-nio-0.0.0.0-8081-exec-2] o.s.web.servlet.DispatcherServlet        : Completed initialization in 0 ms
+2026-05-27T08:53:00.596+07:00 DEBUG 17284 --- [seov] [http-nio-0.0.0.0-8081-exec-1] org.hibernate.SQL                        : 
+    select
+        u1_0.id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.join_date,
+        u1_0.name,
+        u1_0.password,
+        u1_0.position,
+        u1_0.section,
+        u1_0.updated_at,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.username=?
+2026-05-27T08:53:00.600+07:00 TRACE 17284 --- [seov] [http-nio-0.0.0.0-8081-exec-1] org.hibernate.orm.jdbc.bind              : binding parameter (1:VARCHAR) <- [00779]
+2026-05-27T08:53:00.627+07:00 ERROR 17284 --- [seov] [http-nio-0.0.0.0-8081-exec-1] o.a.c.c.C.[.[.[.[dispatcherServlet]      : Servlet.service() for servlet [dispatcherServlet] in context with path [/seov] threw exception [Request processing failed: java.util.NoSuchElementException: No value present] with root cause
+
+java.util.NoSuchElementException: No value present
+	at java.base/java.util.Optional.get(Optional.java:143) ~[na:na]
+	at seov.auth.service.AuthenticationService.authenticate(AuthenticationService.java:47) ~[classes/:na]
+	at seov.auth.controller.AuthenticationController.authenticate(AuthenticationController.java:25) ~[classes/:na]
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103) ~[na:na]
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580) ~[na:na]
+	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:259) ~[spring-web-6.1.4.jar:6.1.4]
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:192) ~[spring-web-6.1.4.jar:6.1.4]
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:118) ~[spring-webmvc-6.1.4.jar:6.1.4]
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:920) ~[spring-webmvc-6.1.4.jar:6.1.4]
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:830) ~[spring-webmvc-6.1.4.jar:6.1.4]
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87) ~[spring-webmvc-6.1.4.jar:6.1.4]
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1089) ~[spring-webmvc-6.1.4.jar:6.1.4]
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:979) ~[spring-webmvc-6.1.4.jar:6.1.4]
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014) ~[spring-webmvc-6.1.4.jar:6.1.4]
+	at org.springframework.web.servlet.FrameworkServlet.doPost(FrameworkServlet.java:914) ~[spring-webmvc-6.1.4.jar:6.1.4]
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:590) ~[tomcat-embed-core-10.1.19.jar:6.0]
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885) ~[spring-webmvc-6.1.4.jar:6.1.4]
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658) ~[tomcat-embed-core-10.1.19.jar:6.0]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:205) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51) ~[tomcat-embed-websocket-10.1.19.jar:10.1.19]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:108) ~[spring-web-6.1.4.jar:6.1.4]
+	at org.springframework.security.web.FilterChainProxy.lambda$doFilterInternal$3(FilterChainProxy.java:231) ~[spring-security-web-6.2.2.jar:6.2.2]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:365) ~[spring-security-web-6.2.2.jar:6.2.2]
+	at org.springframework.security.web.access.intercept.AuthorizationFilter.doFilter(AuthorizationFilter.java:100) ~[spring-security-web-6.2.2.jar:6.2.2]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374) ~[spring-security-web-6.2.2.jar:6.2.2]
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:126) ~[spring-security-web-6.2.2.jar:6.2.2]
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:120) ~[spring-security-web-6.2.2.jar:6.2.2]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374) ~[spring-security-web-6.2.2.jar:6.2.2]
+	at org.springframework.security.web.authentication.AnonymousAuthenticationFilter.doFilter(AnonymousAuthenticationFilter.java:100) ~[spring-security-web-6.2.2.jar:6.2.2]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374) ~[spring-security-web-6.2.2.jar:6.2.2]
+	at org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter.doFilter(SecurityContextHolderAwareRequestFilter.java:179) ~[spring-security-web-6.2.2.jar:6.2.2]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374) ~[spring-security-web-6.2.2.jar:6.2.2]
+	at org.springframework.security.web.savedrequest.RequestCacheAwareFilter.doFilter(RequestCacheAwareFilter.java:63) ~[spring-security-web-6.2.2.jar:6.2.2]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374) ~[spring-security-web-6.2.2.jar:6.2.2]
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:107) ~[spring-security-web-6.2.2.jar:6.2.2]
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:93) ~[spring-security-web-6.2.2.jar:6.2.2]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374) ~[spring-security-web-6.2.2.jar:6.2.2]
+	at org.springframework.web.filter.CorsFilter.doFilterInternal(CorsFilter.java:91) ~[spring-web-6.1.4.jar:6.1.4]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.1.4.jar:6.1.4]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374) ~[spring-security-web-6.2.2.jar:6.2.2]
+	at org.springframework.security.web.header.HeaderWriterFilter.doHeadersAfter(HeaderWriterFilter.java:90) ~[spring-security-web-6.2.2.jar:6.2.2]
+	at org.springframework.security.web.header.HeaderWriterFilter.doFilterInternal(HeaderWriterFilter.java:75) ~[spring-security-web-6.2.2.jar:6.2.2]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.1.4.jar:6.1.4]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374) ~[spring-security-web-6.2.2.jar:6.2.2]
+	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:82) ~[spring-security-web-6.2.2.jar:6.2.2]
+	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:69) ~[spring-security-web-6.2.2.jar:6.2.2]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374) ~[spring-security-web-6.2.2.jar:6.2.2]
+	at org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter.doFilterInternal(WebAsyncManagerIntegrationFilter.java:62) ~[spring-security-web-6.2.2.jar:6.2.2]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.1.4.jar:6.1.4]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374) ~[spring-security-web-6.2.2.jar:6.2.2]
+	at org.springframework.security.web.session.DisableEncodeUrlFilter.doFilterInternal(DisableEncodeUrlFilter.java:42) ~[spring-security-web-6.2.2.jar:6.2.2]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.1.4.jar:6.1.4]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374) ~[spring-security-web-6.2.2.jar:6.2.2]
+	at org.springframework.security.web.FilterChainProxy.doFilterInternal(FilterChainProxy.java:233) ~[spring-security-web-6.2.2.jar:6.2.2]
+	at org.springframework.security.web.FilterChainProxy.doFilter(FilterChainProxy.java:191) ~[spring-security-web-6.2.2.jar:6.2.2]
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113) ~[spring-web-6.1.4.jar:6.1.4]
+	at org.springframework.web.servlet.handler.HandlerMappingIntrospector.lambda$createCacheFilter$3(HandlerMappingIntrospector.java:195) ~[spring-webmvc-6.1.4.jar:6.1.4]
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113) ~[spring-web-6.1.4.jar:6.1.4]
+	at org.springframework.web.filter.CompositeFilter.doFilter(CompositeFilter.java:74) ~[spring-web-6.1.4.jar:6.1.4]
+	at org.springframework.security.config.annotation.web.configuration.WebMvcSecurityConfiguration$CompositeFilterChainProxy.doFilter(WebMvcSecurityConfiguration.java:230) ~[spring-security-config-6.2.2.jar:6.2.2]
+	at org.springframework.web.filter.DelegatingFilterProxy.invokeDelegate(DelegatingFilterProxy.java:352) ~[spring-web-6.1.4.jar:6.1.4]
+	at org.springframework.web.filter.DelegatingFilterProxy.doFilter(DelegatingFilterProxy.java:268) ~[spring-web-6.1.4.jar:6.1.4]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100) ~[spring-web-6.1.4.jar:6.1.4]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.1.4.jar:6.1.4]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93) ~[spring-web-6.1.4.jar:6.1.4]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.1.4.jar:6.1.4]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201) ~[spring-web-6.1.4.jar:6.1.4]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.1.4.jar:6.1.4]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:482) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:115) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:391) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:896) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1744) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1191) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+	at java.base/java.lang.Thread.run(Thread.java:1583) ~[na:na]
+
+2026-05-27T08:53:08.020+07:00 DEBUG 17284 --- [seov] [http-nio-0.0.0.0-8081-exec-3] org.hibernate.SQL                        : 
+    select
+        u1_0.id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.join_date,
+        u1_0.name,
+        u1_0.password,
+        u1_0.position,
+        u1_0.section,
+        u1_0.updated_at,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.username=?
+2026-05-27T08:53:08.020+07:00 TRACE 17284 --- [seov] [http-nio-0.0.0.0-8081-exec-3] org.hibernate.orm.jdbc.bind              : binding parameter (1:VARCHAR) <- [07521]
+2026-05-27T08:53:08.203+07:00 DEBUG 17284 --- [seov] [http-nio-0.0.0.0-8081-exec-3] org.hibernate.SQL                        : 
+    select
+        u1_0.id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.join_date,
+        u1_0.name,
+        u1_0.password,
+        u1_0.position,
+        r1_0.user_id,
+        r1_1.id,
+        r1_1.code,
+        r1_1.description,
+        r1_1.name,
+        p1_0.role_id,
+        p1_1.id,
+        p1_1.code,
+        p1_1.name,
+        u1_0.section,
+        u1_0.updated_at,
+        u1_0.username 
+    from
+        users u1_0 
+    join
+        user_roles r1_0 
+            on u1_0.id=r1_0.user_id 
+    join
+        roles r1_1 
+            on r1_1.id=r1_0.role_id 
+    join
+        role_permissions p1_0 
+            on r1_1.id=p1_0.role_id 
+    join
+        permissions p1_1 
+            on p1_1.id=p1_0.permission_id 
+    where
+        u1_0.username=?
+2026-05-27T08:53:08.203+07:00 TRACE 17284 --- [seov] [http-nio-0.0.0.0-8081-exec-3] org.hibernate.orm.jdbc.bind              : binding parameter (1:VARCHAR) <- [07521]
+2026-05-27T09:20:51.913+07:00  INFO 17284 --- [seov] [MessageBroker-1] o.s.w.s.c.WebSocketMessageBrokerStats    : WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], sockJsScheduler[pool size = 2, active threads = 1, queued tasks = 0, completed tasks = 1]
+2026-05-27T09:50:52.219+07:00  INFO 17284 --- [seov] [MessageBroker-2] o.s.w.s.c.WebSocketMessageBrokerStats    : WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], sockJsScheduler[pool size = 3, active threads = 1, queued tasks = 0, completed tasks = 2]
+2026-05-27T10:10:48.414+07:00  WARN 17284 --- [seov] [HikariPool-1 housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=4m29s398ms155µs200ns).
+2026-05-27T10:11:13.700+07:00 DEBUG 17284 --- [seov] [http-nio-0.0.0.0-8081-exec-8] org.hibernate.SQL                        : 
+    select
+        u1_0.id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.join_date,
+        u1_0.name,
+        u1_0.password,
+        u1_0.position,
+        u1_0.section,
+        u1_0.updated_at,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.username=?
+2026-05-27T10:11:13.705+07:00 TRACE 17284 --- [seov] [http-nio-0.0.0.0-8081-exec-8] org.hibernate.orm.jdbc.bind              : binding parameter (1:VARCHAR) <- [07521]
+2026-05-27T10:11:13.835+07:00 DEBUG 17284 --- [seov] [http-nio-0.0.0.0-8081-exec-8] org.hibernate.SQL                        : 
+    select
+        u1_0.id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.join_date,
+        u1_0.name,
+        u1_0.password,
+        u1_0.position,
+        r1_0.user_id,
+        r1_1.id,
+        r1_1.code,
+        r1_1.description,
+        r1_1.name,
+        p1_0.role_id,
+        p1_1.id,
+        p1_1.code,
+        p1_1.name,
+        u1_0.section,
+        u1_0.updated_at,
+        u1_0.username 
+    from
+        users u1_0 
+    join
+        user_roles r1_0 
+            on u1_0.id=r1_0.user_id 
+    join
+        roles r1_1 
+            on r1_1.id=r1_0.role_id 
+    join
+        role_permissions p1_0 
+            on r1_1.id=p1_0.role_id 
+    join
+        permissions p1_1 
+            on p1_1.id=p1_0.permission_id 
+    where
+        u1_0.username=?
+2026-05-27T10:11:13.835+07:00 TRACE 17284 --- [seov] [http-nio-0.0.0.0-8081-exec-8] org.hibernate.orm.jdbc.bind              : binding parameter (1:VARCHAR) <- [07521]
+2026-05-27T10:24:51.641+07:00  INFO 17284 --- [seov] [MessageBroker-1] o.s.w.s.c.WebSocketMessageBrokerStats    : WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], sockJsScheduler[pool size = 4, active threads = 1, queued tasks = 0, completed tasks = 3]
+2026-05-27T10:54:51.675+07:00  INFO 17284 --- [seov] [MessageBroker-3] o.s.w.s.c.WebSocketMessageBrokerStats    : WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], sockJsScheduler[pool size = 5, active threads = 1, queued tasks = 0, completed tasks = 4]
+2026-05-27T11:12:30.215+07:00  WARN 17284 --- [seov] [HikariPool-1 housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=2m40s813ms400µs700ns).
+2026-05-27T11:27:02.483+07:00  INFO 17284 --- [seov] [MessageBroker-2] o.s.w.s.c.WebSocketMessageBrokerStats    : WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], sockJsScheduler[pool size = 6, active threads = 1, queued tasks = 0, completed tasks = 5]
+2026-05-27T11:57:02.515+07:00  INFO 17284 --- [seov] [MessageBroker-4] o.s.w.s.c.WebSocketMessageBrokerStats    : WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], sockJsScheduler[pool size = 7, active threads = 1, queued tasks = 0, completed tasks = 6]
+2026-05-27T12:27:02.550+07:00  INFO 17284 --- [seov] [MessageBroker-1] o.s.w.s.c.WebSocketMessageBrokerStats    : WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], sockJsScheduler[pool size = 8, active threads = 1, queued tasks = 0, completed tasks = 7]
