@@ -6357,3 +6357,153 @@ java.lang.RuntimeException: User not found
     where
         u1_0.username=?
 2026-05-26T16:43:38.466+07:00 TRACE 16560 --- [seov] [http-nio-0.0.0.0-8081-exec-3] org.hibernate.orm.jdbc.bind              : binding parameter (1:VARCHAR) <- [07521]
+2026-05-26T16:46:51.989+07:00 DEBUG 16560 --- [seov] [http-nio-0.0.0.0-8081-exec-5] org.hibernate.SQL                        : 
+    select
+        u1_0.id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.join_date,
+        u1_0.name,
+        u1_0.password,
+        u1_0.position,
+        u1_0.section,
+        u1_0.updated_at,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.username=?
+2026-05-26T16:46:51.996+07:00 TRACE 16560 --- [seov] [http-nio-0.0.0.0-8081-exec-5] org.hibernate.orm.jdbc.bind              : binding parameter (1:VARCHAR) <- [00779]
+2026-05-26T16:46:52.215+07:00 DEBUG 16560 --- [seov] [http-nio-0.0.0.0-8081-exec-5] org.hibernate.SQL                        : 
+    select
+        r1_0.user_id,
+        r1_1.id,
+        r1_1.code,
+        r1_1.description,
+        r1_1.name 
+    from
+        user_roles r1_0 
+    join
+        roles r1_1 
+            on r1_1.id=r1_0.role_id 
+    where
+        r1_0.user_id=?
+2026-05-26T16:46:52.215+07:00 TRACE 16560 --- [seov] [http-nio-0.0.0.0-8081-exec-5] org.hibernate.orm.jdbc.bind              : binding parameter (1:BIGINT) <- [2]
+2026-05-26T16:46:52.219+07:00 DEBUG 16560 --- [seov] [http-nio-0.0.0.0-8081-exec-5] org.hibernate.SQL                        : 
+    select
+        p1_0.role_id,
+        p1_1.id,
+        p1_1.code,
+        p1_1.name 
+    from
+        role_permissions p1_0 
+    join
+        permissions p1_1 
+            on p1_1.id=p1_0.permission_id 
+    where
+        p1_0.role_id=?
+2026-05-26T16:46:52.220+07:00 TRACE 16560 --- [seov] [http-nio-0.0.0.0-8081-exec-5] org.hibernate.orm.jdbc.bind              : binding parameter (1:BIGINT) <- [2]
+2026-05-26T16:46:52.224+07:00 DEBUG 16560 --- [seov] [http-nio-0.0.0.0-8081-exec-5] org.hibernate.SQL                        : 
+    select
+        p1_0.role_id,
+        p1_1.id,
+        p1_1.code,
+        p1_1.name 
+    from
+        role_permissions p1_0 
+    join
+        permissions p1_1 
+            on p1_1.id=p1_0.permission_id 
+    where
+        p1_0.role_id=?
+2026-05-26T16:46:52.224+07:00 TRACE 16560 --- [seov] [http-nio-0.0.0.0-8081-exec-5] org.hibernate.orm.jdbc.bind              : binding parameter (1:BIGINT) <- [1]
+2026-05-26T16:47:20.004+07:00  INFO 16560 --- [seov] [MessageBroker-1] o.s.w.s.c.WebSocketMessageBrokerStats    : WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], sockJsScheduler[pool size = 4, active threads = 1, queued tasks = 0, completed tasks = 3]
+2026-05-26T16:47:22.454+07:00 DEBUG 16560 --- [seov] [http-nio-0.0.0.0-8081-exec-6] org.hibernate.SQL                        : 
+    select
+        u1_0.id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.join_date,
+        u1_0.name,
+        u1_0.password,
+        u1_0.position,
+        u1_0.section,
+        u1_0.updated_at,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.username=?
+2026-05-26T16:47:22.459+07:00 TRACE 16560 --- [seov] [http-nio-0.0.0.0-8081-exec-6] org.hibernate.orm.jdbc.bind              : binding parameter (1:VARCHAR) <- [00779]
+2026-05-26T16:47:27.195+07:00 DEBUG 16560 --- [seov] [http-nio-0.0.0.0-8081-exec-8] org.hibernate.SQL                        : 
+    select
+        u1_0.id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.join_date,
+        u1_0.name,
+        u1_0.password,
+        u1_0.position,
+        u1_0.section,
+        u1_0.updated_at,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.username=?
+2026-05-26T16:47:27.199+07:00 TRACE 16560 --- [seov] [http-nio-0.0.0.0-8081-exec-8] org.hibernate.orm.jdbc.bind              : binding parameter (1:VARCHAR) <- [07521]
+2026-05-26T16:47:27.290+07:00 DEBUG 16560 --- [seov] [http-nio-0.0.0.0-8081-exec-8] org.hibernate.SQL                        : 
+    select
+        u1_0.id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.join_date,
+        u1_0.name,
+        u1_0.password,
+        u1_0.position,
+        r1_0.user_id,
+        r1_1.id,
+        r1_1.code,
+        r1_1.description,
+        r1_1.name,
+        p1_0.role_id,
+        p1_1.id,
+        p1_1.code,
+        p1_1.name,
+        u1_0.section,
+        u1_0.updated_at,
+        u1_0.username 
+    from
+        users u1_0 
+    join
+        user_roles r1_0 
+            on u1_0.id=r1_0.user_id 
+    join
+        roles r1_1 
+            on r1_1.id=r1_0.role_id 
+    join
+        role_permissions p1_0 
+            on r1_1.id=p1_0.role_id 
+    join
+        permissions p1_1 
+            on p1_1.id=p1_0.permission_id 
+    where
+        u1_0.username=?
+2026-05-26T16:47:27.291+07:00 TRACE 16560 --- [seov] [http-nio-0.0.0.0-8081-exec-8] org.hibernate.orm.jdbc.bind              : binding parameter (1:VARCHAR) <- [07521]
+2026-05-26T16:47:35.503+07:00 DEBUG 16560 --- [seov] [http-nio-0.0.0.0-8081-exec-9] org.hibernate.SQL                        : 
+    select
+        u1_0.id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.join_date,
+        u1_0.name,
+        u1_0.password,
+        u1_0.position,
+        u1_0.section,
+        u1_0.updated_at,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.username=?
+2026-05-26T16:47:35.508+07:00 TRACE 16560 --- [seov] [http-nio-0.0.0.0-8081-exec-9] org.hibernate.orm.jdbc.bind              : binding parameter (1:VARCHAR) <- [00779]
