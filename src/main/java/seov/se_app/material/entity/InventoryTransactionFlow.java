@@ -18,7 +18,7 @@ public class InventoryTransactionFlow extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 //    mã đầu phieu request
-    @Column(name = "mr_code", nullable = false, unique = true, length = 50)
+    @Column(name = "mr_code", nullable = true, unique = true, length = 50)
     private String mrCode;
 
     @Column(name = "flow_code", nullable = false, unique = true, length = 50)
