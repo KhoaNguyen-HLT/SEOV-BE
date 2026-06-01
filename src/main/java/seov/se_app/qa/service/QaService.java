@@ -255,8 +255,7 @@ public class QaService {
         String filePath = "/home/seov/QA-Inspection/6.Systems/1.report/MasterFile.xlsx";
         String lotNo = lotA +"-"+lotB;
 
-        List<String> values =
-                iqcRlmDataRepository.getResultNoMtRd(lotNo);
+        List<String> values = iqcRlmDataRepository.getResultNoMtRd(lotNo);
 
 
 
