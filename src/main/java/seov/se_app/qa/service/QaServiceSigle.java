@@ -19,13 +19,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
-public class QaService {
+public class QaServiceSigle {
 
     @Autowired
     private SimpMessagingTemplate messagingTemplate;
@@ -41,7 +38,7 @@ public class QaService {
             // sheet đầu tiên
             Sheet sheet = workbook.getSheetAt(0);
             iqcRlmData = getData(sheet);
-            iqcRlmDataRepository.deleteByProgramTypeM();
+            iqcRlmDataRepository.deleteByProgramTypeS();
             iqcRlmDataRepository.saveAll(iqcRlmData);
 
             List<IqcRlmDataHis> hisData = iqcRlmData.stream()
@@ -55,45 +52,73 @@ public class QaService {
         return iqcRlmData;
     }
 
-//lấy data file đo đa tâm.
+//lấy data file đo đơn tâm.
     public List<IqcRlmData> getData(Sheet sheet) {
-        List<Row> rows =  processSheet(sheet);
+        List<Row> rows = processSheet(sheet);
 
         DataFormatter formatter = new DataFormatter();
         List<IqcRlmData> dataList = new ArrayList<>();
+
         LocalDateTime now = LocalDateTime.now();
         String requestNo = "IQC" + now.format(
                 DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss")
         );
-        int bs = 1310;
-        String pType = "M";
+
+        String pType = "S";
+
+        String[] columns = {"H", "I", "K", "L", "EV", "EW", "EY", "EZ"};
+
+        Set<String> cable1Cols = Set.of("H", "I", "EV", "EW");
+        Set<String> bs1310Cols = Set.of("H", "I", "K", "L");
+        Set<String> ilCols = Set.of("H", "K", "EV", "EY");
+
+        DateTimeFormatter dtFormatter =
+                DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
         for (Row row : rows) {
-            String subCableSn = formatter.formatCellValue(row.getCell(0));
-            String type = formatter.formatCellValue(row.getCell(2));
-            String lotNo = formatter.formatCellValue(row.getCell(3));
 
-            Cell cellOperationTime = row.getCell(4);
-            String cellValue = formatter.formatCellValue(cellOperationTime).trim();
+            String subCableSn = formatter.formatCellValue(row.getCell(0)).trim();
+            String type = formatter.formatCellValue(row.getCell(2)).trim();
+            String lotNo = formatter.formatCellValue(row.getCell(3)).trim();
+            String userId = formatter.formatCellValue(row.getCell(5)).trim();
 
-            DateTimeFormatter dtFormatter =
-                    DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            Cell operationTimeCell = row.getCell(4);
+            LocalDateTime operationTime = null;
 
-            LocalDateTime operationTime =
-                    LocalDateTime.parse(cellValue, dtFormatter);
+            if (operationTimeCell != null) {
+                if (operationTimeCell.getCellType() == CellType.NUMERIC
+                        && DateUtil.isCellDateFormatted(operationTimeCell)) {
 
-            String userId = formatter.formatCellValue(row.getCell(5));
+                    operationTime = operationTimeCell.getLocalDateTimeCellValue();
 
-            int subCableNo = 0;
+                } else {
 
-            for (int j = 7; j <= 76; j += 3) {
-                subCableNo++;
+                    String cellValue =
+                            formatter.formatCellValue(operationTimeCell).trim();
 
-                String value = formatter.formatCellValue(row.getCell(j)).trim();
+                    if (!cellValue.isEmpty()) {
+                        operationTime = LocalDateTime.parse(
+                                cellValue,
+                                dtFormatter
+                        );
+                    }
+                }
+            }
+
+            for (String col : columns) {
+
+                int colIndex = CellReference.convertColStringToIndex(col);
+                Cell cell = row.getCell(colIndex);
+
+                String value = formatter.formatCellValue(cell).trim();
 
                 if (value.isEmpty()) {
-                    value = "null";
+                    value = null;
                 }
+
+                int subCableNo = cable1Cols.contains(col) ? 1 : 2;
+                int bs = bs1310Cols.contains(col) ? 1310 : 1550;
+                String msType = ilCols.contains(col) ? "IL" : "RL";
 
                 IqcRlmData data = new IqcRlmData();
                 data.setRequestNo(requestNo);
@@ -101,6 +126,7 @@ public class QaService {
                 data.setSubCableSn(subCableSn);
                 data.setType(type);
                 data.setProgramType(pType);
+                data.setMeasureType(msType);
                 data.setBs(bs);
                 data.setUserCode(userId);
                 data.setSubCableNo(subCableNo);
@@ -112,71 +138,76 @@ public class QaService {
                 dataList.add(data);
             }
         }
+
         return dataList;
     }
 
-//    xử lý file excel với trường hợp trùng dòng dữ liệu.
-public List<Row> processSheet(Sheet sheet) {
-    Map<String, Row> map = new LinkedHashMap<>();
-    DataFormatter formatter = new DataFormatter();
 
-    for (int i = 5; i <= sheet.getLastRowNum(); i++) {
-        Row row = sheet.getRow(i);
-        if (row == null) continue;
+    //    xử lý file excel với trường hợp trùng dòng dữ liệu.
+    public List<Row> processSheet(Sheet sheet) {
+        Map<String, Row> map = new LinkedHashMap<>();
+        DataFormatter formatter = new DataFormatter();
 
-        String a = formatter.formatCellValue(row.getCell(0)).trim();
-        String d = formatter.formatCellValue(row.getCell(3)).trim();
+        for (int i = 5; i <= sheet.getLastRowNum(); i++) {
+            Row row = sheet.getRow(i);
+            if (row == null) continue;
 
-        if (a.isEmpty() && d.isEmpty()) {
-            continue;
+            String a = formatter.formatCellValue(row.getCell(0)).trim();
+            String d = formatter.formatCellValue(row.getCell(3)).trim();
+
+            if (a.isEmpty() && d.isEmpty()) {
+                continue;
+            }
+
+            String key = a + "|" + d;
+
+            // nếu trùng A+D thì lấy cả dòng mới nhất
+            map.put(key, row);
         }
 
-        String key = a + "|" + d;
+        List<Row> finalRows = new ArrayList<>(map.values());
 
-        // nếu trùng A+D thì lấy cả dòng mới nhất
-        map.put(key, row);
-    }
+        if (finalRows.size() != 240) {
+            throw new RuntimeException(
+                    "Dữ liệu chuẩn phải có 240 dòng, hiện tại: " + finalRows.size()
+            );
+        }
 
-    List<Row> finalRows = new ArrayList<>(map.values());
-
-    if (finalRows.size() != 148) {
-        throw new RuntimeException(
-                "Dữ liệu chuẩn phải có 148 dòng, hiện tại: " + finalRows.size()
-        );
-    }
-
-    return finalRows;
-}
-
-
-//    get lotdata
-    public List<Map<String, Object>> getLotData(String program){
-        List<Map<String, Object>> data = iqcRlmDataRepository.getLotData(program);
-        return data;
+        return finalRows;
     }
 
 
 
-// lấy data ghi vào báo cáo excel với kiểu đo đa tâm master
+// lấy data ghi vào báo cáo excel với kiểu đo đơn tâm master
     public String getReportMt(String lotA, String lotB) throws IOException {
 
 //        String filePath = "D:\\PROJECT\\2.IQC_Project\\MasterFile.xlsx";
-//        String filePath = "\\\\172.17.47.10\\Public\\04_QA\\IQC_SYSTEM\\report\\MasterFile.xlsx";
-        String filePath = "/home/seov/QA-Inspection/6.Systems/1.report/MasterFile.xlsx";
+//        String filePath = "\\\\172.17.47.10\\Public\\04_QA\\IQC_SYSTEM\\report\\MasterFileS.xlsx";
+        String filePath = "/home/seov/QA-Inspection/6.Systems/1.report/MasterFileS.xlsx";
         List<SubCableSnResponse> dataLa =
-                iqcRlmDataRepository.getReport(lotA);
+                iqcRlmDataRepository.getReportS(lotA);
         List<SubCableSnResponse> dataLb =
-                iqcRlmDataRepository.getReport(lotB);
+                iqcRlmDataRepository.getReportS(lotB);
+        List<String> values =
+                iqcRlmDataRepository.getResultNoS(lotA, lotB);
+        List<String> values1310IL =
+                iqcRlmDataRepository.getResultNoSRd(1310, "IL");
+        List<String> values1310RL =
+                iqcRlmDataRepository.getResultNoSRd(1310, "RL");
+        List<String> values1550IL =
+                iqcRlmDataRepository.getResultNoSRd(1550, "IL");
+        List<String> values1550RL =
+                iqcRlmDataRepository.getResultNoSRd(1550, "RL");
 
-        List<String> valuesLa =
-                iqcRlmDataRepository.getResultNo(lotA);
-        List<String> valuesLb =
-                iqcRlmDataRepository.getResultNo(lotB);
 
 
 
-        if (dataLa.size() != 24 || valuesLa.isEmpty() || dataLb.size() != 24 || valuesLb.isEmpty() ) {
-            return null;
+        if (dataLa.size() != 20 || dataLb.size() != 20 || values.size() != 320) {
+            return "Data lỗi vui lòng kiểm tra lại";
+        }
+
+        if (values1310IL.size() != 200 || values1310RL.size() != 200 || values1550IL.size() != 200 || values1550RL.size() != 200) {
+            return "Data lỗi vui lòng kiểm tra lại";
         }
 
         try (FileInputStream fis = new FileInputStream(filePath);
@@ -185,9 +216,15 @@ public List<Row> processSheet(Sheet sheet) {
             Sheet sheet = workbook.getSheetAt(0);
 
             fillColumnE(sheet, dataLa, "A");
-            fillCellJ13(sheet, valuesLa, "A");
             fillColumnE(sheet, dataLb, "B");
-            fillCellJ13(sheet, valuesLb, "B");
+            fillCellJ12(sheet, values, "B");
+            getReportSRd(sheet,values1310IL,1310,"IL");
+            getReportSRd(sheet,values1310RL,1310,"RL");
+            getReportSRd(sheet,values1550IL,1550,"IL");
+            getReportSRd(sheet,values1550RL,1550,"RL");
+
+
+
 
             try (FileOutputStream fos = new FileOutputStream(filePath)) {
                 workbook.write(fos);
@@ -197,17 +234,17 @@ public List<Row> processSheet(Sheet sheet) {
         return "ok";
     }
 
-
+//lấy data do vao cot E
     private void fillColumnE(Sheet sheet, List<SubCableSnResponse> data, String lot) {
 
         int startRow;
         int lotRowIndex;
 
         if ("A".equals(lot)) {
-            startRow = 12;     // E13
+            startRow = 15;     // E16
             lotRowIndex = 4;   // E5
         } else {
-            startRow = 36;     // E37
+            startRow = 35;     // E36
             lotRowIndex = 5;   // E6
         }
 
@@ -226,7 +263,7 @@ public List<Row> processSheet(Sheet sheet) {
         lotCell.setCellValue(lotNo);
 
         // đổ subCableSn vào cột E
-        for (int i = 0; i < data.size() && i < 24; i++) {
+        for (int i = 0; i < data.size() && i < 20; i++) {
 
             Row row = sheet.getRow(startRow + i);
             if (row == null) {
@@ -244,16 +281,16 @@ public List<Row> processSheet(Sheet sheet) {
     }
 
 
-    private void fillCellJ13(Sheet sheet, List<String> values, String lot) {
+    private void fillCellJ12(Sheet sheet, List<String> values, String lot) {
 
-        String startCell = "A".equals(lot) ? "J13" : "AH13";
+        String startCell = "J12";
 
         CellReference ref = new CellReference(startCell);
 
         int startRow = ref.getRow();
         int startCol = ref.getCol();
 
-        int rowsPerColumn = 24;
+        int rowsPerColumn = 40;
 
         for (int i = 0; i < values.size(); i++) {
 
@@ -278,55 +315,39 @@ public List<Row> processSheet(Sheet sheet) {
     }
 //    Kết thúc
 
-// lấy dữ liệu data ra báo cáo đa tâm master random
-    public String getReportRd(String lotA, String lotB) throws IOException {
 
+    // lấy dữ liệu data ra báo cáo đơn tâm random
+    public void getReportSRd(Sheet sheet,List<String> values, int bs, String msType) throws IOException {
 //        String filePath = "\\\\172.17.47.15\\QA-Inspection\\6.Systems\\1.report\\MasterFile.xlsx";
 //        String filePath = "\\\\172.17.47.10\\Public\\04_QA\\IQC_SYSTEM\\report\\MasterFileS.xlsx";
         String filePath = "/home/seov/QA-Inspection/6.Systems/1.report/MasterFile.xlsx";
-        String lotNo = lotA +"-"+lotB;
+        String startCell;
 
-        List<String> values = iqcRlmDataRepository.getResultNoMtRd(lotNo);
-
-
-
-        if (values.isEmpty() ) {
-            return null;
-        } else if(values.size() != 2400) {
-            return "Không đúng định dạng Data";
+        if (bs == 1310 && "IL".equals(msType)) {
+            startCell = "U6";
+        } else if (bs == 1310 && "RL".equals(msType)) {
+            startCell = "AI6";
+        } else if (bs == 1550 && "IL".equals(msType)) {
+            startCell = "U33";
+        } else if (bs == 1550 && "RL".equals(msType)) {
+            startCell = "AI33";
+        } else {
+            throw new IllegalArgumentException(
+                    "Không hỗ trợ bs=" + bs + ", msType=" + msType
+            );
         }
-
-        try (FileInputStream fis = new FileInputStream(filePath);
-             Workbook workbook = new XSSFWorkbook(fis)) {
-
-            Sheet sheet = workbook.getSheetAt(1);
-
-            fillCellU14MtRd(sheet, values);
-
-            try (FileOutputStream fos = new FileOutputStream(filePath)) {
-                workbook.write(fos);
-            }
-        }
-
-        return "ok";
-    }
-
-
-    private void fillCellU14MtRd(Sheet sheet, List<String> values) {
-
-        String startCell = "U14";
 
         CellReference ref = new CellReference(startCell);
 
         int startRow = ref.getRow();
         int startCol = ref.getCol();
 
-        int rowsPerColumn = 24;
+        int colsPerRow = 10;
 
         for (int i = 0; i < values.size(); i++) {
 
-            int colOffset = i / rowsPerColumn;
-            int rowOffset = i % rowsPerColumn;
+            int rowOffset = i / colsPerRow;
+            int colOffset = i % colsPerRow;
 
             int rowIndex = startRow + rowOffset;
             int colIndex = startCol + colOffset;
@@ -343,6 +364,7 @@ public List<Row> processSheet(Sheet sheet) {
 
             cell.setCellValue(values.get(i) != null ? values.get(i) : "");
         }
+
     }
 
 
