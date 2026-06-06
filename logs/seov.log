@@ -71,3 +71,65 @@ This generated password is for development use only. Your security configuration
 2026-06-06T15:23:52.426+07:00  INFO 20472 --- [seov] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
 2026-06-06T15:23:52.429+07:00  INFO 20472 --- [seov] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
 2026-06-06T15:23:52.462+07:00  INFO 20472 --- [seov] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2026-06-06T15:24:28.661+07:00  INFO 15032 --- [seov] [MessageBroker-1] o.s.w.s.c.WebSocketMessageBrokerStats    : WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], sockJsScheduler[pool size = 1, active threads = 1, queued tasks = 0, completed tasks = 0]
+2026-06-06T15:54:28.712+07:00  INFO 15032 --- [seov] [MessageBroker-1] o.s.w.s.c.WebSocketMessageBrokerStats    : WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], sockJsScheduler[pool size = 2, active threads = 1, queued tasks = 0, completed tasks = 1]
+2026-06-06T16:18:01.574+07:00  INFO 15032 --- [seov] [http-nio-0.0.0.0-8081-exec-2] o.a.c.c.C.[Tomcat].[localhost].[/seov]   : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-06-06T16:18:01.575+07:00  INFO 15032 --- [seov] [http-nio-0.0.0.0-8081-exec-2] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-06-06T16:18:01.587+07:00  INFO 15032 --- [seov] [http-nio-0.0.0.0-8081-exec-2] o.s.web.servlet.DispatcherServlet        : Completed initialization in 11 ms
+2026-06-06T16:18:07.523+07:00 DEBUG 15032 --- [seov] [http-nio-0.0.0.0-8081-exec-4] org.hibernate.SQL                        : 
+    select
+        u1_0.id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.join_date,
+        u1_0.name,
+        u1_0.password,
+        u1_0.position,
+        u1_0.section,
+        u1_0.updated_at,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.username=?
+2026-06-06T16:18:07.528+07:00 TRACE 15032 --- [seov] [http-nio-0.0.0.0-8081-exec-4] org.hibernate.orm.jdbc.bind              : binding parameter (1:VARCHAR) <- [07521]
+2026-06-06T16:18:07.633+07:00 DEBUG 15032 --- [seov] [http-nio-0.0.0.0-8081-exec-4] org.hibernate.SQL                        : 
+    select
+        u1_0.id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.join_date,
+        u1_0.name,
+        u1_0.password,
+        u1_0.position,
+        r1_0.user_id,
+        r1_1.id,
+        r1_1.code,
+        r1_1.description,
+        r1_1.name,
+        p1_0.role_id,
+        p1_1.id,
+        p1_1.code,
+        p1_1.name,
+        u1_0.section,
+        u1_0.updated_at,
+        u1_0.username 
+    from
+        users u1_0 
+    join
+        user_roles r1_0 
+            on u1_0.id=r1_0.user_id 
+    join
+        roles r1_1 
+            on r1_1.id=r1_0.role_id 
+    join
+        role_permissions p1_0 
+            on r1_1.id=p1_0.role_id 
+    join
+        permissions p1_1 
+            on p1_1.id=p1_0.permission_id 
+    where
+        u1_0.username=?
+2026-06-06T16:18:07.634+07:00 TRACE 15032 --- [seov] [http-nio-0.0.0.0-8081-exec-4] org.hibernate.orm.jdbc.bind              : binding parameter (1:VARCHAR) <- [07521]
+2026-06-06T16:24:28.744+07:00  INFO 15032 --- [seov] [MessageBroker-2] o.s.w.s.c.WebSocketMessageBrokerStats    : WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], sockJsScheduler[pool size = 3, active threads = 1, queued tasks = 0, completed tasks = 2]
+2026-06-06T16:54:28.768+07:00  INFO 15032 --- [seov] [MessageBroker-1] o.s.w.s.c.WebSocketMessageBrokerStats    : WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], sockJsScheduler[pool size = 4, active threads = 1, queued tasks = 0, completed tasks = 3]
