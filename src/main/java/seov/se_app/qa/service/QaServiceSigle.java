@@ -176,14 +176,13 @@ public class QaServiceSigle {
         return finalRows;
     }
 
-
-
+    //        String filePath = "D:\\PROJECT\\2.IQC_Project\\MasterFile.xlsx";
+//        String filePath = "\\\\172.17.47.10\\Public\\04_QA\\IQC_SYSTEM\\report\\MasterFileS.xlsx";
+    String filePath = "/home/seov/QA-Inspection/6.Systems/1.report/MasterFileS.xlsx";
 // lấy data ghi vào báo cáo excel với kiểu đo đơn tâm master
     public String getReportMt(String lotA, String lotB) throws IOException {
 
-//        String filePath = "D:\\PROJECT\\2.IQC_Project\\MasterFile.xlsx";
-//        String filePath = "\\\\172.17.47.10\\Public\\04_QA\\IQC_SYSTEM\\report\\MasterFileS.xlsx";
-        String filePath = "/home/seov/QA-Inspection/6.Systems/1.report/MasterFileS.xlsx";
+
         List<SubCableSnResponse> dataLa =
                 iqcRlmDataRepository.getReportS(lotA);
         List<SubCableSnResponse> dataLb =
@@ -318,9 +317,6 @@ public class QaServiceSigle {
 
     // lấy dữ liệu data ra báo cáo đơn tâm random
     public void getReportSRd(Sheet sheet,List<String> values, int bs, String msType) throws IOException {
-//        String filePath = "\\\\172.17.47.15\\QA-Inspection\\6.Systems\\1.report\\MasterFile.xlsx";
-//        String filePath = "\\\\172.17.47.10\\Public\\04_QA\\IQC_SYSTEM\\report\\MasterFileS.xlsx";
-        String filePath = "/home/seov/QA-Inspection/6.Systems/1.report/MasterFile.xlsx";
         String startCell;
 
         if (bs == 1310 && "IL".equals(msType)) {

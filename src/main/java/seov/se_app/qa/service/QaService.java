@@ -157,12 +157,12 @@ public List<Row> processSheet(Sheet sheet) {
 
 
 
+    //        String filePath = "D:\\PROJECT\\2.IQC_Project\\MasterFile.xlsx";
+    //    String filePath = "\\\\172.17.47.10\\Public\\04_QA\\IQC_SYSTEM\\report\\MasterFile.xlsx";
+            String filePath = "/home/seov/QA-Inspection/6.Systems/1.report/MasterFile.xlsx";
 // lấy data ghi vào báo cáo excel với kiểu đo đa tâm master
     public String getReportMt(String lotA, String lotB) throws IOException {
 
-//        String filePath = "D:\\PROJECT\\2.IQC_Project\\MasterFile.xlsx";
-//        String filePath = "\\\\172.17.47.10\\Public\\04_QA\\IQC_SYSTEM\\report\\MasterFile.xlsx";
-        String filePath = "/home/seov/QA-Inspection/6.Systems/1.report/MasterFile.xlsx";
         List<SubCableSnResponse> dataLa =
                 iqcRlmDataRepository.getReport(lotA);
         List<SubCableSnResponse> dataLb =
@@ -281,9 +281,6 @@ public List<Row> processSheet(Sheet sheet) {
 // lấy dữ liệu data ra báo cáo đa tâm master random
     public String getReportRd(String lotA, String lotB) throws IOException {
 
-//        String filePath = "\\\\172.17.47.15\\QA-Inspection\\6.Systems\\1.report\\MasterFile.xlsx";
-//        String filePath = "\\\\172.17.47.10\\Public\\04_QA\\IQC_SYSTEM\\report\\MasterFileS.xlsx";
-        String filePath = "/home/seov/QA-Inspection/6.Systems/1.report/MasterFile.xlsx";
         String lotNo = lotA +"-"+lotB;
 
         List<String> values = iqcRlmDataRepository.getResultNoMtRd(lotNo);

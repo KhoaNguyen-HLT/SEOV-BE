@@ -50,7 +50,7 @@ public interface IqcRlmDataRepository extends JpaRepository<IqcRlmData, Long> {
               and b.subCableNo = 1
         )
           and a.lotNo = :lot
-        order by a.subCableSn
+        order by a.subCableSn, a.subCableNo
 """)
     List<String> getResultNo(String lot);
 
