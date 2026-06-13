@@ -1,4 +1,4 @@
-package seov.se_app.qa.dto.response;
+package seov.se_app.pu.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,7 +12,7 @@ import java.util.Map;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class qaResponse<T> {
+public class puReportResponse<T> {
     private int code;
     private String message;
     private List<Map<String, Object>> data;

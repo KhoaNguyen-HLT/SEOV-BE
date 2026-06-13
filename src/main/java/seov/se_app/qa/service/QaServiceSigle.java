@@ -177,8 +177,8 @@ public class QaServiceSigle {
     }
 
     //        String filePath = "D:\\PROJECT\\2.IQC_Project\\MasterFile.xlsx";
-//        String filePath = "\\\\172.17.47.10\\Public\\04_QA\\IQC_SYSTEM\\report\\MasterFileS.xlsx";
-    String filePath = "/home/seov/QA-Inspection/6.Systems/1.report/MasterFileS.xlsx";
+        String filePath = "\\\\172.17.47.10\\Public\\04_QA\\IQC_SYSTEM\\report\\MasterFileS.xlsx";
+//    String filePath = "/home/seov/QA-Inspection/6.Systems/1.report/MasterFileS.xlsx";
 // lấy data ghi vào báo cáo excel với kiểu đo đơn tâm master
     public String getReportMt(String lotA, String lotB) throws IOException {
 
