@@ -26,9 +26,11 @@ public class IqcRlmData {
     private String subCableSn;
     private Integer subCableNo;
     private String lotNo;
-    private String bs;
+    private int bs;
     private String resultNo;
     private String type;
+    private String measureType;
+    private String programType;
     private String userCode;
     private String status;
     private String flag;

@@ -25,9 +25,11 @@ public class IqcRlmDataHis {
     private String subCableSn;
     private Integer subCableNo;
     private String lotNo;
-    private String bs;
+    private Integer bs;
     private String resultNo;
     private String type;
+    private String measureType;
+    private String programType;
     private String userCode;
     private String status;
     private String flag;
@@ -46,6 +48,8 @@ public class IqcRlmDataHis {
         this.bs = data.getBs();
         this.resultNo = data.getResultNo();
         this.type = data.getType();
+        this.measureType = data.getMeasureType();
+        this.programType = data.getProgramType();
         this.userCode = data.getUserCode();
         this.status = data.getStatus();
         this.flag = data.getFlag();

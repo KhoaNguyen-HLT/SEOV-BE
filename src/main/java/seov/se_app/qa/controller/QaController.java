@@ -12,6 +12,7 @@ import seov.se_app.common.dto.response.ApiResponse;
 import seov.se_app.qa.dto.response.qaResponse;
 import seov.se_app.qa.service.QaService;
 import seov.se_app.qa.entity.IqcRlmData;
+import seov.se_app.qa.service.QaServiceSigle;
 
 
 import java.io.FileNotFoundException;
@@ -24,12 +25,15 @@ import java.util.Map;
 public class QaController {
     @Autowired
     private QaService qaService;
+    @Autowired
+    private QaServiceSigle qaServiceSigle;
 
-    @GetMapping("/iqc/getLotData")
-    ResponseEntity<qaResponse<List<Map<String, Object>>>> getLotData() {
+
+    @GetMapping("/iqc/getLotData/{program}")
+    ResponseEntity<qaResponse<List<Map<String, Object>>>> getLotData(@PathVariable String program) {
         try {
             List<Map<String, Object>> LotData =
-                    qaService.getLotData();
+                    qaService.getLotData(program);
 
             return ResponseEntity.ok(
                     qaResponse.<List<Map<String, Object>>>builder()
@@ -54,36 +58,76 @@ public class QaController {
     public ResponseEntity<ApiResponse<List<IqcRlmData>>> getDataExcel(
             @RequestParam("file") MultipartFile file,
             @RequestParam("user") String user,
-            @RequestParam("status") String status) {
-       List<IqcRlmData> iqcRlmData =  qaService.getDataExcel(file);
-        return ResponseEntity.ok(
-                new ApiResponse<>(200, "success", iqcRlmData)
-        );
-    }
+            @RequestParam("msType") String msType) {
 
-    @PostMapping("/iqc/getReport")
-    public ResponseEntity<ApiResponse<String>> getReport(
-            @RequestParam String lotA,
-            @RequestParam String lotB,
-            @RequestParam String program) throws IOException {
+        if("M".equals(msType)) {
+            List<IqcRlmData> iqcRlmData =  qaService.getDataExcel(file);
+            return ResponseEntity.ok(
+                    new ApiResponse<>(200, "success", iqcRlmData)
+            );
+        } else if ("S".equals(msType)) {
+            List<IqcRlmData> iqcRlmData =  qaServiceSigle.getDataExcel(file);
+            return ResponseEntity.ok(
+                    new ApiResponse<>(200, "success", iqcRlmData)
+            );
 
-        if("M".equals(program)) {
-            String result =  qaService.getReportMt(lotA, lotB);
-            return ResponseEntity.ok(
-                    new ApiResponse<>(200, "success", result)
-            );
-        } else if("R".equals(program)) {
-            String result1 =  qaService.getReportRd(lotA, lotB);
-            return ResponseEntity.ok(
-                    new ApiResponse<>(200, "success", result1)
-            );
         } else {
             return ResponseEntity.ok(
                     new ApiResponse<>(500, "error", null)
             );
         }
 
+    }
 
+    @PostMapping("/iqc/getReport")
+    public ResponseEntity<ApiResponse<String>> getReport(
+            @RequestParam String lotA,
+            @RequestParam String lotB,
+            @RequestParam String msTypeRp,
+            @RequestParam String program) throws IOException {
+//        check xem là loại chương trình đơn tâm hay đa tâm
+//        nếu là đa tâm
+        if("M".equals(program)) {
+            if("M".equals(msTypeRp)) {
+                String result =  qaService.getReportMt(lotA, lotB);
+                if (result == null) {
+                    return ResponseEntity.ok(
+                            new ApiResponse<>(400, "error", result)
+                    );
+                }
+                return ResponseEntity.ok(
+                        new ApiResponse<>(200, "success", result)
+                );
+            } else if("R".equals(msTypeRp)) {
+                String result1 =  qaService.getReportRd(lotA, lotB);
+                return ResponseEntity.ok(
+                        new ApiResponse<>(200, "success", result1)
+                );
+            } else {
+                return ResponseEntity.ok(
+                        new ApiResponse<>(500, "error", null)
+                );
+            }
+// nếu không phải đa tâm thì là đơn tâm
+        } else {
+//            Nếu là kiểu đo master
+            if("M".equals(msTypeRp)) {
+                String result =  qaServiceSigle.getReportMt(lotA, lotB);
+                if (result == null) {
+                    return ResponseEntity.ok(
+                            new ApiResponse<>(400, "error", result)
+                    );
+                }
+                return ResponseEntity.ok(
+                        new ApiResponse<>(200, "success", result)
+                );
+            } else {
+                return ResponseEntity.ok(
+                        new ApiResponse<>(500, "error", null)
+                );
+            }
+
+        }
 
     }
 
