@@ -6,6 +6,7 @@ import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
 import javax.sql.DataSource;
 
@@ -23,5 +24,12 @@ public class SecondaryDataSourceConfig {
     public JdbcTemplate secondaryJdbcTemplate(
             @Qualifier("secondaryDataSource") DataSource dataSource) {
         return new JdbcTemplate(dataSource);
+    }
+
+    @Bean(name = "secondaryNamedJdbcTemplate")
+    public NamedParameterJdbcTemplate secondaryNamedJdbcTemplate(
+            @Qualifier("secondaryDataSource") DataSource dataSource) {
+
+        return new NamedParameterJdbcTemplate(dataSource);
     }
 }

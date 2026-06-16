@@ -29,7 +29,7 @@ void deleteTransInventoryData(String transType, String month, String documentTyp
 
 
     @Query(value = """
-    select A.item_code,
+    select A.*, (A.tondau_5 + A.qty_nhap_6 + A.qty_nhap_7 -A.qty_xuat_8 -A.qty_xuat_9 -A.qty_xuat_10 -A.qty_xuat_11 ) as toncuoi from (select A.item_code,
            B.item_namev,
            B.cfr_unit,
            A.quantity as tondau_5,
@@ -72,7 +72,7 @@ void deleteTransInventoryData(String transType, String month, String documentTyp
           and customs_type_code = 'H21'
           and document_type = 'DATA_PU'
         group by item_code
-    ) F on A.item_code = F.item_code
+    ) F on A.item_code = F.item_code) A
     """, nativeQuery = true)
     List<Map<String, Object>> getData(String month);
 
