@@ -141,7 +141,7 @@ public class CfrService {
 
 
 //    lưu hoặc update bảng tồn đầu
-    public List<CfrOpenInventory> saveOpenInventory(MultipartFile file) {
+    public List<CfrOpenInventory> saveOpenInventory(MultipartFile file, String reportName) {
         List<CfrOpenInventory> data = new ArrayList<>();
         if (file == null || file.isEmpty()) {
             return data;
@@ -155,7 +155,7 @@ public class CfrService {
             FormulaEvaluator evaluator =
                     workbook.getCreationHelper().createFormulaEvaluator();
 //            lấy data
-            List<CfrOpenInventory> CfrOpenInventorys = getDataInventory(sheet, evaluator);
+            List<CfrOpenInventory> CfrOpenInventorys = getDataInventory(sheet, evaluator, reportName);
             if (CfrOpenInventorys.isEmpty()) {
                 return data;
             }
@@ -173,6 +173,7 @@ public class CfrService {
                     oldData.setItemCode(excelData.getItemCode());
                     oldData.setPeriod(excelData.getPeriod());
                     oldData.setQuantity(excelData.getQuantity());
+                    oldData.setReportType(excelData.getReportType());
 
                     saveList.add(oldData);
 
@@ -192,7 +193,7 @@ public class CfrService {
 
 
     //lấy data file tồn đầu
-    public List<CfrOpenInventory> getDataInventory(Sheet sheet, FormulaEvaluator evaluator) {
+    public List<CfrOpenInventory> getDataInventory(Sheet sheet, FormulaEvaluator evaluator, String reportName) {
         DataFormatter formatter = new DataFormatter();
         List<CfrOpenInventory> dataList = new ArrayList<>();
 
@@ -216,7 +217,7 @@ public class CfrService {
                     .period("2026-04")
                     .itemCode(itemCode)
                     .quantity(quantity)
-                    .reportType("15")
+                    .reportType(reportName)
                     .build();
 
             dataList.add(openInventory);

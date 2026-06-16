@@ -27,7 +27,9 @@ public class CfrController {
 
     @PostMapping("/cfr/getMasterData")
     public ResponseEntity<ApiResponse<String>> getMasterData(
-            @RequestParam("files") MultipartFile[] files) {
+            @RequestParam("files") MultipartFile[] files,
+            @RequestParam("reportName") String reportName
+            ) {
 
         boolean success = false;
 
@@ -45,7 +47,7 @@ public class CfrController {
                 }
 
                 case "FY25_CFR_PU.xlsx" -> {
-                    List<CfrOpenInventory> openInventories = cfrService.saveOpenInventory(file);
+                    List<CfrOpenInventory> openInventories = cfrService.saveOpenInventory(file, reportName);
                     if (!openInventories.isEmpty()) {
                         success = true;
                     }

@@ -650,3 +650,144 @@ This generated password is for development use only. Your security configuration
 2026-06-14T22:04:55.212+07:00  INFO 11532 --- [seov] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
 2026-06-14T22:04:55.214+07:00  INFO 11532 --- [seov] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
 2026-06-14T22:04:55.216+07:00  INFO 11532 --- [seov] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2026-06-16T20:57:23.929+07:00  INFO 17932 --- [seov] [main] seov.SeovApplication                     : Starting SeovApplication using Java 20.0.1 with PID 17932 (D:\KHOAHLT\Seov\seov-be\target\classes started by KHOAHLT in D:\KHOAHLT\Seov\seov-be)
+2026-06-16T20:57:23.933+07:00  INFO 17932 --- [seov] [main] seov.SeovApplication                     : No active profile set, falling back to 1 default profile: "default"
+2026-06-16T20:57:24.998+07:00  INFO 17932 --- [seov] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-06-16T20:57:25.160+07:00  INFO 17932 --- [seov] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 149 ms. Found 20 JPA repository interfaces.
+2026-06-16T20:57:26.146+07:00  INFO 17932 --- [seov] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8081 (http)
+2026-06-16T20:57:26.161+07:00  INFO 17932 --- [seov] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-06-16T20:57:26.161+07:00  INFO 17932 --- [seov] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.19]
+2026-06-16T20:57:26.321+07:00  INFO 17932 --- [seov] [main] o.a.c.c.C.[Tomcat].[localhost].[/seov]   : Initializing Spring embedded WebApplicationContext
+2026-06-16T20:57:26.322+07:00  INFO 17932 --- [seov] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 2322 ms
+2026-06-16T20:57:26.519+07:00  INFO 17932 --- [seov] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-06-16T20:57:26.597+07:00  INFO 17932 --- [seov] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.4.4.Final
+2026-06-16T20:57:26.657+07:00  INFO 17932 --- [seov] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2026-06-16T20:57:26.922+07:00  INFO 17932 --- [seov] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-06-16T20:57:26.952+07:00  INFO 17932 --- [seov] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-06-16T20:57:27.243+07:00  INFO 17932 --- [seov] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@7d8f2eec
+2026-06-16T20:57:27.246+07:00  INFO 17932 --- [seov] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-06-16T20:57:27.310+07:00  WARN 17932 --- [seov] [main] org.hibernate.orm.deprecation            : HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-06-16T20:57:28.685+07:00  INFO 17932 --- [seov] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-06-16T20:57:28.784+07:00 DEBUG 17932 --- [seov] [main] org.hibernate.SQL                        : 
+    create table department (
+        id bigserial not null,
+        created_at timestamp(6),
+        status varchar(20),
+        updated_at timestamp(6),
+        department_code varchar(20) not null,
+        department_name varchar(100) not null,
+        description varchar(255),
+        primary key (id)
+    )
+2026-06-16T20:57:28.801+07:00 DEBUG 17932 --- [seov] [main] org.hibernate.SQL                        : 
+    create table position (
+        id bigserial not null,
+        created_at timestamp(6),
+        status varchar(20),
+        updated_at timestamp(6),
+        description varchar(255),
+        position_code varchar(20) not null,
+        position_name varchar(100) not null,
+        primary key (id)
+    )
+2026-06-16T20:57:28.806+07:00 DEBUG 17932 --- [seov] [main] org.hibernate.SQL                        : 
+    alter table if exists users 
+       add column department varchar(255)
+2026-06-16T20:57:28.816+07:00 DEBUG 17932 --- [seov] [main] org.hibernate.SQL                        : 
+    alter table if exists department 
+       drop constraint if exists UK_tc0vggvvuqc22trtdy0dmrahh
+2026-06-16T20:57:28.819+07:00  WARN 17932 --- [seov] [main] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Warning Code: 0, SQLState: 00000
+2026-06-16T20:57:28.821+07:00  WARN 17932 --- [seov] [main] o.h.engine.jdbc.spi.SqlExceptionHelper   : constraint "uk_tc0vggvvuqc22trtdy0dmrahh" of relation "department" does not exist, skipping
+2026-06-16T20:57:28.821+07:00 DEBUG 17932 --- [seov] [main] org.hibernate.SQL                        : 
+    alter table if exists department 
+       add constraint UK_tc0vggvvuqc22trtdy0dmrahh unique (department_code)
+2026-06-16T20:57:28.826+07:00 DEBUG 17932 --- [seov] [main] org.hibernate.SQL                        : 
+    alter table if exists position 
+       drop constraint if exists UK_fojsnnw3tf6al8qyyu3q8qk86
+2026-06-16T20:57:28.827+07:00  WARN 17932 --- [seov] [main] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Warning Code: 0, SQLState: 00000
+2026-06-16T20:57:28.827+07:00  WARN 17932 --- [seov] [main] o.h.engine.jdbc.spi.SqlExceptionHelper   : constraint "uk_fojsnnw3tf6al8qyyu3q8qk86" of relation "position" does not exist, skipping
+2026-06-16T20:57:28.828+07:00 DEBUG 17932 --- [seov] [main] org.hibernate.SQL                        : 
+    alter table if exists position 
+       add constraint UK_fojsnnw3tf6al8qyyu3q8qk86 unique (position_code)
+2026-06-16T20:57:28.886+07:00  INFO 17932 --- [seov] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-06-16T20:57:29.232+07:00  INFO 17932 --- [seov] [main] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-06-16T20:57:30.269+07:00  WARN 17932 --- [seov] [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-06-16T20:57:30.301+07:00  WARN 17932 --- [seov] [main] .s.s.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: 1e75862e-9068-4c66-bfd6-51911da9652f
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2026-06-16T20:57:30.607+07:00  INFO 17932 --- [seov] [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@75f9ae0, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@7672ea5f, org.springframework.security.web.context.SecurityContextHolderFilter@7e1383f7, org.springframework.security.web.header.HeaderWriterFilter@2e652f4e, org.springframework.web.filter.CorsFilter@6b092322, org.springframework.security.web.authentication.logout.LogoutFilter@4d7687f9, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@229cf4e7, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@2de08488, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@22cdc378, org.springframework.security.web.access.ExceptionTranslationFilter@5fab1ec6, org.springframework.security.web.access.intercept.AuthorizationFilter@2e3bfce8]
+2026-06-16T20:57:30.915+07:00  INFO 17932 --- [seov] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8081 (http) with context path '/seov'
+2026-06-16T20:57:30.917+07:00  INFO 17932 --- [seov] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : Starting...
+2026-06-16T20:57:30.918+07:00  INFO 17932 --- [seov] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@3a778c6f]]
+2026-06-16T20:57:30.918+07:00  INFO 17932 --- [seov] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : Started.
+2026-06-16T20:57:30.927+07:00  INFO 17932 --- [seov] [main] seov.SeovApplication                     : Started SeovApplication in 7.835 seconds (process running for 9.348)
+2026-06-16T20:58:30.891+07:00  INFO 17932 --- [seov] [MessageBroker-1] o.s.w.s.c.WebSocketMessageBrokerStats    : WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], sockJsScheduler[pool size = 1, active threads = 1, queued tasks = 0, completed tasks = 0]
+2026-06-16T21:01:30.732+07:00  INFO 17932 --- [seov] [http-nio-0.0.0.0-8081-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/seov]   : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-06-16T21:01:30.732+07:00  INFO 17932 --- [seov] [http-nio-0.0.0.0-8081-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-06-16T21:01:30.734+07:00  INFO 17932 --- [seov] [http-nio-0.0.0.0-8081-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
+2026-06-16T21:01:39.915+07:00 DEBUG 17932 --- [seov] [http-nio-0.0.0.0-8081-exec-4] org.hibernate.SQL                        : 
+    select
+        u1_0.id,
+        u1_0.created_at,
+        u1_0.department,
+        u1_0.email,
+        u1_0.join_date,
+        u1_0.name,
+        u1_0.password,
+        u1_0.position,
+        u1_0.updated_at,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.username=?
+2026-06-16T21:01:39.917+07:00 TRACE 17932 --- [seov] [http-nio-0.0.0.0-8081-exec-4] org.hibernate.orm.jdbc.bind              : binding parameter (1:VARCHAR) <- [07521]
+2026-06-16T21:01:40.026+07:00 DEBUG 17932 --- [seov] [http-nio-0.0.0.0-8081-exec-4] org.hibernate.SQL                        : 
+    select
+        u1_0.id,
+        u1_0.created_at,
+        u1_0.department,
+        u1_0.email,
+        u1_0.join_date,
+        u1_0.name,
+        u1_0.password,
+        u1_0.position,
+        r1_0.user_id,
+        r1_1.id,
+        r1_1.code,
+        r1_1.description,
+        r1_1.name,
+        p1_0.role_id,
+        p1_1.id,
+        p1_1.code,
+        p1_1.name,
+        u1_0.updated_at,
+        u1_0.username 
+    from
+        users u1_0 
+    join
+        user_roles r1_0 
+            on u1_0.id=r1_0.user_id 
+    join
+        roles r1_1 
+            on r1_1.id=r1_0.role_id 
+    join
+        role_permissions p1_0 
+            on r1_1.id=p1_0.role_id 
+    join
+        permissions p1_1 
+            on p1_1.id=p1_0.permission_id 
+    where
+        u1_0.username=?
+2026-06-16T21:01:40.026+07:00 TRACE 17932 --- [seov] [http-nio-0.0.0.0-8081-exec-4] org.hibernate.orm.jdbc.bind              : binding parameter (1:VARCHAR) <- [07521]
+2026-06-16T21:28:30.905+07:00  INFO 17932 --- [seov] [MessageBroker-1] o.s.w.s.c.WebSocketMessageBrokerStats    : WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], sockJsScheduler[pool size = 2, active threads = 1, queued tasks = 0, completed tasks = 1]
+2026-06-16T21:58:30.912+07:00  INFO 17932 --- [seov] [MessageBroker-2] o.s.w.s.c.WebSocketMessageBrokerStats    : WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], sockJsScheduler[pool size = 3, active threads = 1, queued tasks = 0, completed tasks = 2]
+2026-06-16T22:17:58.209+07:00  INFO 17932 --- [seov] [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler     : Stopping...
+2026-06-16T22:17:58.211+07:00  INFO 17932 --- [seov] [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@3a778c6f]]
+2026-06-16T22:17:58.211+07:00  INFO 17932 --- [seov] [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler     : Stopped.
+2026-06-16T22:17:58.256+07:00  INFO 17932 --- [seov] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-06-16T22:17:58.280+07:00  INFO 17932 --- [seov] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2026-06-16T22:17:58.286+07:00  INFO 17932 --- [seov] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
