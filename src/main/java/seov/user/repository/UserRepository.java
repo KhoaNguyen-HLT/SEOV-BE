@@ -12,6 +12,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
     User findAllById(Long username);
     Optional<User> findByUsername(String userName);
 
+    boolean existsByUsername(String userName);
+
     @Query(value = "SELECT * FROM user WHERE username = :username", nativeQuery = true)
     List<User> getUserListCustom(@Param("username") String username);
 

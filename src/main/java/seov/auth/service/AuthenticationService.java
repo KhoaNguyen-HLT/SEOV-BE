@@ -139,6 +139,13 @@ public class AuthenticationService {
         return listRole;
     }
 
+    public List<Role> getAllRole() {
+        List<Role> listRole = roleRepository.findAll();
+        return listRole;
+    }
+
+
+
 
     public RoleResponse updateRole(Long id, RoleUpdateRequest request){
         Role role = roleRepository.findById(id).orElseThrow(() -> new RuntimeException("Role not found"));

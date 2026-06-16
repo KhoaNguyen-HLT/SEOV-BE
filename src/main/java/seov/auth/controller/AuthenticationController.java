@@ -7,9 +7,11 @@ import seov.auth.dto.request.RoleUpdateRequest;
 import seov.auth.dto.respone.ApiResponse;
 import seov.auth.dto.respone.AuthenticationResponse;
 import seov.auth.dto.respone.RoleResponse;
+import seov.auth.entity.Role;
 import seov.auth.service.AuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import seov.user.entity.Position;
 
 import java.util.List;
 import java.util.Map;
@@ -40,8 +42,30 @@ public class AuthenticationController {
     public List<Object> getRole() {
         List<Object> result = authenticationService.getRole();
         return result;
-
     }
+
+    @GetMapping("/getAllRole")
+    public ResponseEntity<ApiResponse<List<Role>>>  getAllRole() {
+        List<Role> result = authenticationService.getAllRole();
+        if (result != null && !result.isEmpty()) {
+            return ResponseEntity.ok(
+                    ApiResponse.<List<Role>>builder()
+                            .code(200)
+                            .message("success")
+                            .data(result)
+                            .build()
+            );
+        } else {
+            return ResponseEntity.ok(
+                    ApiResponse.<List<Role>>builder()
+                            .code(200)
+                            .message("error")
+                            .data(null)
+                            .build()
+            );
+        }
+    }
+
 
     @PutMapping("/roles/{id}")
     public ResponseEntity<ApiResponse<RoleResponse>> updateRole(@PathVariable Long id, @RequestBody RoleUpdateRequest request) {

@@ -5,35 +5,32 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
 import javax.sql.DataSource;
 
-@Configuration
-public class PrimaryDataSourceConfig {
 
-    @Primary
-    @Bean(name = "primaryDataSource")
-    @ConfigurationProperties(prefix = "spring.datasource")
-    public DataSource primaryDataSource() {
+@Configuration
+public class ThirdDataSourceConfig {
+
+    @Bean(name = "thirdDataSource")
+    @ConfigurationProperties(prefix = "spring.datasource-third")
+    public DataSource thirdDataSource() {
         return DataSourceBuilder.create().build();
     }
 
-    @Primary
-    @Bean(name = "primaryJdbcTemplate")
-    public JdbcTemplate primaryJdbcTemplate(
-            @Qualifier("primaryDataSource") DataSource dataSource
-    ) {
+    @Bean(name = "thirdJdbcTemplate")
+    public JdbcTemplate thirdJdbcTemplate(
+            @Qualifier("thirdDataSource") DataSource dataSource) {
         return new JdbcTemplate(dataSource);
     }
 
-    @Primary
-    @Bean(name = "primaryNamedJdbcTemplate")
-    public NamedParameterJdbcTemplate primaryNamedJdbcTemplate(
-            @Qualifier("primaryDataSource") DataSource dataSource
-    ) {
+
+    @Bean(name = "thirdNamedJdbcTemplate")
+    public NamedParameterJdbcTemplate thirdNamedJdbcTemplate(
+            @Qualifier("thirdDataSource") DataSource dataSource) {
+
         return new NamedParameterJdbcTemplate(dataSource);
     }
 }

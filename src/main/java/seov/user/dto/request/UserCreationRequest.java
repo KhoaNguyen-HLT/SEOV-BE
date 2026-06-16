@@ -5,6 +5,8 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDate;
+import java.util.Set;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -16,6 +18,8 @@ public class UserCreationRequest {
      String name;
      String position;
      String section;
+     String department;
+     private Set<Long> role;
      String email;
      @JsonFormat(pattern = "yyyy-MM-dd")
      private LocalDate joinDate;

@@ -26,7 +26,7 @@ public class User {
     private String password;
     private String name;
     private String position;
-    private String section;
+    private String department;
     private String email;
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate joinDate;
