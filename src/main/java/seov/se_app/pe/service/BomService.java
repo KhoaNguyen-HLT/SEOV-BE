@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -24,14 +25,25 @@ public class BomService {
 
     private static final int BATCH_SIZE = 3000;
     private final JdbcTemplate jdbcTemplate;
-    LocalDateTime now =  LocalDateTime.now();
 
     @Transactional
-    public void saveBomData(MultipartFile file) {
+    public void saveBomData(MultipartFile file) throws IOException {
 
         if (file == null || file.isEmpty()) {
             return;
         }
+        LocalDateTime now = LocalDateTime.now();
+
+
+        System.out.println("File: " + file.getOriginalFilename());
+        System.out.println("Size: " + file.getSize());
+        System.out.println("ContentType: " + file.getContentType());
+
+        try (InputStream check = file.getInputStream()) {
+            byte[] header = check.readNBytes(4);
+            System.out.println("Header = " + Arrays.toString(header));
+        }
+
 
         try (InputStream is = file.getInputStream();
              ReadableWorkbook wb = new ReadableWorkbook(is)) {
@@ -50,21 +62,54 @@ public class BomService {
                     Row row = iterator.next();
 
                     // bỏ qua header
-                    if (row.getRowNum() < 3) {
+                    if (row.getRowNum() < 10) {
                         continue;
                     }
-                    String itemProduct = getString(row.getCell(1));
-                    String itemCode = getString(row.getCell(2));
-                    if (itemCode.isBlank()) {
+                    System.out.println(row.getRowNum());
+                    if(row.getCellCount() <= 21) {
                         continue;
                     }
+                    String stt = getString(row.getCell(1));
+                    String bom_link = getString(row.getCell(2));
+                    String type = getString(row.getCell(3));
+                    String prd_code = getString(row.getCell(4));
+                    String product_Code = getString(row.getCell(5));
+                    String product_Name = getString(row.getCell(6));
+                    String material_Code = getString(row.getCell(7));
+                    if (product_Code.isBlank() || material_Code.isBlank()) {
+                        continue;
+                    }
+                    String custom_Mode = getString(row.getCell(9));
+                    String material_Name = getString(row.getCell(10));
+                    String vietnamese_Name = getString(row.getCell(11));
 
-                    BigDecimal quantity = getBigDecimal(row.getCell(3));
+                    BigDecimal norm_Sei = getBigDecimal(row.getCell(12));
+                    BigDecimal norm_Seov = getBigDecimal(row.getCell(13));
+
+                    String gscm_eng = getString(row.getCell(14));
+                    String gscm_vnese = getString(row.getCell(15));
+                    String eng_unit = getString(row.getCell(16));
+                    String vnese_unit = getString(row.getCell(17));
+                    String note = getString(row.getCell(18));
+                    BigDecimal  for_pm = getBigDecimal(row.getCell(20));
+                    String gscm_type = getString(row.getCell(21));
+
+
 
                     batchArgs.add(new Object[]{
-                            itemProduct,
-                            itemCode,
-                            quantity,
+                            stt,
+                            bom_link,
+                            type,
+                            prd_code,
+                            product_Code,
+                            product_Name,
+                            material_Code,
+                            custom_Mode,
+                            material_Name,
+                            vietnamese_Name,
+                            norm_Sei,norm_Seov,gscm_eng,gscm_vnese, eng_unit, vnese_unit,
+                            note,
+                            for_pm, gscm_type,
                             now,
                             now
                     });
@@ -85,16 +130,36 @@ public class BomService {
             jdbcTemplate.execute("""
                     INSERT INTO bom_data
                     (
-                        item_product,
-                        item_code,
-                        quantity,
+                        stt,
+                    bom_link,
+                    type,
+                    prd_code,
+                    product_code,
+                    product_name,
+                    material_code,
+                    custom_mode,
+                    material_name,
+                    vietnamese_name,
+                    norm_sei,norm_seov,gscm_eng,gscm_vnese, eng_unit, vnese_unit,
+                    note,
+                    for_pm, gscm_type,
                         created_at,
                         updated_at
                     )
                     SELECT
-                        item_product,
-                        item_code,
-                        quantity,
+                        stt,
+                    bom_link,
+                    type,
+                    prd_code,
+                    product_code,
+                    product_name,
+                    material_code,
+                    custom_mode,
+                    material_name,
+                    vietnamese_name,
+                    norm_sei,norm_seov,gscm_eng,gscm_vnese, eng_unit, vnese_unit,
+                    note,
+                    for_pm, gscm_type,
                         created_at,
                         updated_at
                     FROM bom_import_data
@@ -111,15 +176,25 @@ public class BomService {
         jdbcTemplate.batchUpdate("""
                 INSERT INTO bom_import_data
                 (
-                    item_product,
-                    item_code,
-                    quantity,
+                    stt,
+                    bom_link,
+                    type,
+                    prd_code,
+                    product_code,
+                    product_name,
+                    material_code,
+                    custom_mode,
+                    material_name,
+                    vietnamese_name,
+                    norm_sei,norm_seov,gscm_eng,gscm_vnese, eng_unit, vnese_unit,
+                    note,
+                    for_pm, gscm_type,
                     created_at,
                     updated_at
                 )
                 VALUES
                 (
-                    ?, ?, ?, ?, ?
+                    ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
                 )
                 """, batchArgs);
 
@@ -136,7 +211,6 @@ public class BomService {
     }
 
     private BigDecimal getBigDecimal(Cell cell) {
-
         if (cell == null) {
             return BigDecimal.ZERO;
         }
@@ -147,7 +221,9 @@ public class BomService {
             return BigDecimal.ZERO;
         }
 
-        return new BigDecimal(value.trim());
+        value = value.trim().replace(",", "").replace("-", "");;
+
+        return new BigDecimal(value);
     }
 
 }

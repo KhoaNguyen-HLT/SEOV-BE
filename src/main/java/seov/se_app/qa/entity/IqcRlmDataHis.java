@@ -29,6 +29,7 @@ public class IqcRlmDataHis {
     private String resultNo;
     private String type;
     private String measureType;
+    private String programName;
     private String programType;
     private String userCode;
     private String status;

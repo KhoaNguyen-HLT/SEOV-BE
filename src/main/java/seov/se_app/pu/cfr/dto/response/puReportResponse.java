@@ -1,4 +1,4 @@
-package seov.se_app.mf.dto.response;
+package seov.se_app.pu.cfr.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,9 +12,8 @@ import java.util.Map;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ZCodeResponse<T> {
+public class puReportResponse<T> {
     private int code;
     private String message;
-    private String text;
     private List<Map<String, Object>> data;
 }

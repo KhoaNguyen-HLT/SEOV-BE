@@ -33,15 +33,15 @@ public class QaService {
     private IqcRlmDataRepository iqcRlmDataRepository;
     @Autowired
     private IqcRlmDataHisRepository iqcRlmDataHisRepository;
-    public List<IqcRlmData> getDataExcel(MultipartFile file){
+    public List<IqcRlmData> getDataExcel(MultipartFile file, String programName){
         List<IqcRlmData> iqcRlmData = new ArrayList<>();
         try {
             InputStream inputStream = file.getInputStream();
             Workbook workbook = new XSSFWorkbook(inputStream);
             // sheet đầu tiên
             Sheet sheet = workbook.getSheetAt(0);
-            iqcRlmData = getData(sheet);
-            iqcRlmDataRepository.deleteByProgramTypeM();
+            iqcRlmData = getData(sheet, programName);
+            iqcRlmDataRepository.deleteByProgramTypeM(programName);
             iqcRlmDataRepository.saveAll(iqcRlmData);
 
             List<IqcRlmDataHis> hisData = iqcRlmData.stream()
@@ -56,7 +56,7 @@ public class QaService {
     }
 
 //lấy data file đo đa tâm.
-    public List<IqcRlmData> getData(Sheet sheet) {
+    public List<IqcRlmData> getData(Sheet sheet, String programName) {
         List<Row> rows =  processSheet(sheet);
 
         DataFormatter formatter = new DataFormatter();
@@ -85,8 +85,14 @@ public class QaService {
             String userId = formatter.formatCellValue(row.getCell(5));
 
             int subCableNo = 0;
+            int lastCol;
+            if("24MT".equals(programName)) {
+                lastCol = 76;
+            } else {
+                lastCol = 40;
+            }
 
-            for (int j = 7; j <= 76; j += 3) {
+            for (int j = 7; j <= lastCol; j += 3) {
                 subCableNo++;
 
                 String value = formatter.formatCellValue(row.getCell(j)).trim();
@@ -101,6 +107,7 @@ public class QaService {
                 data.setSubCableSn(subCableSn);
                 data.setType(type);
                 data.setProgramType(pType);
+                data.setProgramName(programName);
                 data.setBs(bs);
                 data.setUserCode(userId);
                 data.setSubCableNo(subCableNo);
@@ -157,25 +164,47 @@ public List<Row> processSheet(Sheet sheet) {
 
 
 
-    //        String filePath = "D:\\PROJECT\\2.IQC_Project\\MasterFile.xlsx";
-    //    String filePath = "\\\\172.17.47.10\\Public\\04_QA\\IQC_SYSTEM\\report\\MasterFile.xlsx";
-            String filePath = "/home/seov/QA-Inspection/6.Systems/1.report/MasterFile.xlsx";
-// lấy data ghi vào báo cáo excel với kiểu đo đa tâm master
-    public String getReportMt(String lotA, String lotB) throws IOException {
+
+    String filePath24MT = "/home/seov/QA-Inspection/6.Systems/1.report/MasterFile24MT.xlsx";
+    String filePath12MT = "/home/seov/QA-Inspection/6.Systems/1.report/MasterFile12MT.xlsx";
+
+//    String filePath24MT = "\\\\172.17.47.10\\Public\\04_QA\\IQC_SYSTEM\\report\\MasterFile24MT.xlsx";
+//    String filePath12MT = "\\\\172.17.47.10\\Public\\04_QA\\IQC_SYSTEM\\report\\MasterFile12MT.xlsx";
+
+// ==========================
+// MASTER 24MT / 12MT
+// ==========================
+
+    public String getReportMt24MT(String lotA, String lotB, String programName) throws IOException {
+        return getReportMt(lotA, lotB, programName, filePath24MT, 24);
+    }
+
+    public String getReportMt12MT(String lotA, String lotB, String programName) throws IOException {
+        return getReportMt(lotA, lotB, programName, filePath12MT, 12);
+    }
+
+    private String getReportMt(
+            String lotA,
+            String lotB,
+            String programName,
+            String filePath,
+            int rowsPerColumn
+    ) throws IOException {
 
         List<SubCableSnResponse> dataLa =
-                iqcRlmDataRepository.getReport(lotA);
+                iqcRlmDataRepository.getReport(lotA, programName);
+
         List<SubCableSnResponse> dataLb =
-                iqcRlmDataRepository.getReport(lotB);
+                iqcRlmDataRepository.getReport(lotB, programName);
 
         List<String> valuesLa =
-                iqcRlmDataRepository.getResultNo(lotA);
+                iqcRlmDataRepository.getResultNo(lotA, programName);
+
         List<String> valuesLb =
-                iqcRlmDataRepository.getResultNo(lotB);
+                iqcRlmDataRepository.getResultNo(lotB, programName);
 
-
-
-        if (dataLa.size() != 24 || valuesLa.isEmpty() || dataLb.size() != 24 || valuesLb.isEmpty() ) {
+        if (dataLa.size() != 24 || dataLb.size() != 24
+                || valuesLa.isEmpty() || valuesLb.isEmpty()) {
             return null;
         }
 
@@ -185,9 +214,10 @@ public List<Row> processSheet(Sheet sheet) {
             Sheet sheet = workbook.getSheetAt(0);
 
             fillColumnE(sheet, dataLa, "A");
-            fillCellJ13(sheet, valuesLa, "A");
+            fillCellsByColumn(sheet, valuesLa, "J13", rowsPerColumn);
+
             fillColumnE(sheet, dataLb, "B");
-            fillCellJ13(sheet, valuesLb, "B");
+            fillCellsByColumn(sheet, valuesLb, "AH13", rowsPerColumn);
 
             try (FileOutputStream fos = new FileOutputStream(filePath)) {
                 workbook.write(fos);
@@ -198,98 +228,37 @@ public List<Row> processSheet(Sheet sheet) {
     }
 
 
-    private void fillColumnE(Sheet sheet, List<SubCableSnResponse> data, String lot) {
+// ==========================
+// RANDOM 24MT / 12MT
+// ==========================
 
-        int startRow;
-        int lotRowIndex;
-
-        if ("A".equals(lot)) {
-            startRow = 12;     // E13
-            lotRowIndex = 4;   // E5
-        } else {
-            startRow = 36;     // E37
-            lotRowIndex = 5;   // E6
-        }
-
-        // gán lot_no vào E5 hoặc E6
-        Row lotRow = sheet.getRow(lotRowIndex);
-        if (lotRow == null) {
-            lotRow = sheet.createRow(lotRowIndex);
-        }
-
-        Cell lotCell = lotRow.getCell(4); // E
-        if (lotCell == null) {
-            lotCell = lotRow.createCell(4);
-        }
-
-        String lotNo = data.get(0).getLotNo();
-        lotCell.setCellValue(lotNo);
-
-        // đổ subCableSn vào cột E
-        for (int i = 0; i < data.size() && i < 24; i++) {
-
-            Row row = sheet.getRow(startRow + i);
-            if (row == null) {
-                row = sheet.createRow(startRow + i);
-            }
-
-            Cell cell = row.getCell(4); // E
-            if (cell == null) {
-                cell = row.createCell(4);
-            }
-
-            String value = data.get(i).getSubCableSn();
-            cell.setCellValue(value != null ? value : "");
-        }
+    public String getReportRd24MT(String lotA, String lotB, String programName) throws IOException {
+        return getReportRd(lotA, lotB, programName, filePath24MT, 24, 2400);
     }
 
-
-    private void fillCellJ13(Sheet sheet, List<String> values, String lot) {
-
-        String startCell = "A".equals(lot) ? "J13" : "AH13";
-
-        CellReference ref = new CellReference(startCell);
-
-        int startRow = ref.getRow();
-        int startCol = ref.getCol();
-
-        int rowsPerColumn = 24;
-
-        for (int i = 0; i < values.size(); i++) {
-
-            int colOffset = i / rowsPerColumn;
-            int rowOffset = i % rowsPerColumn;
-
-            int rowIndex = startRow + rowOffset;
-            int colIndex = startCol + colOffset;
-
-            Row row = sheet.getRow(rowIndex);
-            if (row == null) {
-                row = sheet.createRow(rowIndex);
-            }
-
-            Cell cell = row.getCell(colIndex);
-            if (cell == null) {
-                cell = row.createCell(colIndex);
-            }
-
-            cell.setCellValue(values.get(i) != null ? values.get(i) : "");
-        }
+    public String getReportRd12MT(String lotA, String lotB, String programName) throws IOException {
+        return getReportRd(lotA, lotB, programName, filePath12MT, 12, 1200);
     }
-//    Kết thúc
 
-// lấy dữ liệu data ra báo cáo đa tâm master random
-    public String getReportRd(String lotA, String lotB) throws IOException {
+    private String getReportRd(
+            String lotA,
+            String lotB,
+            String programName,
+            String filePath,
+            int rowsPerColumn,
+            int expectedSize
+    ) throws IOException {
 
-        String lotNo = lotA +"-"+lotB;
+        String lotNo = lotA + "-" + lotB;
 
-        List<String> values = iqcRlmDataRepository.getResultNoMtRd(lotNo);
+        List<String> values =
+                iqcRlmDataRepository.getResultNoMtRd(lotNo, programName);
 
-
-
-        if (values.isEmpty() ) {
+        if (values.isEmpty()) {
             return null;
-        } else if(values.size() != 2400) {
+        }
+
+        if (values.size() != expectedSize) {
             return "Không đúng định dạng Data";
         }
 
@@ -298,7 +267,7 @@ public List<Row> processSheet(Sheet sheet) {
 
             Sheet sheet = workbook.getSheetAt(1);
 
-            fillCellU14MtRd(sheet, values);
+            fillCellsByColumn(sheet, values, "U14", rowsPerColumn);
 
             try (FileOutputStream fos = new FileOutputStream(filePath)) {
                 workbook.write(fos);
@@ -309,16 +278,51 @@ public List<Row> processSheet(Sheet sheet) {
     }
 
 
-    private void fillCellU14MtRd(Sheet sheet, List<String> values) {
+// ==========================
+// COMMON EXCEL FUNCTIONS
+// ==========================
 
-        String startCell = "U14";
+    private void fillColumnE(
+            Sheet sheet,
+            List<SubCableSnResponse> data,
+            String lot
+    ) {
+
+        int startRow;
+        int lotRowIndex;
+
+        if ("A".equals(lot)) {
+            startRow = 12;      // E13
+            lotRowIndex = 4;    // E5
+        } else {
+            startRow = 36;      // E37
+            lotRowIndex = 5;    // E6
+        }
+
+        String lotNo = data.get(0).getLotNo();
+        setCellValue(sheet, lotRowIndex, 4, lotNo);
+
+        for (int i = 0; i < data.size() && i < 24; i++) {
+            setCellValue(
+                    sheet,
+                    startRow + i,
+                    4,
+                    data.get(i).getSubCableSn()
+            );
+        }
+    }
+
+    private void fillCellsByColumn(
+            Sheet sheet,
+            List<String> values,
+            String startCell,
+            int rowsPerColumn
+    ) {
 
         CellReference ref = new CellReference(startCell);
 
         int startRow = ref.getRow();
         int startCol = ref.getCol();
-
-        int rowsPerColumn = 24;
 
         for (int i = 0; i < values.size(); i++) {
 
@@ -328,18 +332,28 @@ public List<Row> processSheet(Sheet sheet) {
             int rowIndex = startRow + rowOffset;
             int colIndex = startCol + colOffset;
 
-            Row row = sheet.getRow(rowIndex);
-            if (row == null) {
-                row = sheet.createRow(rowIndex);
-            }
-
-            Cell cell = row.getCell(colIndex);
-            if (cell == null) {
-                cell = row.createCell(colIndex);
-            }
-
-            cell.setCellValue(values.get(i) != null ? values.get(i) : "");
+            setCellValue(sheet, rowIndex, colIndex, values.get(i));
         }
+    }
+
+    private void setCellValue(
+            Sheet sheet,
+            int rowIndex,
+            int colIndex,
+            String value
+    ) {
+
+        Row row = sheet.getRow(rowIndex);
+        if (row == null) {
+            row = sheet.createRow(rowIndex);
+        }
+
+        Cell cell = row.getCell(colIndex);
+        if (cell == null) {
+            cell = row.createCell(colIndex);
+        }
+
+        cell.setCellValue(value != null ? value : "");
     }
 
 

@@ -30,15 +30,15 @@ public class QaServiceSigle {
     private IqcRlmDataRepository iqcRlmDataRepository;
     @Autowired
     private IqcRlmDataHisRepository iqcRlmDataHisRepository;
-    public List<IqcRlmData> getDataExcel(MultipartFile file){
+    public List<IqcRlmData> getDataExcel(MultipartFile file, String program){
         List<IqcRlmData> iqcRlmData = new ArrayList<>();
         try {
             InputStream inputStream = file.getInputStream();
             Workbook workbook = new XSSFWorkbook(inputStream);
             // sheet đầu tiên
             Sheet sheet = workbook.getSheetAt(0);
-            iqcRlmData = getData(sheet);
-            iqcRlmDataRepository.deleteByProgramTypeS();
+            iqcRlmData = getData(sheet, program);
+            iqcRlmDataRepository.deleteByProgramTypeS(program);
             iqcRlmDataRepository.saveAll(iqcRlmData);
 
             List<IqcRlmDataHis> hisData = iqcRlmData.stream()
@@ -53,8 +53,8 @@ public class QaServiceSigle {
     }
 
 //lấy data file đo đơn tâm.
-    public List<IqcRlmData> getData(Sheet sheet) {
-        List<Row> rows = processSheet(sheet);
+    public List<IqcRlmData> getData(Sheet sheet, String programName) {
+        List<Row> rows = processSheet(sheet, programName);
 
         DataFormatter formatter = new DataFormatter();
         List<IqcRlmData> dataList = new ArrayList<>();
@@ -63,88 +63,165 @@ public class QaServiceSigle {
         String requestNo = "IQC" + now.format(
                 DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss")
         );
-
         String pType = "S";
 
-        String[] columns = {"H", "I", "K", "L", "EV", "EW", "EY", "EZ"};
+        if("LC-ULC".equals(programName)) {
+            String[] columns = {"H", "I", "K", "L", "EV", "EW", "EY", "EZ"};
 
-        Set<String> cable1Cols = Set.of("H", "I", "EV", "EW");
-        Set<String> bs1310Cols = Set.of("H", "I", "K", "L");
-        Set<String> ilCols = Set.of("H", "K", "EV", "EY");
+            Set<String> cable1Cols = Set.of("H", "I", "EV", "EW");
+            Set<String> bs1310Cols = Set.of("H", "I", "K", "L");
+            Set<String> ilCols = Set.of("H", "K", "EV", "EY");
 
-        DateTimeFormatter dtFormatter =
-                DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            DateTimeFormatter dtFormatter =
+                    DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
-        for (Row row : rows) {
+            for (Row row : rows) {
 
-            String subCableSn = formatter.formatCellValue(row.getCell(0)).trim();
-            String type = formatter.formatCellValue(row.getCell(2)).trim();
-            String lotNo = formatter.formatCellValue(row.getCell(3)).trim();
-            String userId = formatter.formatCellValue(row.getCell(5)).trim();
+                String subCableSn = formatter.formatCellValue(row.getCell(0)).trim();
+                String type = formatter.formatCellValue(row.getCell(2)).trim();
+                String lotNo = formatter.formatCellValue(row.getCell(3)).trim();
+                String userId = formatter.formatCellValue(row.getCell(5)).trim();
 
-            Cell operationTimeCell = row.getCell(4);
-            LocalDateTime operationTime = null;
+                Cell operationTimeCell = row.getCell(4);
+                LocalDateTime operationTime = null;
 
-            if (operationTimeCell != null) {
-                if (operationTimeCell.getCellType() == CellType.NUMERIC
-                        && DateUtil.isCellDateFormatted(operationTimeCell)) {
+                if (operationTimeCell != null) {
+                    if (operationTimeCell.getCellType() == CellType.NUMERIC
+                            && DateUtil.isCellDateFormatted(operationTimeCell)) {
 
-                    operationTime = operationTimeCell.getLocalDateTimeCellValue();
+                        operationTime = operationTimeCell.getLocalDateTimeCellValue();
 
-                } else {
+                    } else {
 
-                    String cellValue =
-                            formatter.formatCellValue(operationTimeCell).trim();
+                        String cellValue =
+                                formatter.formatCellValue(operationTimeCell).trim();
 
-                    if (!cellValue.isEmpty()) {
-                        operationTime = LocalDateTime.parse(
-                                cellValue,
-                                dtFormatter
-                        );
+                        if (!cellValue.isEmpty()) {
+                            operationTime = LocalDateTime.parse(
+                                    cellValue,
+                                    dtFormatter
+                            );
+                        }
                     }
                 }
+
+                for (String col : columns) {
+
+                    int colIndex = CellReference.convertColStringToIndex(col);
+                    Cell cell = row.getCell(colIndex);
+
+                    String value = formatter.formatCellValue(cell).trim();
+
+                    if (value.isEmpty()) {
+                        value = null;
+                    }
+
+                    int subCableNo = cable1Cols.contains(col) ? 1 : 2;
+                    int bs = bs1310Cols.contains(col) ? 1310 : 1550;
+                    String msType = ilCols.contains(col) ? "IL" : "RL";
+
+                    IqcRlmData data = new IqcRlmData();
+                    data.setRequestNo(requestNo);
+                    data.setLotNo(lotNo);
+                    data.setSubCableSn(subCableSn);
+                    data.setType(type);
+                    data.setProgramType(pType);
+                    data.setMeasureType(msType);
+                    data.setProgramName(programName);
+                    data.setBs(bs);
+                    data.setUserCode(userId);
+                    data.setSubCableNo(subCableNo);
+                    data.setResultNo(value);
+                    data.setOperationTime(operationTime);
+                    data.setCreated_at(LocalDateTime.now());
+                    data.setUpdated_at(LocalDateTime.now());
+
+                    dataList.add(data);
+                }
             }
 
-            for (String col : columns) {
+        } else if("LC-SC".equals(programName)) {
+            String[] columns = {"H", "I", "EV", "EW"};
+            Set<String> bs1310Cols = Set.of("H", "I");
+            Set<String> ilCols = Set.of("H", "EV");
 
-                int colIndex = CellReference.convertColStringToIndex(col);
-                Cell cell = row.getCell(colIndex);
+            DateTimeFormatter dtFormatter =
+                    DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
-                String value = formatter.formatCellValue(cell).trim();
+            for (Row row : rows) {
 
-                if (value.isEmpty()) {
-                    value = null;
+                String subCableSn = formatter.formatCellValue(row.getCell(0)).trim();
+                String type = formatter.formatCellValue(row.getCell(2)).trim();
+                String lotNo = formatter.formatCellValue(row.getCell(3)).trim();
+                String userId = formatter.formatCellValue(row.getCell(5)).trim();
+
+                Cell operationTimeCell = row.getCell(4);
+                LocalDateTime operationTime = null;
+
+                if (operationTimeCell != null) {
+                    if (operationTimeCell.getCellType() == CellType.NUMERIC
+                            && DateUtil.isCellDateFormatted(operationTimeCell)) {
+
+                        operationTime = operationTimeCell.getLocalDateTimeCellValue();
+
+                    } else {
+
+                        String cellValue =
+                                formatter.formatCellValue(operationTimeCell).trim();
+
+                        if (!cellValue.isEmpty()) {
+                            operationTime = LocalDateTime.parse(
+                                    cellValue,
+                                    dtFormatter
+                            );
+                        }
+                    }
                 }
 
-                int subCableNo = cable1Cols.contains(col) ? 1 : 2;
-                int bs = bs1310Cols.contains(col) ? 1310 : 1550;
-                String msType = ilCols.contains(col) ? "IL" : "RL";
+                for (String col : columns) {
 
-                IqcRlmData data = new IqcRlmData();
-                data.setRequestNo(requestNo);
-                data.setLotNo(lotNo);
-                data.setSubCableSn(subCableSn);
-                data.setType(type);
-                data.setProgramType(pType);
-                data.setMeasureType(msType);
-                data.setBs(bs);
-                data.setUserCode(userId);
-                data.setSubCableNo(subCableNo);
-                data.setResultNo(value);
-                data.setOperationTime(operationTime);
-                data.setCreated_at(LocalDateTime.now());
-                data.setUpdated_at(LocalDateTime.now());
+                    int colIndex = CellReference.convertColStringToIndex(col);
+                    Cell cell = row.getCell(colIndex);
 
-                dataList.add(data);
+                    String value = formatter.formatCellValue(cell).trim();
+
+                    if (value.isEmpty()) {
+                        value = null;
+                    }
+
+                    int subCableNo = 1;
+                    int bs = bs1310Cols.contains(col) ? 1310 : 1550;
+                    String msType = ilCols.contains(col) ? "IL" : "RL";
+
+                    IqcRlmData data = new IqcRlmData();
+                    data.setRequestNo(requestNo);
+                    data.setLotNo(lotNo);
+                    data.setSubCableSn(subCableSn);
+                    data.setType(type);
+                    data.setProgramType(pType);
+                    data.setMeasureType(msType);
+                    data.setProgramName(programName);
+                    data.setBs(bs);
+                    data.setUserCode(userId);
+                    data.setSubCableNo(subCableNo);
+                    data.setResultNo(value);
+                    data.setOperationTime(operationTime);
+                    data.setCreated_at(LocalDateTime.now());
+                    data.setUpdated_at(LocalDateTime.now());
+
+                    dataList.add(data);
+                }
             }
         }
+
+
 
         return dataList;
     }
 
 
     //    xử lý file excel với trường hợp trùng dòng dữ liệu.
-    public List<Row> processSheet(Sheet sheet) {
+    public List<Row> processSheet(Sheet sheet, String programName) {
         Map<String, Row> map = new LinkedHashMap<>();
         DataFormatter formatter = new DataFormatter();
 
@@ -167,21 +244,26 @@ public class QaServiceSigle {
 
         List<Row> finalRows = new ArrayList<>(map.values());
 
-        if (finalRows.size() != 240) {
+        if ("LC-ULC".equals(programName) && finalRows.size() != 240) {
             throw new RuntimeException(
                     "Dữ liệu chuẩn phải có 240 dòng, hiện tại: " + finalRows.size()
+            );
+        } else if ("LC-SC".equals(programName) && finalRows.size() != 280) {
+            throw new RuntimeException(
+                    "Dữ liệu chuẩn phải có 280 dòng, hiện tại: " + finalRows.size()
             );
         }
 
         return finalRows;
     }
 
-    //        String filePath = "D:\\PROJECT\\2.IQC_Project\\MasterFile.xlsx";
-//        String filePath = "\\\\172.17.47.10\\Public\\04_QA\\IQC_SYSTEM\\report\\MasterFileS.xlsx";
-    String filePath = "/home/seov/QA-Inspection/6.Systems/1.report/MasterFileS.xlsx";
-// lấy data ghi vào báo cáo excel với kiểu đo đơn tâm master
-    public String getReportMt(String lotA, String lotB) throws IOException {
 
+    String filePathLC_ULC = "/home/seov/QA-Inspection/6.Systems/1.report/MasterFileLC-ULC.xlsx";
+    String filePathLC_SC = "/home/seov/QA-Inspection/6.Systems/1.report/MasterFileLC-SC.xlsx";
+//    String filePathLC_ULC = "\\\\172.17.47.10\\Public\\04_QA\\IQC_SYSTEM\\report\\MasterFileLC-ULC.xlsx";
+//    String filePathLC_SC = "\\\\172.17.47.10\\Public\\04_QA\\IQC_SYSTEM\\report\\MasterFileLC-SC.xlsx";
+// lấy data ghi vào báo cáo excel với kiểu đo đơn tâm master
+    public String getReportULC(String lotA, String lotB) throws IOException {
 
         List<SubCableSnResponse> dataLa =
                 iqcRlmDataRepository.getReportS(lotA);
@@ -190,13 +272,13 @@ public class QaServiceSigle {
         List<String> values =
                 iqcRlmDataRepository.getResultNoS(lotA, lotB);
         List<String> values1310IL =
-                iqcRlmDataRepository.getResultNoSRd(1310, "IL");
+                iqcRlmDataRepository.getResultNoSRd(1310, "IL", "LC-ULC");
         List<String> values1310RL =
-                iqcRlmDataRepository.getResultNoSRd(1310, "RL");
+                iqcRlmDataRepository.getResultNoSRd(1310, "RL", "LC-ULC");
         List<String> values1550IL =
-                iqcRlmDataRepository.getResultNoSRd(1550, "IL");
+                iqcRlmDataRepository.getResultNoSRd(1550, "IL", "LC-ULC");
         List<String> values1550RL =
-                iqcRlmDataRepository.getResultNoSRd(1550, "RL");
+                iqcRlmDataRepository.getResultNoSRd(1550, "RL", "LC-ULC");
 
 
 
@@ -209,7 +291,7 @@ public class QaServiceSigle {
             return "Data lỗi vui lòng kiểm tra lại";
         }
 
-        try (FileInputStream fis = new FileInputStream(filePath);
+        try (FileInputStream fis = new FileInputStream(filePathLC_ULC);
              Workbook workbook = new XSSFWorkbook(fis)) {
 
             Sheet sheet = workbook.getSheetAt(0);
@@ -225,13 +307,14 @@ public class QaServiceSigle {
 
 
 
-            try (FileOutputStream fos = new FileOutputStream(filePath)) {
+            try (FileOutputStream fos = new FileOutputStream(filePathLC_ULC)) {
                 workbook.write(fos);
             }
         }
 
         return "ok";
     }
+
 
 //lấy data do vao cot E
     private void fillColumnE(Sheet sheet, List<SubCableSnResponse> data, String lot) {
@@ -362,6 +445,109 @@ public class QaServiceSigle {
         }
 
     }
+
+
+
+// 2. Get Single Report LC-SC./////////////////////////////////////////////////////////
+
+    public String getReportSC(String lotA, String lotB) throws IOException {
+
+        List<SubCableSnResponse> dataLa =
+                iqcRlmDataRepository.getReportS(lotA);
+        List<SubCableSnResponse> dataLb =
+                iqcRlmDataRepository.getReportS(lotB);
+        List<String> values =
+                iqcRlmDataRepository.getResultNoS(lotA, lotB);
+        List<String> values1310IL =
+                iqcRlmDataRepository.getResultNoSRdSc(1310, "IL", "LC-SC");
+        List<String> values1310RL =
+                iqcRlmDataRepository.getResultNoSRdSc(1310, "RL", "LC-SC");
+        List<String> values1550IL =
+                iqcRlmDataRepository.getResultNoSRdSc(1550, "IL", "LC-SC");
+        List<String> values1550RL =
+                iqcRlmDataRepository.getResultNoSRdSc(1550, "RL", "LC-SC");
+
+
+
+
+        if (dataLa.size() != 40 || dataLb.size() != 40 || values.size() != 320) {
+            return "Data lỗi vui lòng kiểm tra lại";
+        }
+
+        if (values1310IL.size() != 200 || values1310RL.size() != 200 || values1550IL.size() != 200 || values1550RL.size() != 200) {
+            return "Data lỗi vui lòng kiểm tra lại";
+        }
+
+        try (FileInputStream fis = new FileInputStream(filePathLC_SC);
+             Workbook workbook = new XSSFWorkbook(fis)) {
+
+            Sheet sheet = workbook.getSheetAt(0);
+
+            fillColumnESC(sheet, dataLa, "A");
+            fillColumnESC(sheet, dataLb, "B");
+            fillCellJ12(sheet, values, "B");
+            getReportSRd(sheet,values1310IL,1310,"IL");
+            getReportSRd(sheet,values1310RL,1310,"RL");
+            getReportSRd(sheet,values1550IL,1550,"IL");
+            getReportSRd(sheet,values1550RL,1550,"RL");
+
+
+
+
+            try (FileOutputStream fos = new FileOutputStream(filePathLC_SC)) {
+                workbook.write(fos);
+            }
+        }
+
+        return "ok";
+    }
+
+    //lấy data do vao cot E
+    private void fillColumnESC(Sheet sheet, List<SubCableSnResponse> data, String lot) {
+
+        int startRow;
+        int lotRowIndex;
+
+        if ("A".equals(lot)) {
+            startRow = 15;     // E16
+            lotRowIndex = 4;   // E5
+        } else {
+            startRow = 55;     // E56
+            lotRowIndex = 5;   // E6
+        }
+
+        // gán lot_no vào E5 hoặc E6
+        Row lotRow = sheet.getRow(lotRowIndex);
+        if (lotRow == null) {
+            lotRow = sheet.createRow(lotRowIndex);
+        }
+
+        Cell lotCell = lotRow.getCell(4); // E
+        if (lotCell == null) {
+            lotCell = lotRow.createCell(4);
+        }
+
+        String lotNo = data.get(0).getLotNo();
+        lotCell.setCellValue(lotNo);
+
+        // đổ subCableSn vào cột E
+        for (int i = 0; i < data.size() && i < 40; i++) {
+
+            Row row = sheet.getRow(startRow + i);
+            if (row == null) {
+                row = sheet.createRow(startRow + i);
+            }
+
+            Cell cell = row.getCell(4); // E
+            if (cell == null) {
+                cell = row.createCell(4);
+            }
+
+            String value = data.get(i).getSubCableSn();
+            cell.setCellValue(value != null ? value : "");
+        }
+    }
+
 
 
 

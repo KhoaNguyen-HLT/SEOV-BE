@@ -5,13 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import seov.se_app.common.dto.response.ApiResponse;
-import seov.se_app.pe.dto.response.PeResponse;
-import seov.se_app.pe.entity.BomData;
 import seov.se_app.pe.service.BomService;
-import seov.se_app.pu.service.CfrTransService;
-
-import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/pe")

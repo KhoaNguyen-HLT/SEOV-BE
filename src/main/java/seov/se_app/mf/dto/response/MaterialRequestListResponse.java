@@ -12,7 +12,7 @@ import java.util.Map;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ZCodeResponse<T> {
+public class MaterialRequestListResponse<T> {
     private int code;
     private String message;
     private String text;

@@ -13,21 +13,25 @@ import java.util.Map;
 
 public interface IqcRlmDataRepository extends JpaRepository<IqcRlmData, Long> {
     @Query(value = """
-    select DISTINCT (A.lot_no) from iqc_rlm_data A where A.program_type = :program and A."type" like '%Master%'
+    select DISTINCT (A.lot_no) from iqc_rlm_data A where A.program_name = :program and A."type" like '%Master%'
 """, nativeQuery = true)
     List<Map<String, Object>> getLotData(String program);
 
 
-    @Query("""
-    select
-        A.lotNo as lotNo,
-        A.subCableSn as subCableSn
-    from IqcRlmData A
-    where A.lotNo = :lot
-      and A.subCableNo = 1
-    order by A.subCableSn
-""")
-    List<SubCableSnResponse> getReport(String lot);
+    @Query(value = """
+    SELECT
+        lot_no AS lotNo,
+        sub_cable_sn AS subCableSn
+    FROM iqc_rlm_data
+    WHERE lot_no = :lot
+      AND sub_cable_no = 1
+      AND program_name = :programName
+    ORDER BY sub_cable_sn
+""", nativeQuery = true)
+    List<SubCableSnResponse> getReport(
+            @Param("lot") String lot,
+            @Param("programName") String programName
+    );
 
     @Query(value = """
     SELECT DISTINCT ON (A.sub_cable_sn)
@@ -47,12 +51,12 @@ public interface IqcRlmDataRepository extends JpaRepository<IqcRlmData, Long> {
             select b.subCableSn
             from IqcRlmData b
             where b.lotNo = :lot
-              and b.subCableNo = 1
+              and b.subCableNo = 1 and b.programName = :programName
         )
           and a.lotNo = :lot
         order by a.subCableSn, a.subCableNo
 """)
-    List<String> getResultNo(String lot);
+    List<String> getResultNo(String lot, String programName);
 
 
     @Query(value = """
@@ -100,38 +104,54 @@ public interface IqcRlmDataRepository extends JpaRepository<IqcRlmData, Long> {
     select result_no from iqc_rlm_data where "type" like '%Random%' 
      and bs = :bs 
      and sub_cable_no = 1  
-     and measure_type = :msType
+     and measure_type = :msType and program_name = :programName
      and program_type = 'S' order by lot_no , iqc_rlm_data.sub_cable_sn
     """, nativeQuery = true)
-    List<String> getResultNoSRd(int bs,String msType
+    List<String> getResultNoSRd(int bs,String msType, String programName
+    );
+
+
+    @Query(value = """
+    select result_no from iqc_rlm_data where "type" like '%Random%' 
+     and bs = :bs 
+     and sub_cable_no = 1  
+     and measure_type = :msType and program_name = :programName
+     and program_type = 'S' order by
+        cast(right(lot_no, 1) as integer),
+        case
+            when substring(lot_no from 'RD([0-9X])[0-9]') = 'X' then 10
+            else cast(substring(lot_no from 'RD([0-9])[0-9]') as integer)
+        end, sub_cable_sn
+    """, nativeQuery = true)
+    List<String> getResultNoSRdSc(int bs,String msType, String programName
     );
 
 
     @Query("""
         select ird.resultNo
         from IqcRlmData ird
-        where ird.type like '%Random%'
+        where ird.type like '%Random%' and ird.programName = :programName
           and ird.lotNo like concat(:lotNo, '%')
         order by ird.id, ird.lotNo, ird.subCableSn, ird.subCableNo
         """)
-    List<String> getResultNoMtRd(String lotNo);
+    List<String> getResultNoMtRd(String lotNo, String programName);
 
 
     @Modifying
     @Transactional
     @Query("""
         delete from IqcRlmData a
-        where a.programType = 'M'
+        where a.programType = 'M' and programName = :ProgramName
     """)
-    void deleteByProgramTypeM();
+    void deleteByProgramTypeM(String ProgramName);
 
     @Modifying
     @Transactional
     @Query("""
         delete from IqcRlmData a
-        where a.programType = 'S'
+        where a.programType = 'S' and a.programName = :programName
     """)
-    void deleteByProgramTypeS();
+    void deleteByProgramTypeS(String programName);
 
 
 

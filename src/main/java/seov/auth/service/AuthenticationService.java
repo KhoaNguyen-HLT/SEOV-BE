@@ -94,6 +94,7 @@ public class AuthenticationService {
                 .issuer("khoa.com")
                 .issueTime(new Date())
                 .expirationTime(new Date(Instant.now().plus(1, ChronoUnit.HOURS).toEpochMilli()))
+                .claim("userName",username )
                 .claim("role", roles)
                 .claim("permissions", permissions)
                 .build();

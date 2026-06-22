@@ -58,20 +58,33 @@ public class QaController {
     public ResponseEntity<ApiResponse<List<IqcRlmData>>> getDataExcel(
             @RequestParam("file") MultipartFile file,
             @RequestParam("user") String user,
-            @RequestParam("msType") String msType) {
+            @RequestParam("program") String program) {
 
-        if("M".equals(msType)) {
-            List<IqcRlmData> iqcRlmData =  qaService.getDataExcel(file);
+        if("24MT".equals(program)) {
+            List<IqcRlmData> iqcRlmData =  qaService.getDataExcel(file, program);
             return ResponseEntity.ok(
                     new ApiResponse<>(200, "success", iqcRlmData)
             );
-        } else if ("S".equals(msType)) {
-            List<IqcRlmData> iqcRlmData =  qaServiceSigle.getDataExcel(file);
+        }
+        else if ("12MT".equals(program)) {
+            List<IqcRlmData> iqcRlmData =  qaService.getDataExcel(file, program);
+            return ResponseEntity.ok(
+                    new ApiResponse<>(200, "success", iqcRlmData)
+            );
+        } else if ("LC-ULC".equals(program)) {
+            List<IqcRlmData> iqcRlmData =  qaServiceSigle.getDataExcel(file, "LC-ULC");
             return ResponseEntity.ok(
                     new ApiResponse<>(200, "success", iqcRlmData)
             );
 
-        } else {
+        } else if ("LC-SC".equals(program)) {
+            List<IqcRlmData> iqcRlmData =  qaServiceSigle.getDataExcel(file, "LC-SC");
+            return ResponseEntity.ok(
+                    new ApiResponse<>(200, "success", iqcRlmData)
+            );
+
+        }
+        else {
             return ResponseEntity.ok(
                     new ApiResponse<>(500, "error", null)
             );
@@ -86,10 +99,12 @@ public class QaController {
             @RequestParam String msTypeRp,
             @RequestParam String program) throws IOException {
 //        check xem là loại chương trình đơn tâm hay đa tâm
-//        nếu là đa tâm
-        if("M".equals(program)) {
-            if("M".equals(msTypeRp)) {
-                String result =  qaService.getReportMt(lotA, lotB);
+//        nếu là đa tâm check tiếp xem loại báo cáo nào?
+
+        if("24MT".equals(program)) {
+//    bao cao hang da tam 24MT
+            if ("M".equals(msTypeRp)) {
+                String result = qaService.getReportMt24MT(lotA, lotB, program);
                 if (result == null) {
                     return ResponseEntity.ok(
                             new ApiResponse<>(400, "error", result)
@@ -98,8 +113,8 @@ public class QaController {
                 return ResponseEntity.ok(
                         new ApiResponse<>(200, "success", result)
                 );
-            } else if("R".equals(msTypeRp)) {
-                String result1 =  qaService.getReportRd(lotA, lotB);
+            } else if ("R".equals(msTypeRp)) {
+                String result1 = qaService.getReportRd24MT(lotA, lotB, program);
                 return ResponseEntity.ok(
                         new ApiResponse<>(200, "success", result1)
                 );
@@ -108,11 +123,12 @@ public class QaController {
                         new ApiResponse<>(500, "error", null)
                 );
             }
-// nếu không phải đa tâm thì là đơn tâm
-        } else {
-//            Nếu là kiểu đo master
-            if("M".equals(msTypeRp)) {
-                String result =  qaServiceSigle.getReportMt(lotA, lotB);
+        }
+ // kieu do da tam 12MT
+        else if("12MT".equals(program)){
+
+            if ("M".equals(msTypeRp)) {
+                String result = qaService.getReportMt12MT(lotA, lotB, program);
                 if (result == null) {
                     return ResponseEntity.ok(
                             new ApiResponse<>(400, "error", result)
@@ -121,12 +137,43 @@ public class QaController {
                 return ResponseEntity.ok(
                         new ApiResponse<>(200, "success", result)
                 );
+            } else if ("R".equals(msTypeRp)) {
+                String result1 = qaService.getReportRd12MT(lotA, lotB, program);
+                return ResponseEntity.ok(
+                        new ApiResponse<>(200, "success", result1)
+                );
             } else {
                 return ResponseEntity.ok(
                         new ApiResponse<>(500, "error", null)
                 );
             }
 
+// kieu do dơn tam LC-ULC
+        } else if("LC-ULC".equals(program)) {
+                String result =  qaServiceSigle.getReportULC(lotA, lotB);
+                if (result == null) {
+                    return ResponseEntity.ok(
+                            new ApiResponse<>(400, "error", result)
+                    );
+                }
+                return ResponseEntity.ok(
+                        new ApiResponse<>(200, "success", result)
+                );
+  // kieu do dơn tam LC-SC
+        } else if ("LC-SC".equals(program)) {
+                String result =  qaServiceSigle.getReportSC(lotA, lotB);
+                if (result == null) {
+                    return ResponseEntity.ok(
+                            new ApiResponse<>(400, "error", result)
+                    );
+                }
+                return ResponseEntity.ok(
+                        new ApiResponse<>(200, "success", result)
+                );
+        } else {
+            return ResponseEntity.ok(
+                    new ApiResponse<>(500, "error", null)
+            );
         }
 
     }
