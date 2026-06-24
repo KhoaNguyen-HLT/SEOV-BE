@@ -55,20 +55,29 @@ public class MfController {
             ) {
         System.out.println(request.getZCodes());
         try {
-            String Result =
+            List<Map<String, Object>> Result =
                     mfService.getDataPu(request);
-            if("OK".equals(Result)) {
-
+            if(Result.size() == 1) {
+                return ResponseEntity.ok(
+                        ZCodeResponse.<List<Map<String, Object>>>builder()
+                                .code(200)
+                                .message("success")
+                                .text(null)
+                                .data(Result)
+                                .build()
+                );
+            } else {
+                return ResponseEntity.ok(
+                        ZCodeResponse.<List<Map<String, Object>>>builder()
+                                .code(200)
+                                .message("error")
+                                .text("Có nhiều hơn 1 model được")
+                                .data(null)
+                                .build()
+                );
             }
 
-            return ResponseEntity.ok(
-                    ZCodeResponse.<List<Map<String, Object>>>builder()
-                            .code(200)
-                            .message("success")
-                            .text(Result)
-                            .data(null)
-                            .build()
-            );
+
 
         } catch (Exception e) {
             return ResponseEntity.status(500).body(
@@ -120,6 +129,36 @@ public class MfController {
         try {
             List<Map<String, Object>> Result =
                     mfService.getMaterialRequestData(request);
+
+            return ResponseEntity.ok(
+                    MaterialRequestListResponse.<List<Map<String, Object>>>builder()
+                            .code(200)
+                            .message("success")
+                            .text(null)
+                            .data(Result)
+                            .build()
+            );
+
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(
+                    MaterialRequestListResponse.<List<Map<String, Object>>>builder()
+                            .code(500)
+                            .message("error")
+                            .text("null")
+                            .data(null)
+                            .build()
+            );
+        }
+    }
+
+
+    @GetMapping("/getBomData")
+    ResponseEntity<MaterialRequestListResponse<List<Map<String, Object>>>> getMaterialRequestData(
+            @RequestParam String design_number
+    ) {
+        try {
+            List<Map<String, Object>> Result =
+                    mfService.getBomData(design_number);
 
             return ResponseEntity.ok(
                     MaterialRequestListResponse.<List<Map<String, Object>>>builder()

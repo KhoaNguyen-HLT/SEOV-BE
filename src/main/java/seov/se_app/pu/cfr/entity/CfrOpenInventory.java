@@ -28,6 +28,7 @@ public class CfrOpenInventory extends BaseEntity {
     @Column(precision = 18, scale = 3)
     private BigDecimal quantity;
     private String reportType;
+    private String reportMonth;
     private String remark;
 
 }

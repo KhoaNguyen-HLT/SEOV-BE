@@ -15,7 +15,6 @@ public class CommonQueryService {
     public CommonQueryService(
             @Qualifier("primaryNamedJdbcTemplate")
             NamedParameterJdbcTemplate primaryDb,
-
             @Qualifier("secondaryNamedJdbcTemplate")
             NamedParameterJdbcTemplate secondaryDb,
             @Qualifier("thirdNamedJdbcTemplate")

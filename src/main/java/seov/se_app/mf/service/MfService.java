@@ -12,6 +12,7 @@ import seov.se_app.mf.entity.MfMaterialRequest;
 import seov.se_app.mf.entity.MaterialRequestDetail;
 import seov.se_app.mf.repository.MaterialRequestDetailRepository;
 import seov.se_app.mf.repository.MfMaterialRequestRepository;
+import seov.se_app.pe.repository.BomDataRepository;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -26,7 +27,9 @@ import java.util.Map;
 
     private final MaterialRequestDetailRepository materialRequestDetailRepository;
     private final MfMaterialRequestRepository materialRequestRepository;
+    private final BomDataRepository bomDataRepository;
     private final CommonQueryService commonQueryService;
+
 
         public List<Map<String, Object>> getZCodeData() {
             String sql = """
@@ -39,7 +42,7 @@ import java.util.Map;
             return commonQueryService.queryThirdDb(sql, params);
         }
 
-    public String getDataPu(MaterialRequestDataPu request) {
+    public List<Map<String, Object>> getDataPu(MaterialRequestDataPu request) {
         String sql = """
             SELECT distinct(A.design_number)
                     FROM order_process_use_parts A
@@ -49,11 +52,8 @@ import java.util.Map;
         Map<String, Object> params = new HashMap<>();
             params.put("zCode", request.getZCodes());
         List<Map<String, Object>> data = commonQueryService.queryThirdDb(sql, params);
-        if(data.size() != 1) {
-            return "Mã 'Z' có nhiều hơn 1 thành phẩm, cần kiểm tra lại!";
-        } else  {
-            return "OK";
-        }
+
+        return data;
 
     }
 
@@ -110,6 +110,11 @@ import java.util.Map;
 
     public  List<Map<String, Object>> getMaterialRequestData(MaterialRequestList request) {
         return  materialRequestRepository.getMaterialRequestData(request.getDepartment(), request.getFromDate(), request.getToDate());
+    }
+
+
+    public  List<Map<String, Object>> getBomData(String design_number) {
+        return  bomDataRepository.getBomData(design_number);
     }
 
 

@@ -7,25 +7,25 @@ server:
 spring:
   servlet:
     multipart:
-      max-file-size: 50MB
-      max-request-size: 50MB
+      max-file-size: 100MB
+      max-request-size: 100MB
 
 
   jackson:
     time-zone: Asia/Ho_Chi_Minh
 # Main Database
-  datasource:
-      jdbc-url: jdbc:postgresql://localhost:5432/seovdb
-      username: postgres
-      password: seov2026
-      driver-class-name: org.postgresql.Driver
-
 #  datasource:
-#    #      jdbc-url: jdbc:postgresql://172.17.47.31:5432/postgres
-#      jdbc-url: jdbc:postgresql://172.17.47.31:5432/postgres?options=-c%20timezone=Asia/Ho_Chi_Minh
+#      jdbc-url: jdbc:postgresql://localhost:5432/seovdb
 #      username: postgres
-#      password: P@sskh0nk0l4m
+#      password: seov2026
 #      driver-class-name: org.postgresql.Driver
+
+  datasource:
+    #      jdbc-url: jdbc:postgresql://172.17.47.31:5432/postgres
+      jdbc-url: jdbc:postgresql://172.17.47.31:5432/postgres?options=-c%20timezone=Asia/Ho_Chi_Minh
+      username: postgres
+      password: P@sskh0nk0l4m
+      driver-class-name: org.postgresql.Driver
   # secondary Database
   datasource-secondary:
     url: jdbc:sqlserver://172.17.47.178:1433;databaseName=ANDON_v2;encrypt=true;trustServerCertificate=true

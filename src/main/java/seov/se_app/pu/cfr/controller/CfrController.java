@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import seov.se_app.common.dto.response.ApiResponse;
+import seov.se_app.pu.cfr.dto.request.CfrUpdateIvtRequest;
 import seov.se_app.pu.cfr.entity.CfrMaterial;
 import seov.se_app.pu.cfr.entity.CfrOpenInventory;
 import seov.se_app.pu.cfr.entity.CfrTransInventory;
@@ -220,6 +221,27 @@ public class CfrController {
 
 
     }
+
+    @PostMapping("/cfr/updateOpenInventory")
+    public ResponseEntity<ApiResponse<List<CfrOpenInventory>>> updateOpenInventory(
+           @RequestBody CfrUpdateIvtRequest request
+    ) {
+
+        List<CfrOpenInventory> data = cfrService.updateOpenInventory(request.getReportName(), request.getMonth());
+        if (data.size() >= 0) {
+            return ResponseEntity.ok(
+                    new ApiResponse<>(200, "success", data)
+            );
+        } else {
+            return ResponseEntity.ok(
+                    new ApiResponse<>(400, "error", null)
+            );
+        }
+
+
+    }
+
+
 
 
 }

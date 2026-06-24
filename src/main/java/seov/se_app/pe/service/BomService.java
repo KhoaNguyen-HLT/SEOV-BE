@@ -66,8 +66,8 @@ public class BomService {
                         continue;
                     }
                     System.out.println(row.getRowNum());
-                    if(row.getCellCount() <= 21) {
-                        continue;
+                    if(row.getCellCount() <1) {
+                        break;
                     }
                     String stt = getString(row.getCell(1));
                     String bom_link = getString(row.getCell(2));
@@ -76,8 +76,8 @@ public class BomService {
                     String product_Code = getString(row.getCell(5));
                     String product_Name = getString(row.getCell(6));
                     String material_Code = getString(row.getCell(7));
-                    if (product_Code.isBlank() || material_Code.isBlank()) {
-                        continue;
+                    if (material_Code.isBlank()) {
+                        material_Code = getString(row.getCell(8));
                     }
                     String custom_Mode = getString(row.getCell(9));
                     String material_Name = getString(row.getCell(10));
@@ -90,9 +90,8 @@ public class BomService {
                     String gscm_vnese = getString(row.getCell(15));
                     String eng_unit = getString(row.getCell(16));
                     String vnese_unit = getString(row.getCell(17));
-                    String note = getString(row.getCell(18));
-                    BigDecimal  for_pm = getBigDecimal(row.getCell(20));
-                    String gscm_type = getString(row.getCell(21));
+                    BigDecimal  for_pm = row.getCellCount() > 18 ? getBigDecimal(row.getCell(18)) : null;
+                    String gscm_type = row.getCellCount() > 19 ? getString(row.getCell(19)) : "";
 
 
 
@@ -108,7 +107,6 @@ public class BomService {
                             material_Name,
                             vietnamese_Name,
                             norm_Sei,norm_Seov,gscm_eng,gscm_vnese, eng_unit, vnese_unit,
-                            note,
                             for_pm, gscm_type,
                             now,
                             now
@@ -141,7 +139,6 @@ public class BomService {
                     material_name,
                     vietnamese_name,
                     norm_sei,norm_seov,gscm_eng,gscm_vnese, eng_unit, vnese_unit,
-                    note,
                     for_pm, gscm_type,
                         created_at,
                         updated_at
@@ -158,7 +155,6 @@ public class BomService {
                     material_name,
                     vietnamese_name,
                     norm_sei,norm_seov,gscm_eng,gscm_vnese, eng_unit, vnese_unit,
-                    note,
                     for_pm, gscm_type,
                         created_at,
                         updated_at
@@ -169,6 +165,7 @@ public class BomService {
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }
+
     }
 
     private void insertTmp(List<Object[]> batchArgs) {
@@ -187,14 +184,13 @@ public class BomService {
                     material_name,
                     vietnamese_name,
                     norm_sei,norm_seov,gscm_eng,gscm_vnese, eng_unit, vnese_unit,
-                    note,
                     for_pm, gscm_type,
                     created_at,
                     updated_at
                 )
                 VALUES
                 (
-                    ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
+                    ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
                 )
                 """, batchArgs);
 

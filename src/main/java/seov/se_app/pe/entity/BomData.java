@@ -12,13 +12,13 @@ import java.math.BigDecimal;
 @Entity
 @Data
 @Table(
-        name = "bom_data",
-        uniqueConstraints = {
-                @UniqueConstraint(
-                        name = "uk_bom_prd_material",
-                        columnNames = {"product_code", "material_code"}
-                )
-        }
+        name = "bom_data"
+//        uniqueConstraints = {
+//                @UniqueConstraint(
+//                        name = "uk_bom_prd_material",
+//                        columnNames = {"product_code", "material_code"}
+//                )
+//        }
 )
 @NoArgsConstructor
 @AllArgsConstructor

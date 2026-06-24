@@ -15,6 +15,8 @@ import seov.se_app.pu.cfr.repository.CfrTransInventoryRepository;
 
 import java.io.InputStream;
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Service
@@ -245,13 +247,21 @@ public class CfrService {
             String itemCode = formatter.formatCellValue(row.getCell(1)).trim();
             BigDecimal quantity =  getFormulaBigDecimal(row.getCell(10), evaluator);
 
+
             // bỏ qua dòng trống
             if (itemCode.isEmpty()) {
                 continue;
             }
 
+            if (quantity == null || quantity.compareTo(BigDecimal.ZERO) == 0) {
+                continue;
+            }
+
+
+
             CfrOpenInventory openInventory = CfrOpenInventory.builder()
                     .period("2026-04")
+                    .reportMonth("2026-04")
                     .itemCode(itemCode)
                     .quantity(quantity)
                     .reportType(reportName)
@@ -306,6 +316,42 @@ public class CfrService {
     public List<Map<String, Object>> getData15a(String reportName, String month) {
         return cfrTransInventoryRepository.getData15a(month);
     }
+
+
+    public List<CfrOpenInventory> updateOpenInventory(String reportName, String month) {
+        String month1 = LocalDate.now()
+                .format(DateTimeFormatter.ofPattern("yyyy-MM"));
+        if("15".equals(reportName)) {
+            List<Map<String, Object>> data = cfrOpenInventoryRepository.updateOpenInventory15();
+            List<CfrOpenInventory> inventories = data.stream()
+                    .map(row -> CfrOpenInventory.builder()
+                            .itemCode((String) row.get("item_code"))
+                            .quantity(BigDecimal.valueOf(0))
+                            .period("2026-04")
+                            .reportMonth((String) row.get("month"))
+                            .reportType((String) row.get("report_type"))
+                            .build())
+                    .toList();
+
+            return  cfrOpenInventoryRepository.saveAll(inventories);
+        } else {
+            List<Map<String, Object>> data = cfrOpenInventoryRepository.updateOpenInventory15a();
+            List<CfrOpenInventory> inventories = data.stream()
+                    .map(row -> CfrOpenInventory.builder()
+                            .itemCode((String) row.get("item_code"))
+                            .quantity(BigDecimal.valueOf(0))
+                            .period("2026-04")
+                            .reportMonth((String) row.get("month"))
+                            .reportType((String) row.get("report_type"))
+                            .build())
+                    .toList();
+
+            return  cfrOpenInventoryRepository.saveAll(inventories);
+        }
+
+
+
+    };
 
 
 }

@@ -38,7 +38,7 @@ void deleteTransInventoryData( String month, String documentType, String reportN
            0 as qty_xuat_9,
            coalesce(E.qty_xuat_10 , 0) as qty_xuat_10,
            coalesce(F.qty_xuat_11, 0) as qty_xuat_11
-    from (select * from cfr_inventory where report_type = '15')  A
+    from (select * from cfr_inventory where report_type = '15' and  report_month <= :month )  A
     left join material_data B 
         on A.item_code = B.item_code
     left join (
@@ -46,7 +46,7 @@ void deleteTransInventoryData( String month, String documentType, String reportN
         from cfr_inventory_transaction
         where month <= :month
           and customs_type_code in ('E11', 'E15')
-          and document_type = 'DATA_PU'
+          and document_type = 'DATA_PU' and report_type = '15'
         group by item_code
     ) C on A.item_code = C.item_code
     left join (
@@ -54,14 +54,14 @@ void deleteTransInventoryData( String month, String documentType, String reportN
         from cfr_inventory_transaction
         where month <= :month
           and customs_type_code = 'B13'
-          and document_type = 'DATA_PU'
+          and document_type = 'DATA_PU' and report_type = '15'
         group by item_code
     ) D on A.item_code = D.item_code
     left join (
         select item_code, sum(quantity) as qty_xuat_10
         from cfr_inventory_transaction
         where month <= :month
-          and document_type = 'IVT_MF'
+          and document_type = 'IVT_MF' and report_type = '15'
         group by item_code
     ) E on A.item_code = E.item_code
     left join (
@@ -69,7 +69,7 @@ void deleteTransInventoryData( String month, String documentType, String reportN
         from cfr_inventory_transaction
         where month <= :month
           and customs_type_code = 'H21'
-          and document_type = 'DATA_PU'
+          and document_type = 'DATA_PU' and report_type = '15'
         group by item_code
     ) F on A.item_code = F.item_code) A
     """, nativeQuery = true)
@@ -78,88 +78,25 @@ void deleteTransInventoryData( String month, String documentType, String reportN
 
 
     @Query(value = """
-    SELECT 
-        x.item_code,
-        x.item_namev,
-        x.cfr_unit,
-        x.tondau_5,
-        x.qty_nhap_6,
-        x.qty_nhap_7,
-        x.qty_xuat_8,
-        x.qty_xuat_9,
-        x.qty_xuat_10,
-        (
-            x.tondau_5 
-            + x.qty_nhap_6 
-            + x.qty_nhap_7 
-            - x.qty_xuat_8 
-            - x.qty_xuat_9 
-            - x.qty_xuat_10
-        ) AS toncuoi
-    FROM (
-        SELECT 
-            i.item_code,
-            m.item_namev,
-            m.cfr_unit,
-            COALESCE(i.quantity, 0) AS tondau_5,
 
-            COALESCE(SUM(
-                CASE 
-                    WHEN t.month <= :month
-                     AND t.document_type = 'IVT_MF'
-                    THEN t.quantity 
-                    ELSE 0 
-                END
-            ), 0) AS qty_nhap_6,
-
-            COALESCE(SUM(
-                CASE 
-                    WHEN t.month <= :month
-                     AND t.document_type = 'DATA_PU'
-                     AND t.customs_type_code = 'G13'
-                    THEN t.quantity 
-                    ELSE 0 
-                END
-            ), 0) AS qty_nhap_7,
-
-            0 AS qty_xuat_8,
-
-            COALESCE(SUM(
-                CASE 
-                    WHEN t.month <= :month
-                     AND t.document_type = 'DATA_PU'
-                     AND t.customs_type_code IN ('E42', 'G23')
-                    THEN t.quantity 
-                    ELSE 0 
-                END
-            ), 0) AS qty_xuat_9,
-
-            COALESCE(SUM(
-                CASE 
-                    WHEN t.month <= :month
-                     AND t.document_type IN ('OTHER_MF', 'DATA_PU')
-                     AND t.customs_type_code IN ('OTHER', 'H21')
-                    THEN t.quantity 
-                    ELSE 0 
-                END
-            ), 0) AS qty_xuat_10
-
-        FROM cfr_inventory i
-        LEFT JOIN material_data m 
-            ON i.item_code = m.item_code
-        LEFT JOIN cfr_inventory_transaction t 
-            ON i.item_code = t.item_code
-           AND t.report_type = '15a'
-
-        WHERE i.report_type = '15a'
-
-        GROUP BY 
-            i.item_code,
-            m.item_namev,
-            m.cfr_unit,
-            i.quantity
-    ) x
-    ORDER BY x.item_code
+    select A.*, (A.tondau_5 + A.qty_nhap_6 +A.qty_nhap_7 - A.qty_xuat_8 - A.qty_xuat_9 - A.qty_xuat_10 ) as toncuoi\s
+    from (select A.item_code , B.item_namev , B.cfr_unit , A.quantity as tondau_5, coalesce(C.qty_nhap_6, 0) as qty_nhap_6  , coalesce(D.qty_nhap_7, 0) as qty_nhap_7,
+    0 as qty_xuat_8, coalesce(E.qty_xuat_9, 0) as qty_xuat_9, coalesce(F.qty_xuat_10, 0) as qty_xuat_10
+    from (select * from cfr_inventory where report_type = '15a' and report_month <= :month ) A\s
+    left join\s
+    material_data  B on A.item_code = B.item_code\s
+    left join
+    (select A.item_code,sum(A.quantity)  as qty_nhap_6  from cfr_inventory_transaction A where month <= :month and  A.document_type = 'IVT_MF' and A.report_type = '15a'  group by A.item_code ) C
+    on A.item_code = C.item_code
+    left join
+    (select A.item_code,sum(A.quantity)  as qty_nhap_7  from cfr_inventory_transaction A where month <= :month and A.customs_type_code = 'G13' and A.document_type = 'DATA_PU' and A.report_type = '15a'  group by A.item_code ) D
+    on A.item_code = D.item_code
+    left join
+    (select A.item_code,sum(A.quantity)  as qty_xuat_9  from cfr_inventory_transaction A where month <= :month  and A.customs_type_code in('E42', 'G23')  and A.document_type = 'DATA_PU' and A.report_type = '15a'  group by A.item_code ) E
+    on A.item_code = E.item_code
+    left join
+    (select A.item_code,sum(A.quantity)  as qty_xuat_10  from cfr_inventory_transaction A where month <= :month and A.document_type in ('OTHER_MF', 'DATA_PU') and  customs_type_code in ('OTHER','H21')  and A.report_type = '15a' group by A.item_code ) F
+    on A.item_code = F.item_code) A
     """, nativeQuery = true)
     List<Map<String, Object>> getData15a(@Param("month") String month);
 
