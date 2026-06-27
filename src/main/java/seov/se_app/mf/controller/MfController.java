@@ -1,11 +1,11 @@
 package seov.se_app.mf.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import seov.se_app.mf.dto.request.MaterialRequestDataPu;
-import seov.se_app.mf.dto.request.MaterialRequestList;
-import seov.se_app.mf.dto.request.MaterialRequestSaveDto;
+import seov.se_app.mf.dto.request.*;
 import seov.se_app.mf.dto.response.MaterialRequestListResponse;
 import seov.se_app.mf.dto.response.MaterialRequestResponse;
 import seov.se_app.mf.dto.response.ZCodeResponse;
@@ -122,6 +122,95 @@ public class MfController {
     }
 
 
+    @PostMapping("/updateIssuedMaterial")
+    ResponseEntity<MaterialRequestResponse<MfMaterialRequest>> updateIssuedMaterial(
+            @RequestBody MaterialRequestUpdateDto request
+    ) {
+        try {
+            MfMaterialRequest Result =
+                    mfService.updateIssuedMaterial(request);
+
+            return ResponseEntity.ok(
+                    MaterialRequestResponse.<MfMaterialRequest>builder()
+                            .code(200)
+                            .message("success")
+                            .text(null)
+                            .data(Result)
+                            .build()
+            );
+
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(
+                    MaterialRequestResponse.<MfMaterialRequest>builder()
+                            .code(500)
+                            .message("error")
+                            .text("null")
+                            .data(null)
+                            .build()
+            );
+        }
+    }
+
+
+    @PostMapping("/rejectRequest")
+    ResponseEntity<MaterialRequestResponse<MfMaterialRequest>> rejectRequest(
+            @RequestBody MaterialRequestRejectDto request
+    ) {
+        try {
+            MfMaterialRequest Result =
+                    mfService.rejectRequest(request);
+
+            return ResponseEntity.ok(
+                    MaterialRequestResponse.<MfMaterialRequest>builder()
+                            .code(200)
+                            .message("success")
+                            .text(null)
+                            .data(Result)
+                            .build()
+            );
+
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(
+                    MaterialRequestResponse.<MfMaterialRequest>builder()
+                            .code(500)
+                            .message("error")
+                            .text("null")
+                            .data(null)
+                            .build()
+            );
+        }
+    }
+
+    @PostMapping("/approveRequest")
+    ResponseEntity<MaterialRequestResponse<MfMaterialRequest>> approveRequest(
+            @RequestBody MaterialRequestUpdateDto request
+    ) {
+        try {
+            MfMaterialRequest Result =
+                    mfService.approvalMaterialRequest(request);
+
+            return ResponseEntity.ok(
+                    MaterialRequestResponse.<MfMaterialRequest>builder()
+                            .code(200)
+                            .message("success")
+                            .text(null)
+                            .data(Result)
+                            .build()
+            );
+
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(
+                    MaterialRequestResponse.<MfMaterialRequest>builder()
+                            .code(500)
+                            .message("error")
+                            .text("null")
+                            .data(null)
+                            .build()
+            );
+        }
+    }
+
+
     @PostMapping("/getMaterialRequestData")
     ResponseEntity<MaterialRequestListResponse<List<Map<String, Object>>>> getMaterialRequestData(
             @RequestBody MaterialRequestList request
@@ -152,13 +241,13 @@ public class MfController {
     }
 
 
-    @GetMapping("/getBomData")
-    ResponseEntity<MaterialRequestListResponse<List<Map<String, Object>>>> getMaterialRequestData(
+    @GetMapping("/prepareMaterialRequestData")
+    ResponseEntity<MaterialRequestListResponse<List<Map<String, Object>>>> prepareMaterialRequestData(
             @RequestParam String design_number
     ) {
         try {
             List<Map<String, Object>> Result =
-                    mfService.getBomData(design_number);
+                    mfService.prepareMaterialRequestData(design_number);
 
             return ResponseEntity.ok(
                     MaterialRequestListResponse.<List<Map<String, Object>>>builder()
@@ -180,6 +269,88 @@ public class MfController {
             );
         }
     }
+
+
+    @GetMapping("/getDetailMaterialRequest")
+    ResponseEntity<MaterialRequestListResponse<List<Map<String, Object>>>> getDetailMaterialRequest(
+            @RequestParam String requestNo
+    ) {
+        try {
+            List<Map<String, Object>> Result =
+                    mfService.getDetailMaterialRequest(requestNo);
+            List<Map<String, Object>> hdData =
+                    mfService.getHeaderMaterialRequest(requestNo);
+
+            return ResponseEntity.ok(
+                    MaterialRequestListResponse.<List<Map<String, Object>>>builder()
+                            .code(200)
+                            .message("success")
+                            .text(null)
+                            .data(Result)
+                            .hdData(hdData)
+                            .build()
+            );
+
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(
+                    MaterialRequestListResponse.<List<Map<String, Object>>>builder()
+                            .code(500)
+                            .message("error")
+                            .text(e.getMessage())
+                            .data(null)
+                            .build()
+            );
+        }
+    }
+
+
+//    @GetMapping("/printMaterialExcelData")
+//    ResponseEntity<MaterialRequestListResponse<List<Map<String, Object>>>> printMaterialExcelData(
+//            @RequestParam String requestNo
+//    ) {
+//        try {
+//            byte[] Result =
+//                    mfService.printMaterialExcelData(requestNo);
+//
+//            return ResponseEntity.ok(
+//                    MaterialRequestListResponse.<List<Map<String, Object>>>builder()
+//                            .code(200)
+//                            .message("success")
+//                            .text(null)
+//                            .data(null)
+//                            .hdData(null)
+//                            .build()
+//            );
+//
+//        } catch (Exception e) {
+//            return ResponseEntity.status(500).body(
+//                    MaterialRequestListResponse.<List<Map<String, Object>>>builder()
+//                            .code(500)
+//                            .message("error")
+//                            .text(e.getMessage())
+//                            .data(null)
+//                            .build()
+//            );
+//        }
+//    }
+
+
+    @GetMapping("/exportMaterialRequestExcel")
+    public ResponseEntity<byte[]> exportMaterialRequestExcel(@RequestParam String requestNo) throws Exception {
+
+        byte[] fileBytes = mfService.printMaterialExcelData(requestNo);
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION,
+                        "attachment; filename=\"Material_Request_" + requestNo + ".xlsx\"")
+                .contentType(MediaType.parseMediaType(
+                        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
+                .body(fileBytes);
+    }
+
+
+
+
 
 
 

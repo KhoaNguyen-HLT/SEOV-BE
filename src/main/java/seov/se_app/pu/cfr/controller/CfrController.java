@@ -60,7 +60,7 @@ public class CfrController {
 
                 default -> {
                     return ResponseEntity.ok(
-                            new ApiResponse<>(400, "error", null)
+                            new ApiResponse<>(400, "Sai tên File import:" + fileName , null)
                     );
                 }
             }
@@ -93,6 +93,7 @@ public class CfrController {
             String baseName = fileName
                     .replace(".xlsx", "")
                     .replace(".xls", "");
+            baseName = baseName.substring(5);
 
             switch (baseName) {
 
@@ -118,7 +119,7 @@ public class CfrController {
 
                 default -> {
                     return ResponseEntity.ok(
-                            new ApiResponse<>(400, "error", null)
+                            new ApiResponse<>(400, "Sai tên File import:" + fileName , null)
                     );
                 }
             }
@@ -150,6 +151,7 @@ public class CfrController {
             String baseName = fileName
                     .replace(".xlsx", "")
                     .replace(".xls", "");
+            baseName = baseName.substring(5);
 
             switch (baseName) {
 
@@ -160,8 +162,8 @@ public class CfrController {
                     }
                 }
 
-                case "inventory_mf" -> {
-                    List<CfrTransInventory> openInventories = cfrTrans15aService.saveTransData(file, "IVT_MF", month, reportName);
+                case "fg_mf" -> {
+                    List<CfrTransInventory> openInventories = cfrTrans15aService.saveTransData(file, "FG_MF", month, reportName);
                     if (!openInventories.isEmpty()) {
                         success = true;
                     }
@@ -175,7 +177,7 @@ public class CfrController {
 
                 default -> {
                     return ResponseEntity.ok(
-                            new ApiResponse<>(400, "error", null)
+                            new ApiResponse<>(400, "Sai tên File import:" + fileName, null)
                     );
                 }
             }
@@ -196,28 +198,26 @@ public class CfrController {
     ResponseEntity<puReportResponse<List<Map<String,Object>>>> getData(
             @RequestParam String reportName,
             @RequestParam String month ) {
-
-        if("15".equals(reportName)) {
             List<Map<String, Object>> data = cfrService.getData(reportName, month);
+            if(data.size() > 0) {
+                return ResponseEntity.ok(
+                        puReportResponse.<List<Map<String, Object>>>builder()
+                                .code(200)
+                                .message("success")
+                                .data(data)
+                                .build()
+                );
+            } else {
+                return ResponseEntity.ok(
+                        puReportResponse.<List<Map<String, Object>>>builder()
+                                .code(400)
+                                .message("error")
+                                .data(null)
+                                .build()
+                );
+            }
 
-            return ResponseEntity.ok(
-                    puReportResponse.<List<Map<String, Object>>>builder()
-                            .code(200)
-                            .message("success")
-                            .data(data)
-                            .build()
-            );
-        } else {
-            List<Map<String, Object>> data = cfrService.getData15a(reportName, month);
 
-            return ResponseEntity.ok(
-                    puReportResponse.<List<Map<String, Object>>>builder()
-                            .code(200)
-                            .message("success")
-                            .data(data)
-                            .build()
-            );
-        }
 
 
     }
@@ -238,6 +238,33 @@ public class CfrController {
             );
         }
 
+
+    }
+
+
+    @GetMapping("/cfr/checkExistedData")
+    public ResponseEntity<ApiResponse<String>> checkExistedData(
+            @RequestParam("month") String month,
+            @RequestParam("reportName") String reportName
+    ) {
+        List<Map<String, Object>> data = cfrService.checkExistedData(month, reportName);
+        if(data.size() > 0) {
+            return ResponseEntity.ok(
+                    ApiResponse.<String>builder()
+                            .code(200)
+                            .message("existed")
+                            .data(null)
+                            .build()
+            );
+        } else {
+            return ResponseEntity.ok(
+                    ApiResponse.<String>builder()
+                            .code(200)
+                            .message("no_exist")
+                            .data(null)
+                            .build()
+            );
+        }
 
     }
 

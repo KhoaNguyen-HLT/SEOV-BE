@@ -310,12 +310,21 @@ public class CfrService {
     }
 
     public List<Map<String, Object>> getData(String reportName, String month) {
-        return cfrTransInventoryRepository.getData(month);
+        if("15".equals(reportName)) {
+            return cfrTransInventoryRepository.getData(month);
+        } else if ("15a".equals(reportName)) {
+            return cfrTransInventoryRepository.getData15a(month);
+        } else {
+            return cfrTransInventoryRepository.getData16(month);
+        }
+
     }
 
-    public List<Map<String, Object>> getData15a(String reportName, String month) {
-        return cfrTransInventoryRepository.getData15a(month);
+
+    public List<Map<String, Object>> checkExistedData(String month, String reportName) {
+        return cfrTransInventoryRepository.checkExistedData(month,reportName );
     }
+
 
 
     public List<CfrOpenInventory> updateOpenInventory(String reportName, String month) {

@@ -78,7 +78,7 @@ public class CfrTransService {
                 BigDecimal quantity =  getFormulaBigDecimal(row.getCell(26), evaluator);
 
                 // bỏ qua dòng trống
-                if (itemCode.isEmpty()) {
+                if (itemCode.isEmpty() || "End".equals(itemCode)) {
                     continue;
                 }
 

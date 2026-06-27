@@ -41,10 +41,6 @@ public class MaterialRequest extends BaseEntity {
 
         this.createdAt = now;
         this.updatedAt = now;
-
-        if (this.status == null) {
-            this.status = "ACTIVE";
-        }
     }
 
     @PreUpdate

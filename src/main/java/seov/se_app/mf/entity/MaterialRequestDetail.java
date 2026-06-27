@@ -26,14 +26,14 @@ public class MaterialRequestDetail extends BaseEntity{
     @Column(name = "request_no", nullable = false, length = 50)
     private String requestNo;
 
-    @Column(name = "item_code", nullable = false, length = 100)
-    private String itemCode;
+    @Column(name = "material_code", length = 50)
+    private String materialCode;
 
     @Column(name = "unit", length = 30)
     private String unit;
 
-    @Column(name = "request_qty", precision = 18, scale = 6)
-    private BigDecimal requestQty;
+    @Column(name = "qty_order", precision = 18, scale = 6)
+    private BigDecimal qtyOrder;
 
     @Column(name = "issued_qty", precision = 18, scale = 6)
     private BigDecimal issuedQty;

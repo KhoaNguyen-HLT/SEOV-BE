@@ -100,4 +100,41 @@ void deleteTransInventoryData( String month, String documentType, String reportN
     """, nativeQuery = true)
     List<Map<String, Object>> getData15a(@Param("month") String month);
 
+
+    @Query(value = """
+
+            with tb1 as (
+            select A.item_code, SUM(A.quantity) as pr_qty from cfr_inventory_transaction a where report_type = '15a' and document_type = 'DATA_PU' and a."month" <= :month and a.month >= '2026-04' group by item_code order by a.item_code
+            ), tb2 as (select item_code, sum(quantity) as tong_nvl_xuat_trong_ky
+            from cfr_inventory_transaction a
+            where a."month" <= :month and a.month >= '2026-04'
+              and document_type = 'IVT_MF' and report_type = '15'
+            group by item_code),
+            tb3 as (select  b.material_code , sum(b.norm_seov) as sum_nvl_dm from tb1 left join bom_data b  on tb1.item_code = b.product_code group by material_code order by b.material_code )
+            --        select * from tb3
+           select A.*, (A.tong_nvl_xuat_trong_ky * A.ty_le_nvl_bom) as nvl_thucte_sd,  (A.tong_nvl_xuat_trong_ky * A.ty_le_nvl_bom)/A.tp_nhap_trong_ky as fn from\s
+            (select tb1.item_code, B.item_namee, B.cfr_unit,C.material_code ,D.item_namee as material_name  , D.cfr_unit as m_unit, C.prd_code , C.norm_seov, tb1.pr_qty as tp_nhap_trong_ky,
+            tb2.tong_nvl_xuat_trong_ky , (C.norm_seov * tb1.pr_qty) as nvl_sudung_dm,
+            case
+            when tb3.sum_nvl_dm > 0 then (C.norm_seov * tb1.pr_qty)/tb3.sum_nvl_dm\s
+    	else null
+    end
+            as ty_le_nvl_bom
+            from tb1
+            left join material_data B on tb1.item_code = b.item_code
+            left join bom_data C on tb1.item_code = c.product_code
+            left join material_data D on C.material_code = D.item_code
+            left join tb2 on C.material_code  = tb2.item_code
+            left join tb3 on c.material_code = tb3.material_code  ) A
+    """, nativeQuery = true)
+    List<Map<String, Object>> getData16(@Param("month") String month);
+
+
+
+    @Query(value = """
+    select item_code from cfr_inventory_transaction where month = :month and report_type = :reportName limit 1
+    """, nativeQuery = true)
+    List<Map<String, Object>> checkExistedData(@Param("month") String month, @Param("reportName") String reportName);
+
+
 }

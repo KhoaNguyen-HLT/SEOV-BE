@@ -5,21 +5,24 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import seov.se_app.common.service.CommonQueryService;
-import seov.se_app.mf.dto.request.MaterialRequestDataPu;
-import seov.se_app.mf.dto.request.MaterialRequestList;
-import seov.se_app.mf.dto.request.MaterialRequestSaveDto;
+import seov.se_app.mf.dto.request.*;
 import seov.se_app.mf.entity.MfMaterialRequest;
 import seov.se_app.mf.entity.MaterialRequestDetail;
+import seov.se_app.mf.enums.MaterialRequestStatus;
 import seov.se_app.mf.repository.MaterialRequestDetailRepository;
 import seov.se_app.mf.repository.MfMaterialRequestRepository;
 import seov.se_app.pe.repository.BomDataRepository;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static seov.se_app.mf.enums.MaterialRequestStatus.SUBMITTED;
 
 @Service
 @RequiredArgsConstructor
@@ -29,6 +32,8 @@ import java.util.Map;
     private final MfMaterialRequestRepository materialRequestRepository;
     private final BomDataRepository bomDataRepository;
     private final CommonQueryService commonQueryService;
+    private final PrintMaterialExcelData printMaterialExcelData;
+
 
 
         public List<Map<String, Object>> getZCodeData() {
@@ -75,7 +80,7 @@ import java.util.Map;
                 .department(dto.getDepartment())
                 .productionNumber(dto.getProductionNumber())
                 .requestDate(dto.getRequestDate() != null ? dto.getRequestDate() : LocalDate.now())
-                .status("SUBMITTED")
+                .status(SUBMITTED)
                 .remark(dto.getRemark())
                 .zCode(zCodeString)
                 .createdBy(dto.getCreatedBy())
@@ -86,9 +91,9 @@ import java.util.Map;
         List<MaterialRequestDetail> details = dto.getDetails().stream()
                 .map(item -> MaterialRequestDetail.builder()
                         .requestNo(requestNo)
-                        .itemCode(item.getItemCode())
+                        .materialCode(item.getMaterialCode())
                         .unit(item.getUnit())
-                        .requestQty(item.getRequestQty())
+                        .qtyOrder(item.getQtyOrder())
                         .issuedQty(BigDecimal.ZERO)
                         .process(item.getProcess())
                         .materialType(item.getMaterialType())
@@ -102,6 +107,84 @@ import java.util.Map;
     }
 
 
+    @Transactional
+    public MfMaterialRequest updateIssuedMaterial(MaterialRequestUpdateDto dto) {
+
+        if (dto.getDetails() == null || dto.getDetails().isEmpty()) {
+            throw new RuntimeException("Chi tiết yêu cầu NVL không được trống");
+        }
+
+        MfMaterialRequest request = materialRequestRepository
+                .findByRequestNo(dto.getRequestNo())
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy phiếu"));
+
+        request.setStatus(MaterialRequestStatus.COMPLETED);
+        request.setUpdatedBy(dto.getUpdatedBy());
+        request.setIssuedBy(dto.getUpdatedBy());
+        request.setIssuedAt(LocalDateTime.now());
+
+        for (MaterialRequestDetailDto item : dto.getDetails()) {
+            MaterialRequestDetail detail = materialRequestDetailRepository
+                    .findById(item.getId())
+                    .orElseThrow(() -> new RuntimeException("Không tìm thấy dòng detail id: " + item.getId()));
+
+            detail.setIssuedQty(item.getIssuedQty());
+            detail.setRemark(item.getRemark());
+        }
+
+
+        return request;
+    }
+
+
+    @Transactional
+    public MfMaterialRequest rejectRequest(MaterialRequestRejectDto dto) {
+
+        MfMaterialRequest request = materialRequestRepository
+                .findByRequestNo(dto.getRequestNo())
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy phiếu"));
+
+        request.setStatus(MaterialRequestStatus.REJECTED);
+        request.setUpdatedBy(dto.getRejectedBy());
+        request.setRejectedBy(dto.getRejectedBy());
+        request.setRejectedAt(LocalDateTime.now());
+        request.setUpdatedAt(LocalDateTime.now());
+        request.setRejectReason(dto.getRejectReason());
+
+
+        return request;
+    }
+
+
+
+
+
+    @Transactional
+    public MfMaterialRequest approvalMaterialRequest(MaterialRequestUpdateDto dto) {
+
+        MfMaterialRequest request = materialRequestRepository
+                .findByRequestNo(dto.getRequestNo())
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy phiếu"));
+
+        request.setStatus(MaterialRequestStatus.APPROVED);
+        request.setUpdatedBy(dto.getUpdatedBy());
+        request.setApprovedBy(dto.getUpdatedBy());
+        request.setApprovedAt(LocalDateTime.now());
+        request.setUpdatedAt(LocalDateTime.now());
+
+
+        return request;
+    }
+
+
+
+
+
+
+
+
+
+
     private String generateRequestNo() {
         return "MR-" + LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"))
                 + "-" + System.currentTimeMillis();
@@ -113,9 +196,29 @@ import java.util.Map;
     }
 
 
-    public  List<Map<String, Object>> getBomData(String design_number) {
-        return  bomDataRepository.getBomData(design_number);
+    public  List<Map<String, Object>> prepareMaterialRequestData(String design_number) {
+        return  materialRequestRepository.prepareMaterialRequestData(design_number);
     }
+
+    public  List<Map<String, Object>> getDetailMaterialRequest(String requestNo) {
+        return  materialRequestDetailRepository.getDetailMaterialRequest(requestNo);
+    }
+
+    public  List<Map<String, Object>> getHeaderMaterialRequest(String requestNo) {
+        return  materialRequestRepository.getHeaderMaterialRequest(requestNo);
+    }
+
+    public byte[] printMaterialExcelData(String requestNo) throws Exception {
+
+        List<MaterialRequestReportProjection> reportData =
+                materialRequestDetailRepository.getReportMaterialRequest(requestNo);
+        return printMaterialExcelData.exportExcel(reportData);
+    }
+
+
+
+
+
 
 
 

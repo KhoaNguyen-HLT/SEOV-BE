@@ -20,9 +20,6 @@ public abstract class BaseEntity {
     @Column(name = "updated_at")
     protected LocalDateTime updatedAt;
 
-    @Column(name = "status", length = 20)
-    protected String status;
-
     @PrePersist
     protected void prePersist() {
 
@@ -30,10 +27,6 @@ public abstract class BaseEntity {
 
         this.createdAt = now;
         this.updatedAt = now;
-
-        if (this.status == null) {
-            this.status = "ACTIVE";
-        }
     }
 
     @PreUpdate

@@ -78,7 +78,7 @@ public class CfrTrans15aService {
                 BigDecimal quantity =  getFormulaBigDecimal(row.getCell(26), evaluator);
 
                 // bỏ qua dòng trống
-                if (itemCode.isEmpty()) {
+                if (itemCode.isEmpty() || "End".equals(itemCode)) {
                     continue;
                 }
 
@@ -93,7 +93,7 @@ public class CfrTrans15aService {
 
                 dataList.add(cfrTransInventory);
             }
-        } else if ("IVT_MF".equals(documentType)) {
+        } else if ("FG_MF".equals(documentType)) {
             for (int i = 9; i <= sheet.getLastRowNum(); i++) {
 
                 Row row = sheet.getRow(i);
