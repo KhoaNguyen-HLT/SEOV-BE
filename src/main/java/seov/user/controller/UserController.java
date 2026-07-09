@@ -3,6 +3,7 @@ package seov.user.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import seov.se_app.qa.dto.response.qaResponse;
+import seov.user.dto.request.UpdateUserRoleRequest;
 import seov.user.dto.request.UserCreationRequest;
 import seov.user.dto.respon.ApiResponse;
 import seov.user.entity.Department;
@@ -98,9 +99,33 @@ public class UserController {
 
     }
 
-    @GetMapping("/{username}")
-    User getpidvn_user(@PathVariable Long username  ){
-        return userService.getUserid(username);
+    @PostMapping("/updateUserRole")
+    public ResponseEntity<?> updateUserRole(@RequestBody UpdateUserRoleRequest request) {
+        userService.updateUserRole(request);
+        return ResponseEntity.ok(Map.of("message", "success"));
+    }
+
+    @GetMapping("/getUserByUserName/{username}")
+    public ResponseEntity<ApiResponse<User>> getUserByUserName(@PathVariable String username  ){
+
+        User user=  userService.getUserByUserName(username);
+        if (user != null) {
+            return ResponseEntity.ok(
+                    ApiResponse.<User>builder()
+                            .code(200)
+                            .message("success")
+                            .data(user)
+                            .build()
+            );
+        } else {
+            return ResponseEntity.ok(
+                    ApiResponse.<User>builder()
+                            .code(400)
+                            .message("error")
+                            .data(null)
+                            .build()
+            );
+        }
     }
 
     @GetMapping("/getUserCustom")

@@ -17,4 +17,5 @@ public class MaterialRequestList {
     private String department;
     private LocalDate fromDate;
     private LocalDate toDate;
+    private String status;
 }

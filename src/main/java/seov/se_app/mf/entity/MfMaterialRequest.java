@@ -9,8 +9,10 @@ import lombok.NoArgsConstructor;
 import seov.se_app.common.entity.BaseEntity;
 import seov.se_app.mf.enums.MaterialRequestStatus;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @Entity
 @Table(name = "mf_material_request")
@@ -33,8 +35,14 @@ public class MfMaterialRequest extends BaseEntity{
     @Column(name = "production_number", length = 100)
     private String productionNumber;
 
-    @Column(name = "request_date")
-    private LocalDate requestDate;
+    @Column(name = "request_need_date")
+    private LocalDateTime requestNeedDate;
+
+    @Column(name = "required_time")
+    private LocalTime requiredTime;
+
+    @Column(name = "qty_request", precision = 18, scale = 6)
+    private BigDecimal qtyRequest;
 
     /**
      * SUBMITTED

@@ -5,6 +5,7 @@ target/
 !**/src/test/**/target/
 
 ###log###
+/logs
 !**/seov.log
 !**/seov.log.2026-05-11.0.gz
 
@@ -39,6 +40,8 @@ build/
 # spring config
 src/main/resources/application.properties
 src/main/resources/application.yml
+src/main/resources/application-prod.yaml
+src/main/resources/application-test.yaml
 src/main/resources/application-*.properties
 src/main/resources/application-*.yml
 

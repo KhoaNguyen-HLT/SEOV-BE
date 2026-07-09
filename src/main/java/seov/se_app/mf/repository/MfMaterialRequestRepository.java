@@ -2,9 +2,11 @@ package seov.se_app.mf.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import seov.se_app.mf.entity.MfMaterialRequest;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -14,10 +16,10 @@ public interface MfMaterialRequestRepository extends JpaRepository<MfMaterialReq
     Optional<MfMaterialRequest> findByRequestNo(String requestNo);
 
     @Query(value = """
-       select A.* from mf_material_request A where A.department =:department
-         AND A.request_date >= :fromDate AND A.request_date <= :toDate
+       select A.* from mf_material_request A where A.department =:department AND status like Concat('%',:status,'%')
+         AND A.created_at >= :fromDate AND A.created_at <= :toDate
     """, nativeQuery = true)
-    List<Map<String, Object>> getMaterialRequestData(String department, LocalDate fromDate, LocalDate toDate);
+    List<Map<String, Object>> getMaterialRequestData(String department, LocalDateTime fromDate, LocalDateTime toDate, String status);
 
 
     @Query(value = """
@@ -40,4 +42,17 @@ public interface MfMaterialRequestRepository extends JpaRepository<MfMaterialReq
         where A.request_no = :requestNo
 """, nativeQuery = true)
     List<Map<String, Object>> getHeaderMaterialRequest(String requestNo);
+
+
+    @Query("""
+    SELECT COUNT(r)
+    FROM MfMaterialRequest r
+    WHERE r.createdAt >= :start
+      AND r.createdAt < :end
+""")
+    Long countRequestInDay(
+            @Param("start") LocalDateTime start,
+            @Param("end") LocalDateTime end
+    );
+
 }

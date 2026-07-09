@@ -1,9 +1,7 @@
 package seov.auth.controller;
 
 import org.springframework.web.bind.annotation.*;
-import seov.auth.dto.request.AuthenticationRequest;
-import seov.auth.dto.request.PermissionRequest;
-import seov.auth.dto.request.RoleUpdateRequest;
+import seov.auth.dto.request.*;
 import seov.auth.dto.respone.ApiResponse;
 import seov.auth.dto.respone.AuthenticationResponse;
 import seov.auth.dto.respone.RoleResponse;
@@ -12,6 +10,7 @@ import seov.auth.service.AuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import seov.user.entity.Position;
+import seov.user.entity.User;
 
 import java.util.List;
 import java.util.Map;
@@ -119,5 +118,57 @@ public class AuthenticationController {
                 .build();
         return ResponseEntity.ok(response);
     }
+
+
+    @PostMapping("/UpdateRolePermission")
+    public ResponseEntity<?> updateRolePermission(
+            @RequestBody UpdateRolePermissionRequest request) {
+
+        authenticationService.updateRolePermission(request);
+
+        return ResponseEntity.ok(Map.of("message", "success"));
+    }
+
+
+    @PostMapping("/resetPassword")
+    public ResponseEntity<ApiResponse<User>> resetPassword(
+            @RequestBody ResetPasswordRequest request) {
+        User user = authenticationService.resetPassword(request);
+        ApiResponse<User> response = ApiResponse.<User>builder()
+                .code(200)
+                .message("success")
+                .data(user)
+                .build();
+        return ResponseEntity.ok(response);
+    }
+
+
+    @PostMapping("/changePassword")
+    public ResponseEntity<ApiResponse<User>> changePassword(
+            @RequestBody ChangePasswordRequest request) {
+
+        try {
+            User user = authenticationService.changePassword(request);
+
+            return ResponseEntity.ok(
+                    ApiResponse.<User>builder()
+                            .code(200)
+                            .message("success")
+                            .data(user)
+                            .build()
+            );
+
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(
+                    ApiResponse.<User>builder()
+                            .code(400)
+                            .message(e.getMessage())
+                            .data(null)
+                            .build()
+            );
+        }
+    }
+
+
 
 }

@@ -66,7 +66,8 @@ public class BomService {
                         continue;
                     }
                     System.out.println(row.getRowNum());
-                    if(row.getCellCount() <1) {
+
+                    if(row.getCellCount() <10) {
                         break;
                     }
                     String stt = getString(row.getCell(1));

@@ -5,40 +5,18 @@ server:
     context-path: /seov
 
 spring:
+  profiles:
+#    active: test
+    active: prod
+
+
   servlet:
     multipart:
       max-file-size: 100MB
       max-request-size: 100MB
 
-
   jackson:
     time-zone: Asia/Ho_Chi_Minh
-# Main Database
-  datasource:
-      jdbc-url: jdbc:postgresql://localhost:5432/seovdb
-      username: postgres
-      password: seov2026
-      driver-class-name: org.postgresql.Driver
-
-#  datasource:
-#    #      jdbc-url: jdbc:postgresql://172.17.47.31:5432/postgres
-#      jdbc-url: jdbc:postgresql://172.17.47.31:5432/postgres?options=-c%20timezone=Asia/Ho_Chi_Minh
-#      username: postgres
-#      password: P@sskh0nk0l4m
-#      driver-class-name: org.postgresql.Driver
-  # secondary Database
-  datasource-secondary:
-    url: jdbc:sqlserver://172.17.47.178:1433;databaseName=ANDON_v2;encrypt=true;trustServerCertificate=true
-    username: sa
-    password: Admin@123
-    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
-# third Database
-  datasource-third:
-    jdbc-url: jdbc:postgresql://172.17.47.22:5432/sedv_db
-    username: sedv
-    password: shp
-    driver-class-name: org.postgresql.Driver
-
 
   jpa:
     hibernate:
@@ -50,56 +28,16 @@ spring:
         jdbc:
           time_zone: Asia/Ho_Chi_Minh
 
-  mail:
-    host: smtp.gmail.com
-    port: 587
-    username: khoanguyenhlt@gmail.com
-    password: hryxarmjikapeani
-    properties:
-      mail:
-        smtp:
-          auth: true
-          starttls:
-            enable: true
+app:
+  default-password: 123456
 
 logging:
   file:
     name: logs/seov.log
-
   level:
     root: INFO
-
   logback:
     rollingpolicy:
       max-file-size: 10MB
       max-history: 7
       total-size-cap: 100MB
-
-
-
-#    spring:
-#      datasource:
-#        #    url: jdbc:mariadb://localhost:3306/seovdb
-#        url: "jdbc:mariadb://host.docker.internal:3306/seovdb"
-#        driver-class-name: org.mariadb.jdbc.Driver
-#        username: root
-#        password: seov2026
-#spring:
-#  datasource:
-##    url: "jdbc:mysql://localhost:3306/identity_service"
-#    url: "jdbc:mysql://host.docker.internal:3306/identity_service"
-#    driverClassName: "com.mysql.cj.jdbc.Driver"
-#    username: root
-#    password: Khoa@1105
-
-
-##  datasource
-#  datasource:
-#    jdbc-url: "jdbc:mariadb://localhost:3306/seovdb"
-##    jdbc-url: "jdbc:mariadb://host.docker.internal:3306/seovdb"
-#    driver-class-name: org.mariadb.jdbc.Driver
-#    username: seov_user
-#    password: seov2026
-
-#    ------------------------------------------
-

@@ -1,0 +1,15 @@
+package seov.auth.dto.request;
+
+import lombok.*;
+import lombok.experimental.FieldDefaults;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@FieldDefaults(level = AccessLevel.PRIVATE)
+public class ChangePasswordRequest {
+    String username;
+    String oldPassword;
+    String password;
+}

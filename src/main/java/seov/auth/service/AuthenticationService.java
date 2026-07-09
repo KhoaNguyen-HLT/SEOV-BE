@@ -1,9 +1,10 @@
 package seov.auth.service;
 
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestBody;
-import seov.auth.dto.request.AuthenticationRequest;
-import seov.auth.dto.request.PermissionRequest;
-import seov.auth.dto.request.RoleUpdateRequest;
+import seov.auth.dto.request.*;
 import seov.auth.dto.respone.RoleResponse;
 import seov.auth.repository.permissionRepository;
 import seov.auth.repository.roleRepository;
@@ -37,7 +38,8 @@ public class AuthenticationService {
     permissionRepository permissionRepository;
     @NonFinal
     static final String SIGNER_KEY  = "63af975db954bc2318eff8b6bc65aa33f7cb6315ea02c6f5924d38bd0a17f0f8fd79ecfafbec11b9279b8e0f737ebc4d623a34489612afbb357f90592f73a959";
-
+    @Value("${app.default-password}")
+    private String defaultPassword;
     public AuthenticationResponse authenticate(AuthenticationRequest request){
         var user = userRepository.findByUsername(request.getUsername());
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
@@ -216,6 +218,51 @@ public class AuthenticationService {
                 .build();
 
     }
+
+
+
+    @Transactional
+    public void updateRolePermission(UpdateRolePermissionRequest request) {
+
+        Role role = roleRepository.findById(request.getRoleId())
+                .orElseThrow(() -> new RuntimeException("Role not found"));
+        List<Permissions> permissions =
+                permissionRepository.findAllById(request.getPermissionIds());
+        role.setPermissions(new HashSet<>(permissions));
+        roleRepository.save(role);
+    }
+
+    @Transactional
+    public User resetPassword(ResetPasswordRequest request) {
+
+        User user = userRepository.findByUsername(request.getUsername())
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(10);
+        user.setPassword(encoder.encode(defaultPassword));
+
+        return user;
+    }
+
+
+    @Transactional
+    public User changePassword(ChangePasswordRequest request) {
+
+        User user = userRepository.findByUsername(request.getUsername())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
+
+        if (!passwordEncoder.matches(request.getOldPassword(), user.getPassword())) {
+            throw new RuntimeException("Old password is incorrect");
+        }
+
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
+
+        return userRepository.save(user);
+    }
+
+
+
 
 
 

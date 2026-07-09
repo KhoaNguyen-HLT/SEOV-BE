@@ -1,5 +1,6 @@
 package seov.se_app.mf.service;
 
+import lombok.RequiredArgsConstructor;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -8,6 +9,7 @@ import org.apache.poi.ss.util.CellReference;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
+import seov.Config.properties.FileProperties;
 import seov.se_app.device.entity.Device;
 import seov.se_app.mf.dto.request.MaterialRequestReportProjection;
 
@@ -19,12 +21,14 @@ import java.util.List;
 import java.util.Map;
 
 @Service
+@RequiredArgsConstructor
 public class PrintMaterialExcelData {
+    private final FileProperties fileProperties;
     public byte[] exportExcel(List<MaterialRequestReportProjection> data) throws Exception {
 
-//        ClassPathResource resource =
-//                new ClassPathResource("templates/material_confirm.xlsx");
-        String path = "D:\\REPORT\\material_report.xlsx";
+//        String path = "/home/seov/MF/Order_NVL/material_report.xlsx";
+//        String path = "D:\\REPORT\\material_report.xlsx";
+            String path = fileProperties.getMfNvl();
 
         try (InputStream is = new FileInputStream(path);
              Workbook workbook = new XSSFWorkbook(is);
@@ -32,16 +36,22 @@ public class PrintMaterialExcelData {
 
             Sheet sheet = workbook.getSheetAt(0);
 
-            MaterialRequestReportProjection footer = data.get(0);
+            MaterialRequestReportProjection infoData = data.get(0);
 
-
-            setCellValueF(sheet, "F7", footer.getCreatedBy());
-            setCellValueF(sheet, "F10", footer.getProductionNumber());
-            setCellValueF(sheet, "F11", "10");
+            setCellValueF(sheet, "J5", infoData.getRequestNo());
+            setCellValueF(sheet, "D7", infoData.getCreatedBy());
+            setCellValueF(sheet, "D8", infoData.getDepartment());
+            setCellValueF(sheet, "D9", infoData.getRemark());
+            setCellValueF(sheet, "D10", infoData.getProductionNumber());
+            setCellValueF(sheet, "D11", infoData.getQtyRequest());
+            setCellValueF(sheet, "H7", infoData.getCreateAt());
+            setCellValueF(sheet, "H8", infoData.getRequestNeedDate());
+            setCellValueF(sheet, "H9", infoData.getRequiredTime());
+            setCellValueF(sheet, "H10", infoData.getProductName());
 //            setCellValueF(sheet, "L7", footer.get);
-            setCellValueF(sheet, "F18", footer.getCreatedBy());
-            setCellValueF(sheet, "G18", footer.getApprovedBy());
-            setCellValueF(sheet, "L18", footer.getIssuedBy());
+            setCellValueF(sheet, "D18", infoData.getCreatedBy());
+            setCellValueF(sheet, "E18", infoData.getApprovedBy());
+            setCellValueF(sheet, "H18", infoData.getIssuedBy());
 
 
             int templateRowIndex = 14;
@@ -88,15 +98,13 @@ public class PrintMaterialExcelData {
 
                 setCellValue(sheet, currentRowIndex, 1, BigDecimal.valueOf(i + 1));
                 setCellValue(sheet, currentRowIndex, 2, item.getMaterialCode());
-                setCellValue(sheet, currentRowIndex, 3, item.getMaterialCode());
-                setCellValue(sheet, currentRowIndex, 4, item.getMaterialName());
-                setCellValue(sheet, currentRowIndex, 5, item.getMaterialName());
-                setCellValue(sheet, currentRowIndex, 6, item.getUnit());
-                setCellValue(sheet, currentRowIndex, 7, item.getMaterialType());
-                setCellValue(sheet, currentRowIndex, 9, item.getQtyOrder());
-                setCellValue(sheet, currentRowIndex, 11, item.getQtyOrder());
-                setCellValue(sheet, currentRowIndex, 12, item.getIssuedQty());
-                setCellValue(sheet, currentRowIndex, 15, item.getLayout());
+                setCellValue(sheet, currentRowIndex, 3, item.getMaterialName());
+                setCellValue(sheet, currentRowIndex, 4, item.getUnit());
+                setCellValue(sheet, currentRowIndex, 5, item.getMaterialType());
+                setCellValue(sheet, currentRowIndex, 6, item.getQtyOrder());
+                setCellValue(sheet, currentRowIndex, 7, item.getQtyOrder());
+                setCellValue(sheet, currentRowIndex, 8, item.getIssuedQty());
+                setCellValue(sheet, currentRowIndex, 12, item.getLayout());
             }
 
             workbook.write(out);

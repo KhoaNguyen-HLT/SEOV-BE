@@ -38,7 +38,7 @@ import static seov.se_app.mf.enums.MaterialRequestStatus.SUBMITTED;
 
         public List<Map<String, Object>> getZCodeData() {
             String sql = """
-            select A.* from (SELECT DISTINCT (production_number), registered_at FROM productinformation_parts_list limit 500) A order by registered_at desc
+            select A.* from (SELECT DISTINCT (production_number) FROM productinformation_parts_list limit 10000) A order by production_number desc
         """;
 
             Map<String, Object> params = new HashMap<>();
@@ -70,7 +70,7 @@ import static seov.se_app.mf.enums.MaterialRequestStatus.SUBMITTED;
             throw new RuntimeException("Chi tiết yêu cầu NVL không được trống");
         }
 
-        String requestNo = generateRequestNo();
+        String requestNo = generateRequestNo( dto.getDepartment() );
         if (dto.getZCode() != null && !dto.getZCode().isEmpty()) {
             zCodeString = String.join(",", dto.getZCode());
         }
@@ -79,7 +79,9 @@ import static seov.se_app.mf.enums.MaterialRequestStatus.SUBMITTED;
                 .requestNo(requestNo)
                 .department(dto.getDepartment())
                 .productionNumber(dto.getProductionNumber())
-                .requestDate(dto.getRequestDate() != null ? dto.getRequestDate() : LocalDate.now())
+                .requestNeedDate(dto.getRequestDate() != null ? dto.getRequestDate() : LocalDateTime.now())
+                .requiredTime(dto.getRequestDate().toLocalTime())
+                .qtyRequest(dto.getQtyRequest())
                 .status(SUBMITTED)
                 .remark(dto.getRemark())
                 .zCode(zCodeString)
@@ -185,14 +187,22 @@ import static seov.se_app.mf.enums.MaterialRequestStatus.SUBMITTED;
 
 
 
-    private String generateRequestNo() {
-        return "MR-" + LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"))
-                + "-" + System.currentTimeMillis();
+    private String generateRequestNo(String department) {
+        LocalDate today = LocalDate.now();
+
+        Long count = materialRequestRepository.countRequestInDay(
+                today.atStartOfDay(),
+                today.plusDays(1).atStartOfDay()
+        );
+        return department+ "-" + LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"))
+                + "-" +  String.format("%03d", count + 1);
     }
 
 
     public  List<Map<String, Object>> getMaterialRequestData(MaterialRequestList request) {
-        return  materialRequestRepository.getMaterialRequestData(request.getDepartment(), request.getFromDate(), request.getToDate());
+        LocalDateTime from = request.getFromDate().atStartOfDay();
+        LocalDateTime to = request.getToDate().plusDays(1).atStartOfDay();
+        return  materialRequestRepository.getMaterialRequestData(request.getDepartment(), from, to, request.getStatus());
     }
 
 

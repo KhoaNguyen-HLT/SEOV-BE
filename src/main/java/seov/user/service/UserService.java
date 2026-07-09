@@ -1,8 +1,10 @@
 package seov.user.service;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import seov.auth.entity.Role;
 import seov.auth.repository.roleRepository;
+import seov.user.dto.request.UpdateUserRoleRequest;
 import seov.user.dto.request.UserCreationRequest;
 import seov.user.entity.Department;
 import seov.user.entity.Position;
@@ -91,6 +93,10 @@ public class UserService {
         return userRepository.findAllById(username);
     }
 
+    public User getUserByUserName(String username){
+        return userRepository.getUserByUserName(username);
+    }
+
     public List<User> getUserListCustom(String username){
         return userRepository.getUserListCustom(username);
     }
@@ -101,6 +107,20 @@ public class UserService {
         User user = getUserid(userId);
         userRepository.delete(user);
         return user;
+    }
+
+
+    @Transactional
+    public void updateUserRole(UpdateUserRoleRequest request) {
+
+        User user = userRepository.findById(request.getUserId())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        List<Role> roles = roleRepository.findAllById(request.getRoleIds());
+
+        user.setRoles(new HashSet<>(roles));
+
+        userRepository.save(user);
     }
 
 

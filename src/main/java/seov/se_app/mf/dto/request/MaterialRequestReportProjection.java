@@ -1,13 +1,9 @@
 package seov.se_app.mf.dto.request;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+
 public interface MaterialRequestReportProjection {
     String getRequestNo();
 
@@ -26,7 +22,12 @@ public interface MaterialRequestReportProjection {
     String getUnit();
 
     String getLayout();
+    String getRequestNeedDate();
+    String getRequiredTime();
+    String getProductName();
+    String getRemark();
 
+    String getCreateAt();
     LocalDateTime getUpdatedAt();
 
     String getMaterialType();
@@ -36,6 +37,7 @@ public interface MaterialRequestReportProjection {
     String getMaterialName();
 
     BigDecimal getQtyOrder();
+    String getQtyRequest();
 
     BigDecimal getIssuedQty();
 }
