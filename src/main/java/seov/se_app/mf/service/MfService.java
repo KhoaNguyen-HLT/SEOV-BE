@@ -11,6 +11,7 @@ import seov.se_app.mf.entity.MaterialRequestDetail;
 import seov.se_app.mf.enums.MaterialRequestStatus;
 import seov.se_app.mf.repository.MaterialRequestDetailRepository;
 import seov.se_app.mf.repository.MfMaterialRequestRepository;
+import seov.se_app.pe.entity.BomData;
 import seov.se_app.pe.repository.BomDataRepository;
 
 import java.io.IOException;
@@ -18,9 +19,11 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static seov.se_app.mf.enums.MaterialRequestStatus.SUBMITTED;
 
@@ -46,6 +49,19 @@ import static seov.se_app.mf.enums.MaterialRequestStatus.SUBMITTED;
 
             return commonQueryService.queryThirdDb(sql, params);
         }
+
+
+    public List<Map<String, Object>> getConsumptionData() {
+
+        return materialRequestRepository.getConsumptionData();
+    }
+
+    public List<Map<String, Object>> getProductData() {
+
+        return materialRequestRepository.getProductData();
+    }
+
+
 
     public List<Map<String, Object>> getDataPu(MaterialRequestDataPu request) {
         String sql = """
@@ -107,6 +123,87 @@ import static seov.se_app.mf.enums.MaterialRequestStatus.SUBMITTED;
 
         return request;
     }
+
+
+    public List<MaterialProductDetail> getMaterial(
+            List<productRequest> request) {
+
+// laays List danh sach product code
+        List<String> productCodes = request.stream()
+                .map(productRequest::getItemCode)
+                .toList();
+
+// lay list Bom_data theo list product_code
+        List<BomData> bomList =
+                bomDataRepository.findByProductCodeIn(productCodes);
+
+//check quantity Product input from FE.
+        Map<String, BigDecimal> productQtyMap =
+                request.stream()
+                        .collect(Collectors.toMap(
+                                productRequest::getItemCode,
+                                productRequest::getQty
+                        ));
+
+
+        Map<String, MaterialProductDetail> materialMap = new HashMap<>();
+
+//for loop each BomData row call from  bomList
+        for (BomData bom : bomList) {
+//get the quantity product
+            BigDecimal productQty =
+                    productQtyMap.get(bom.getProductCode());
+
+            if (productQty == null) {
+                continue;
+            }
+
+//            calculator material (ex: 2 X 100 = 200)
+            BigDecimal needQty =
+                    bom.getNormSeov()
+                            .multiply(productQty);
+
+
+// lưu kết quả vào materialMap
+            materialMap.compute(
+                    bom.getMaterialCode(),
+                    (key, oldValue) -> {
+
+                        if (oldValue == null) {
+                            MaterialProductDetail detail =
+                                    new MaterialProductDetail();
+                            detail.setItemCode(
+                                    bom.getMaterialCode()
+                            );
+                            detail.setItemName(
+                                    bom.getVietnameseName()
+                            );
+                            detail.setCustomMode(
+                                    bom.getCustomMode()
+                            );
+                            detail.setUnit(
+                                    bom.getEngUnit()
+                            );
+                            detail.setQty(needQty);
+                            return detail;
+                        } else {
+
+                            oldValue.setQty(
+                                    oldValue.getQty()
+                                            .add(needQty)
+                            );
+                            return oldValue;
+                        }
+                    }
+            );
+        }
+
+//return result
+        return new ArrayList<>(materialMap.values());
+    }
+
+
+
 
 
     @Transactional

@@ -182,4 +182,43 @@ public LocalDate getFormulaLocalDate(Row row, String column) {
             return BigDecimal.ZERO;
         }
     }
+
+
+
+    //    hàm xử lý công thức
+    public BigDecimal getFormulaBigDecimal(
+            Cell cell,
+            FormulaEvaluator evaluator) {
+
+        try {
+            if (cell == null) {
+                return BigDecimal.ZERO;
+            }
+
+            CellValue cellValue = evaluator.evaluate(cell);
+
+            if (cellValue == null) {
+                return BigDecimal.ZERO;
+            }
+
+            if (cellValue.getCellType() == CellType.NUMERIC) {
+                return BigDecimal.valueOf(cellValue.getNumberValue());
+            }
+
+            if (cellValue.getCellType() == CellType.STRING) {
+                String value = cellValue.getStringValue().trim();
+
+                if (value.isEmpty()) {
+                    return BigDecimal.ZERO;
+                }
+
+                return new BigDecimal(value.replace(",", ""));
+            }
+
+            return BigDecimal.ZERO;
+
+        } catch (Exception e) {
+            return BigDecimal.ZERO;
+        }
+    }
 }

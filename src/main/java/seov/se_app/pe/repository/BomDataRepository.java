@@ -17,4 +17,7 @@ public interface BomDataRepository extends JpaRepository<BomData, Long> {
 """, nativeQuery = true)
     List<Map<String, Object>> getBomData(String design_number);
 
+    List<BomData> findByProductCodeIn(List<String> productCodes);
+
+
 }

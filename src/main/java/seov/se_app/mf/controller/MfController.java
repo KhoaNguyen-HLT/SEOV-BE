@@ -6,9 +6,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import seov.se_app.mf.dto.request.*;
-import seov.se_app.mf.dto.response.MaterialRequestListResponse;
-import seov.se_app.mf.dto.response.MaterialRequestResponse;
-import seov.se_app.mf.dto.response.ZCodeResponse;
+import seov.se_app.mf.dto.response.*;
 import seov.se_app.mf.entity.MfMaterialRequest;
 import seov.se_app.mf.service.MfService;
 
@@ -49,11 +47,62 @@ public class MfController {
     }
 
 
+    @GetMapping("/getConsumptionData")
+    ResponseEntity<ApiResponse<List<Map<String, Object>>>> getConsumptionData() {
+        try {
+            List<Map<String, Object>> Data =
+                    mfService.getConsumptionData();
+
+            return ResponseEntity.ok(
+                    ApiResponse.<List<Map<String, Object>>>builder()
+                            .code(200)
+                            .message("success")
+                            .data(Data)
+                            .build()
+            );
+
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(
+                    ApiResponse.<List<Map<String, Object>>>builder()
+                            .code(500)
+                            .message("error")
+                            .data(null)
+                            .build()
+            );
+        }
+    }
+
+
+    @GetMapping("/getProductData")
+    ResponseEntity<ApiResponse<List<Map<String, Object>>>> getProductData() {
+        try {
+            List<Map<String, Object>> Data =
+                    mfService.getProductData();
+
+            return ResponseEntity.ok(
+                    ApiResponse.<List<Map<String, Object>>>builder()
+                            .code(200)
+                            .message("success")
+                            .data(Data)
+                            .build()
+            );
+
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(
+                    ApiResponse.<List<Map<String, Object>>>builder()
+                            .code(500)
+                            .message("error")
+                            .data(null)
+                            .build()
+            );
+        }
+    }
+
+
     @PostMapping("/getDataPu")
     ResponseEntity<ZCodeResponse<List<Map<String, Object>>>> getDataPu(
             @RequestBody MaterialRequestDataPu request
             ) {
-        System.out.println(request.getZCodes());
         try {
             List<Map<String, Object>> Result =
                     mfService.getDataPu(request);
@@ -112,6 +161,35 @@ public class MfController {
         } catch (Exception e) {
             return ResponseEntity.status(500).body(
                     MaterialRequestResponse.<MfMaterialRequest>builder()
+                            .code(500)
+                            .message("error")
+                            .text("null")
+                            .data(null)
+                            .build()
+            );
+        }
+    }
+
+    @PostMapping("/getMaterial")
+    ResponseEntity<MaterialProductRequestResponse<List<MaterialProductDetail>>> getMaterial(
+            @RequestBody List<productRequest> request
+    ) {
+        try {
+            List<MaterialProductDetail> Result =
+                    mfService.getMaterial(request);
+
+            return ResponseEntity.ok(
+                    MaterialProductRequestResponse.<List<MaterialProductDetail>>builder()
+                            .code(200)
+                            .message("success")
+                            .text(null)
+                            .data(Result)
+                            .build()
+            );
+
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(
+                    MaterialProductRequestResponse.<List<MaterialProductDetail>>builder()
                             .code(500)
                             .message("error")
                             .text("null")
@@ -303,36 +381,6 @@ public class MfController {
         }
     }
 
-
-//    @GetMapping("/printMaterialExcelData")
-//    ResponseEntity<MaterialRequestListResponse<List<Map<String, Object>>>> printMaterialExcelData(
-//            @RequestParam String requestNo
-//    ) {
-//        try {
-//            byte[] Result =
-//                    mfService.printMaterialExcelData(requestNo);
-//
-//            return ResponseEntity.ok(
-//                    MaterialRequestListResponse.<List<Map<String, Object>>>builder()
-//                            .code(200)
-//                            .message("success")
-//                            .text(null)
-//                            .data(null)
-//                            .hdData(null)
-//                            .build()
-//            );
-//
-//        } catch (Exception e) {
-//            return ResponseEntity.status(500).body(
-//                    MaterialRequestListResponse.<List<Map<String, Object>>>builder()
-//                            .code(500)
-//                            .message("error")
-//                            .text(e.getMessage())
-//                            .data(null)
-//                            .build()
-//            );
-//        }
-//    }
 
 
     @GetMapping("/exportMaterialRequestExcel")

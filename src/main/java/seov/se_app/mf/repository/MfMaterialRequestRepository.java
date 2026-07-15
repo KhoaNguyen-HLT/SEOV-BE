@@ -28,6 +28,20 @@ public interface MfMaterialRequestRepository extends JpaRepository<MfMaterialReq
 """, nativeQuery = true)
     List<Map<String, Object>> prepareMaterialRequestData(String design_number);
 
+    @Query(value = """
+          select A.item_code as material_code, A.item_namev as vietnamese_name, A.material_type as custom_mode, A.gscm_unit as gscm_eng  from material_data A where A."type" = 'NVL'
+          and A.material_type not in ('MAIN','Main material','Packing material', 'Packing materials', 'Sub material' );
+""", nativeQuery = true)
+    List<Map<String, Object>> getConsumptionData();
+
+
+    @Query(value = """
+          select A.id,A.item_code, A.item_namee, A.gscm_unit  from material_data A where type = 'TP';
+""", nativeQuery = true)
+    List<Map<String, Object>> getProductData();
+
+
+
 
     @Query(value = """
     select A.request_no,A.production_number,A.department,A.status,\s

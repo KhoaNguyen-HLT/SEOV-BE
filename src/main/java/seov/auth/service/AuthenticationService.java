@@ -64,7 +64,7 @@ public class AuthenticationService {
                     .flatMap(role -> role.getPermissions().stream())
                     .map(Permissions::getName)
                     .collect(Collectors.toSet());
-            var token = generateToken(request.getUsername(),roles, permissions );
+            var token = generateToken(request.getUsername(),user1.getName(),roles, permissions );
 
             return AuthenticationResponse.builder()
                     .token(token)
@@ -89,7 +89,7 @@ public class AuthenticationService {
         return result;
     }
 
-    private String generateToken(String username, List<String> roles,Set<String> permissions ) {
+    private String generateToken(String username, String name,List<String> roles,Set<String> permissions ) {
         JWSHeader header= new JWSHeader(JWSAlgorithm.HS512);
         JWTClaimsSet jwtClaimsSet = new JWTClaimsSet.Builder()
                 .subject(username)
@@ -97,6 +97,7 @@ public class AuthenticationService {
                 .issueTime(new Date())
                 .expirationTime(new Date(Instant.now().plus(1, ChronoUnit.HOURS).toEpochMilli()))
                 .claim("userName",username )
+                .claim("name",name )
                 .claim("role", roles)
                 .claim("permissions", permissions)
                 .build();

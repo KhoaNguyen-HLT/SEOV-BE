@@ -22,6 +22,7 @@ public interface MaterialRequestReportProjection {
     String getUnit();
 
     String getLayout();
+    String getPerson();
     String getRequestNeedDate();
     String getRequiredTime();
     String getProductName();

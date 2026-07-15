@@ -1,7 +1,7 @@
 app:
   file:
-    mf-Nvl: /home/seov/MF/Order_NVL/material_report.xlsx
-
+     mf-Nvl: /home/seov/MF/Order_NVL/material_report.xlsx
+#     mf-Nvl: D:\\REPORT\\material_report.xlsx
 spring:
   datasource:
     jdbc-url: jdbc:postgresql://172.17.47.31:5432/postgres?options=-c%20timezone=Asia/Ho_Chi_Minh

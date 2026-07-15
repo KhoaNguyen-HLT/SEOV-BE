@@ -48,7 +48,8 @@ public interface MaterialRequestDetailRepository extends JpaRepository<MaterialR
             E.qty_order AS qtyOrder,
             E.issued_qty AS issuedQty,
             F.layout,
-            G.vietnamese_name as materialName ,
+            F.person,
+            H.item_namev as materialName ,
             G.product_name as productName
         FROM mf_material_request A                     \s
         LEFT join users B  ON A.approved_by = B.username                     \s
@@ -57,6 +58,7 @@ public interface MaterialRequestDetailRepository extends JpaRepository<MaterialR
         LEFT join mf_material_request_detail E  ON A.request_no = E.request_no                     \s
         LEFT join pm_layout F ON E.material_code = F.material_code\s
         LEFT join bom_data G on A.production_number = G.product_code and E.material_code = G.material_code\s
+        LEFT join material_data H on  E.material_code = H.item_code\s
         where A.request_no =  :requestNo       \s
         order by E.material_code ;
 """, nativeQuery = true)

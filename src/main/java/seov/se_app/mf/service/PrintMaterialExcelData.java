@@ -104,6 +104,7 @@ public class PrintMaterialExcelData {
                 setCellValue(sheet, currentRowIndex, 6, item.getQtyOrder());
                 setCellValue(sheet, currentRowIndex, 7, item.getQtyOrder());
                 setCellValue(sheet, currentRowIndex, 8, item.getIssuedQty());
+                setCellValue(sheet, currentRowIndex, 11, item.getPerson());
                 setCellValue(sheet, currentRowIndex, 12, item.getLayout());
             }
 
