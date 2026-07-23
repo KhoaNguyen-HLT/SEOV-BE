@@ -7,9 +7,11 @@ import org.dhatim.fastexcel.reader.Cell;
 import org.dhatim.fastexcel.reader.ReadableWorkbook;
 import org.dhatim.fastexcel.reader.Row;
 import org.dhatim.fastexcel.reader.Sheet;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import seov.se_app.common.service.CommonQueryService;
 
 
 import java.io.IOException;
@@ -24,7 +26,14 @@ import java.util.stream.Stream;
 public class BomService {
 
     private static final int BATCH_SIZE = 3000;
-    private final JdbcTemplate jdbcTemplate;
+    private final CommonQueryService commonQueryService;
+//    private final JdbcTemplate jdbcTemplatepr;
+
+//    public BomService(
+//            @Qualifier("primaryJdbcTemplate") JdbcTemplate jdbcTemplatepr
+//    ) {
+//        this.jdbcTemplatepr = jdbcTemplatepr;
+//    }
 
     @Transactional
     public void saveBomData(MultipartFile file) throws IOException {
@@ -49,7 +58,7 @@ public class BomService {
              ReadableWorkbook wb = new ReadableWorkbook(is)) {
 
             // clear tmp
-            jdbcTemplate.execute("TRUNCATE TABLE bom_import_data RESTART IDENTITY");
+            commonQueryService.executeMainDb("TRUNCATE TABLE bom_import_data RESTART IDENTITY");
             Sheet sheet = wb.getFirstSheet();
 
             List<Object[]> batchArgs = new ArrayList<>(BATCH_SIZE);
@@ -125,8 +134,8 @@ public class BomService {
             }
 
             // replace bom
-            jdbcTemplate.execute("TRUNCATE TABLE bom_data RESTART IDENTITY");
-            jdbcTemplate.execute("""
+            commonQueryService.executeMainDb("TRUNCATE TABLE bom_data RESTART IDENTITY");
+            commonQueryService.executeMainDb("""
                     INSERT INTO bom_data
                     (
                         stt,
@@ -171,7 +180,7 @@ public class BomService {
 
     private void insertTmp(List<Object[]> batchArgs) {
 
-        jdbcTemplate.batchUpdate("""
+        commonQueryService.batchUpdateMainDb("""
                 INSERT INTO bom_import_data
                 (
                     stt,

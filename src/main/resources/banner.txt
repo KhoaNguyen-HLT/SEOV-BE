@@ -1,0 +1,20 @@
+========================================================
+
+              FACTORY MANAGEMENT SYSTEM
+
+                 A Di Đà Code 🙏
+
+        ☑ Database không Deadlock
+        ☑ API không Timeout
+        ☑ Transaction không Rollback
+        ☑ Production không Incident
+
+             Developer Still Alive ☕
+                 Never Bug 😎
+
+--------------------------------------------------------
+
+        Runtime     : Java ${java.version}
+        Framework   : Spring Boot ${spring-boot.version}
+
+========================================================

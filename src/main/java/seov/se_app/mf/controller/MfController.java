@@ -358,6 +358,8 @@ public class MfController {
                     mfService.getDetailMaterialRequest(requestNo);
             List<Map<String, Object>> hdData =
                     mfService.getHeaderMaterialRequest(requestNo);
+            List<Map<String, Object>> prData =
+                    mfService.getMaterialAnRequest(requestNo);
 
             return ResponseEntity.ok(
                     MaterialRequestListResponse.<List<Map<String, Object>>>builder()
@@ -366,6 +368,7 @@ public class MfController {
                             .text(null)
                             .data(Result)
                             .hdData(hdData)
+                            .prData(prData)
                             .build()
             );
 
@@ -380,6 +383,7 @@ public class MfController {
             );
         }
     }
+
 
 
 

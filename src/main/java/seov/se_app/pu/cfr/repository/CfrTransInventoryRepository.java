@@ -222,5 +222,13 @@ void deleteTransInventoryData( String month, String documentType, String reportN
     """, nativeQuery = true)
     List<Map<String, Object>> checkExistedData(@Param("month") String month, @Param("reportName") String reportName);
 
+    @Query(value = """
+     select A.* from (select A.document_type, A."month" , A.report_type , A.created_by, B.name, to_char(A.created_at , 'DD/MM/YYYY HH24:MI:SS') as datetime  from cfr_inventory_transaction A 
+    left join users B on A.created_by = B.username
+    ) A group by A.document_type, A."month" , A.report_type , A.created_by, A.datetime, A.name
+    order by A.report_type,A.document_type, A."month"
+    """, nativeQuery = true)
+    List<Map<String, Object>> getHisData(@Param("reportName") String reportName);
+
 
 }

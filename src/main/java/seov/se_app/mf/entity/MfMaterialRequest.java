@@ -41,7 +41,7 @@ public class MfMaterialRequest extends BaseEntity{
     @Column(name = "required_time")
     private LocalTime requiredTime;
 
-    @Column(name = "qty_request", precision = 18, scale = 6)
+    @Column(name = "qty_request", precision = 18, scale = 2)
     private BigDecimal qtyRequest;
 
     /**

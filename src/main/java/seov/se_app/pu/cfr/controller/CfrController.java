@@ -33,26 +33,30 @@ public class CfrController {
     @PostMapping("/cfr/getMasterData")
     public ResponseEntity<ApiResponse<String>> getMasterData(
             @RequestParam("files") MultipartFile[] files,
-            @RequestParam("reportName") String reportName
+            @RequestParam("reportName") String reportName,
+            @RequestParam("userName") String userName
             ) {
 
         boolean success = false;
 
         for (MultipartFile file : files) {
-
-            String fileName = file.getOriginalFilename();
+            String fileName = file.getOriginalFilename().toLowerCase();
+            String baseName = fileName
+                    .replace(".xlsx", "")
+                    .replace(".xls", "");
+            baseName = baseName.substring(5);
 
             switch (fileName) {
 
-                case "Masterlist_PU.xlsx" -> {
-                    List<CfrMaterial> materials = cfrService.saveMaterialData(file,reportName);
+                case "Masterlist_PU" -> {
+                    List<CfrMaterial> materials = cfrService.saveMaterialData(file,reportName, userName);
                     if (!materials.isEmpty()) {
                         success = true;
                     }
                 }
 
-                case "FY25_CFR_PU.xlsx" -> {
-                    List<CfrOpenInventory> openInventories = cfrService.saveOpenInventory(file, reportName);
+                case "CFR_PU" -> {
+                    List<CfrOpenInventory> openInventories = cfrService.saveOpenInventory(file, reportName, userName);
                     if (!openInventories.isEmpty()) {
                         success = true;
                     }
@@ -82,7 +86,8 @@ public class CfrController {
     public ResponseEntity<ApiResponse<String>> getTransData(
             @RequestParam("files") MultipartFile[] files,
             @RequestParam("month") String month,
-            @RequestParam("reportName") String reportName
+            @RequestParam("reportName") String reportName,
+            @RequestParam("userName") String userName
             ) {
 
         boolean success = false;
@@ -98,20 +103,20 @@ public class CfrController {
             switch (baseName) {
 
                 case "customs_data_pu" -> {
-                    List<CfrTransInventory> materials = cfrTransService.saveTransData(file, "DATA_PU", month, reportName);
+                    List<CfrTransInventory> materials = cfrTransService.saveTransData(file, "DATA_PU", month, reportName, userName);
                     if (!materials.isEmpty()) {
                         success = true;
                     }
                 }
 
                 case "inventory_mf" -> {
-                    List<CfrTransInventory> openInventories = cfrTransService.saveTransData(file, "IVT_MF", month, reportName);
+                    List<CfrTransInventory> openInventories = cfrTransService.saveTransData(file, "IVT_MF", month, reportName, userName);
                     if (!openInventories.isEmpty()) {
                         success = true;
                     }
                 }
                 case "others_mf" -> {
-                    List<CfrTransInventory> openInventories = cfrTransService.saveTransData(file, "OTHER_MF", month, reportName);
+                    List<CfrTransInventory> openInventories = cfrTransService.saveTransData(file, "OTHER_MF", month, reportName, userName);
                     if (!openInventories.isEmpty()) {
                         success = true;
                     }
@@ -140,7 +145,8 @@ public class CfrController {
     public ResponseEntity<ApiResponse<String>> getTransData15a(
             @RequestParam("files") MultipartFile[] files,
             @RequestParam("month") String month,
-            @RequestParam("reportName") String reportName
+            @RequestParam("reportName") String reportName,
+            @RequestParam("userName") String userName
     ) {
 
         boolean success = false;
@@ -156,20 +162,20 @@ public class CfrController {
             switch (baseName) {
 
                 case "customs_data_pu" -> {
-                    List<CfrTransInventory> materials = cfrTrans15aService.saveTransData(file, "DATA_PU", month, reportName);
+                    List<CfrTransInventory> materials = cfrTrans15aService.saveTransData(file, "DATA_PU", month, reportName, userName);
                     if (!materials.isEmpty()) {
                         success = true;
                     }
                 }
 
                 case "fg_mf" -> {
-                    List<CfrTransInventory> openInventories = cfrTrans15aService.saveTransData(file, "FG_MF", month, reportName);
+                    List<CfrTransInventory> openInventories = cfrTrans15aService.saveTransData(file, "FG_MF", month, reportName, userName);
                     if (!openInventories.isEmpty()) {
                         success = true;
                     }
                 }
                 case "others_mf" -> {
-                    List<CfrTransInventory> openInventories = cfrTrans15aService.saveTransData(file, "OTHER_MF", month, reportName);
+                    List<CfrTransInventory> openInventories = cfrTrans15aService.saveTransData(file, "OTHER_MF", month, reportName, userName);
                     if (!openInventories.isEmpty()) {
                         success = true;
                     }
@@ -218,6 +224,30 @@ public class CfrController {
             }
 
 
+    }
+
+
+    @GetMapping("/cfr/getHisData")
+    ResponseEntity<puReportResponse<List<Map<String,Object>>>> getHisData(
+            @RequestParam String reportName) {
+        List<Map<String, Object>> data = cfrService.getHisData(reportName);
+        if(data.size() > 0) {
+            return ResponseEntity.ok(
+                    puReportResponse.<List<Map<String, Object>>>builder()
+                            .code(200)
+                            .message("success")
+                            .data(data)
+                            .build()
+            );
+        } else {
+            return ResponseEntity.ok(
+                    puReportResponse.<List<Map<String, Object>>>builder()
+                            .code(400)
+                            .message("error")
+                            .data(null)
+                            .build()
+            );
+        }
 
 
     }

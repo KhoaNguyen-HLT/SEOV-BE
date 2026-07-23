@@ -15,6 +15,10 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 public class productRequest {
+
+    @JsonProperty("item_code")
     private String itemCode;
+    private String unit;
+    private String remark;
     private BigDecimal qty;
 }

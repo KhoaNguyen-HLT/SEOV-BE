@@ -1,4 +1,4 @@
-package seov.se_app.pm.entity;
+package seov.se_app.pm.wh.entity;
 
 
 import jakarta.persistence.*;
@@ -7,10 +7,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import seov.se_app.common.entity.BaseEntity;
-import seov.se_app.mf.enums.MaterialRequestStatus;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "pm_layout")
@@ -18,7 +14,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 @Data
-public class PmLayout extends BaseEntity{
+public class WhLayout extends BaseEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

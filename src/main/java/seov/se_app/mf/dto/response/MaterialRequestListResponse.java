@@ -18,4 +18,5 @@ public class MaterialRequestListResponse<T> {
     private String text;
     private List<Map<String, Object>> data;
     private List<Map<String, Object>> hdData;
+    private List<Map<String, Object>> prData;
 }

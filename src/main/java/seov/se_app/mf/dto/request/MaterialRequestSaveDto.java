@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import seov.se_app.mf.entity.MaterialAnRequest;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -25,4 +26,5 @@ public class MaterialRequestSaveDto {
     @JsonProperty("zCodes")
     private List<String> zCode;
     private List<MaterialRequestDetailDto> details;
+    private List<productRequest> products;
 }

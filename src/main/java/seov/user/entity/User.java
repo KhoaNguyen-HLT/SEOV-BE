@@ -28,6 +28,7 @@ public class User {
     private String position;
     private String department;
     private String email;
+    @Column(name = "join_date")
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate joinDate;
     private LocalDate created_at;

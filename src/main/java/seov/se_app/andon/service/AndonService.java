@@ -2,7 +2,9 @@ package seov.se_app.andon.service;
 
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -16,6 +18,7 @@ import seov.se_app.andon.dto.respon.getLinesRespone;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -26,42 +29,64 @@ import seov.se_app.andon.entity.andondata;
 import seov.se_app.andon.repository.andonHandlingDetailRepository;
 import seov.se_app.andon.repository.andonProcessLogRepository;
 import seov.se_app.andon.repository.andonRepository;
+import seov.se_app.common.service.CommonQueryService;
+import seov.se_app.mf.dto.request.MaterialRequestDataPu;
 
 @Service
+@RequiredArgsConstructor
 public class AndonService {
+    private final CommonQueryService commonQueryService;
     @Autowired
     private JavaMailSender mailSender;
-
     @Autowired
     private EntityManager entityManager;
-
     @Autowired
     private SimpMessagingTemplate messagingTemplate;
-    @Autowired
-    private JdbcTemplate jdbcTemplate;
+    private final JdbcTemplate jdbcTemplatesc;
     @Autowired
     private andonRepository andonRepository;
     @Autowired
     private andonProcessLogRepository andonProcessLogRepository;
-
     @Autowired
     private andonHandlingDetailRepository andonHandlingDetailRepository;
 
+
+
+//    public AndonService(
+//            @Qualifier("secondaryJdbcTemplate") JdbcTemplate jdbcTemplatesc
+//    ) {
+//        this.jdbcTemplatesc = jdbcTemplatesc;
+//    }
+
+
+
     public List<getLinesRespone> getLines() {
 
-            String sql = "SELECT top 10 SiteCode, LineName FROM mstSiteControllers";
+        String sql = "SELECT top 10 SiteCode, LineName FROM mstSiteControllers";
 
-            return jdbcTemplate.query(sql, (rs, rowNum) -> {
-                getLinesRespone dto = new getLinesRespone();
-                dto.setSiteCode(rs.getString("SiteCode"));
-                dto.setLineName(rs.getString("LineName"));
-                return dto;
-            });
-//        getLinesRespone dto = new getLinesRespone();
-//        dto.setSiteCode("SiteCode");
-//        dto.setLineName("LineName");
-//        return dto;
+        Map<String, Object> params = new HashMap<>();
+        List<Map<String, Object>> data = commonQueryService.queryThirdDb(sql, params);
+
+        List<getLinesRespone> result = data.stream().map(row -> new getLinesRespone(
+                (String) row.get("SiteCode"),
+                (String) row.get("LineName")
+        )).toList();
+
+        return result;
     }
+
+//    public List<getLinesRespone> getLines() {
+//
+//            String sql = "SELECT top 10 SiteCode, LineName FROM mstSiteControllers";
+//
+//            return jdbcTemplatesc.query(sql, (rs, rowNum) -> {
+//                getLinesRespone dto = new getLinesRespone();
+//                dto.setSiteCode(rs.getString("SiteCode"));
+//                dto.setLineName(rs.getString("LineName"));
+//                return dto;
+//            });
+//
+//    }
 
 
     public List<Map<String, Object>> andonGetData(andonGetDataRequest request) {

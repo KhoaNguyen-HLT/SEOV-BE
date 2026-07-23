@@ -45,4 +45,6 @@ public class CfrMaterial extends BaseEntity {
     private String customMode;
     private String hsCode;
     private String supplier;
+    private String createdBy;
+    private String updatedBy;
 }

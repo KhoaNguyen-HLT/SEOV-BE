@@ -1,10 +1,7 @@
 package seov.se_app.mf.service;
 
 import lombok.RequiredArgsConstructor;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellReference;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.core.io.ClassPathResource;
@@ -17,6 +14,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.math.BigDecimal;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 
@@ -25,9 +23,7 @@ import java.util.Map;
 public class PrintMaterialExcelData {
     private final FileProperties fileProperties;
     public byte[] exportExcel(List<MaterialRequestReportProjection> data) throws Exception {
-
-//        String path = "/home/seov/MF/Order_NVL/material_report.xlsx";
-//        String path = "D:\\REPORT\\material_report.xlsx";
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
             String path = fileProperties.getMfNvl();
 
         try (InputStream is = new FileInputStream(path);
@@ -91,7 +87,14 @@ public class PrintMaterialExcelData {
                         cell = row.createCell(j);
                     }
 
-                    cell.setCellStyle(templateCell.getCellStyle());
+                    
+                    CellStyle style = workbook.createCellStyle();
+                    style.cloneStyleFrom(templateCell.getCellStyle());
+
+                    DataFormat format = workbook.createDataFormat();
+                    style.setDataFormat(format.getFormat("#,##0.00"));
+
+                    cell.setCellStyle(style);
                 }
 
                 MaterialRequestReportProjection item = data.get(i);
@@ -103,7 +106,9 @@ public class PrintMaterialExcelData {
                 setCellValue(sheet, currentRowIndex, 5, item.getMaterialType());
                 setCellValue(sheet, currentRowIndex, 6, item.getQtyOrder());
                 setCellValue(sheet, currentRowIndex, 7, item.getQtyOrder());
-                setCellValue(sheet, currentRowIndex, 8, item.getIssuedQty());
+                if (item.getIssuedQty() != null && item.getIssuedQty().compareTo(BigDecimal.ZERO) != 0) {
+                    setCellValue(sheet, currentRowIndex, 8, item.getIssuedQty());
+                }
                 setCellValue(sheet, currentRowIndex, 11, item.getPerson());
                 setCellValue(sheet, currentRowIndex, 12, item.getLayout());
             }

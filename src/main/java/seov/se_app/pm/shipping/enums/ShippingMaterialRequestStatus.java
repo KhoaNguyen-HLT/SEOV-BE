@@ -1,6 +1,6 @@
-package seov.se_app.pm.enums;
+package seov.se_app.pm.shipping.enums;
 
-public enum MaterialRequestStatus {
+public enum ShippingMaterialRequestStatus {
     SUBMITTED,   // Chờ duyệt
     APPROVED,    // Đã duyệt
     REJECTED,    // Từ chối

@@ -1,6 +1,8 @@
 package seov.se_app.pu.cfr.service;
 
 import jakarta.transaction.Transactional;
+import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,21 +22,17 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Service
+@RequiredArgsConstructor
 public class CfrService {
 
-    @Autowired
-    private SimpMessagingTemplate messagingTemplate;
-    @Autowired
-    private CfrMaterialsRepository cfrMaterialsRepository;
-    @Autowired
-    private CfrOpenInventoryRepository cfrOpenInventoryRepository;
-
-    @Autowired
-    private CfrTransInventoryRepository cfrTransInventoryRepository;
+    private final SimpMessagingTemplate messagingTemplate;
+    private final CfrMaterialsRepository cfrMaterialsRepository;
+    private final CfrOpenInventoryRepository cfrOpenInventoryRepository;
+    private final CfrTransInventoryRepository cfrTransInventoryRepository;
 
 
     @Transactional
-    public List<CfrMaterial> saveMaterialData(MultipartFile file, String reportName) {
+    public List<CfrMaterial> saveMaterialData(MultipartFile file, String reportName, String userName) {
         List<CfrMaterial> saveList = new ArrayList<>();
         int noSheet;
         if (file == null || file.isEmpty()) {
@@ -53,7 +51,7 @@ public class CfrService {
 
             Sheet sheet = workbook.getSheetAt(noSheet);
 //            lấy data material
-            List<CfrMaterial> cfrMaterials = getMaterialData(sheet, reportName);
+            List<CfrMaterial> cfrMaterials = getMaterialData(sheet, reportName, userName);
             if (cfrMaterials.isEmpty()) {
                 return saveList;
             }
@@ -89,16 +87,14 @@ public class CfrService {
             }
 
             cfrMaterialsRepository.saveAll(saveList);
-
             return saveList ;
-
         } catch (Exception e) {
             throw new RuntimeException("Import material data failed", e);
         }
     }
 
 //    //lấy data file material list
-    public List<CfrMaterial> getMaterialData(Sheet sheet, String reportName) {
+    public List<CfrMaterial> getMaterialData(Sheet sheet, String reportName, String userName) {
         DataFormatter formatter = new DataFormatter();
         List<CfrMaterial> dataList = new ArrayList<>();
         String materialType;
@@ -131,6 +127,8 @@ public class CfrService {
                         .hsCode(formatter.formatCellValue(row.getCell(9)).trim())
                         .supplier(formatter.formatCellValue(row.getCell(10)).trim())
                         .type(materialType)
+                        .createdBy(userName)
+                        .updatedBy(userName)
                         .build();
 
                 dataList.add(material);
@@ -163,21 +161,20 @@ public class CfrService {
                         .materialType(formatter.formatCellValue(row.getCell(6)).trim())
                         .gscmType(formatter.formatCellValue(row.getCell(7)).trim())
                         .type(materialType)
+                        .createdBy(userName)
+                        .updatedBy(userName)
                         .build();
 
                 dataList.add(material);
             }
         }
 
-
-
         return dataList;
     }
 
 
-
 //    lưu hoặc update bảng tồn đầu
-    public List<CfrOpenInventory> saveOpenInventory(MultipartFile file, String reportName) {
+    public List<CfrOpenInventory> saveOpenInventory(MultipartFile file, String reportName, String userName) {
         List<CfrOpenInventory> data = new ArrayList<>();
         int noSheet;
         if (file == null || file.isEmpty()) {
@@ -194,7 +191,7 @@ public class CfrService {
             FormulaEvaluator evaluator =
                     workbook.getCreationHelper().createFormulaEvaluator();
 //            lấy data
-            List<CfrOpenInventory> CfrOpenInventorys = getDataInventory(sheet, evaluator, reportName);
+            List<CfrOpenInventory> CfrOpenInventorys = getDataInventory(sheet, evaluator, reportName, userName);
             if (CfrOpenInventorys.isEmpty()) {
                 return data;
             }
@@ -213,6 +210,7 @@ public class CfrService {
                     oldData.setPeriod(excelData.getPeriod());
                     oldData.setQuantity(excelData.getQuantity());
                     oldData.setReportType(excelData.getReportType());
+                    oldData.setUpdatedBy(excelData.getUpdatedBy());
 
                     saveList.add(oldData);
 
@@ -231,8 +229,15 @@ public class CfrService {
     }
 
 
+//    lấy giá tháng bắt đầu năm tài chính
+    LocalDate localDate = LocalDate.now();
+    int fiscalYear = localDate.getMonthValue() >= 4
+            ? localDate.getYear()
+            : localDate.getYear() - 1;
+    String period = fiscalYear + "-04";
+
     //lấy data file tồn đầu
-    public List<CfrOpenInventory> getDataInventory(Sheet sheet, FormulaEvaluator evaluator, String reportName) {
+    public List<CfrOpenInventory> getDataInventory(Sheet sheet, FormulaEvaluator evaluator, String reportName, String userName) {
         DataFormatter formatter = new DataFormatter();
         List<CfrOpenInventory> dataList = new ArrayList<>();
 
@@ -247,7 +252,6 @@ public class CfrService {
             String itemCode = formatter.formatCellValue(row.getCell(1)).trim();
             BigDecimal quantity =  getFormulaBigDecimal(row.getCell(10), evaluator);
 
-
             // bỏ qua dòng trống
             if (itemCode.isEmpty()) {
                 continue;
@@ -257,14 +261,14 @@ public class CfrService {
                 continue;
             }
 
-
-
             CfrOpenInventory openInventory = CfrOpenInventory.builder()
-                    .period("2026-04")
-                    .reportMonth("2026-04")
+                    .period(period)
+                    .reportMonth(period)
                     .itemCode(itemCode)
                     .quantity(quantity)
                     .reportType(reportName)
+                    .createdBy(userName)
+                    .updatedBy(userName)
                     .build();
 
             dataList.add(openInventory);
@@ -321,10 +325,14 @@ public class CfrService {
     }
 
 
+    public List<Map<String, Object>> getHisData(String reportName) {
+        return cfrTransInventoryRepository.getHisData(reportName);
+    }
+
+
     public List<Map<String, Object>> checkExistedData(String month, String reportName) {
         return cfrTransInventoryRepository.checkExistedData(month,reportName );
     }
-
 
 
     public List<CfrOpenInventory> updateOpenInventory(String reportName, String month) {
@@ -336,7 +344,7 @@ public class CfrService {
                     .map(row -> CfrOpenInventory.builder()
                             .itemCode((String) row.get("item_code"))
                             .quantity(BigDecimal.valueOf(0))
-                            .period("2026-04")
+                            .period(period)
                             .reportMonth((String) row.get("month"))
                             .reportType((String) row.get("report_type"))
                             .build())
@@ -349,7 +357,7 @@ public class CfrService {
                     .map(row -> CfrOpenInventory.builder()
                             .itemCode((String) row.get("item_code"))
                             .quantity(BigDecimal.valueOf(0))
-                            .period("2026-04")
+                            .period(period)
                             .reportMonth((String) row.get("month"))
                             .reportType((String) row.get("report_type"))
                             .build())
@@ -361,6 +369,9 @@ public class CfrService {
 
 
     };
+
+
+
 
 
 }

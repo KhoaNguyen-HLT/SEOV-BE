@@ -37,4 +37,5 @@ public class CfrTransInventory extends BaseEntity {
     private String reportType;
     private String customsTypeCode;
     private String remark;
+    private String createdBy;
 }

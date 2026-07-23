@@ -32,7 +32,7 @@ public class CfrTransService {
 
 
     @Transactional
-    public List<CfrTransInventory> saveTransData(MultipartFile file, String documentType, String month, String reportName) {
+    public List<CfrTransInventory> saveTransData(MultipartFile file, String documentType, String month, String reportName, String userName) {
         List<CfrTransInventory> cfrTransInventories = new ArrayList<>();
         if (file == null || file.isEmpty()) {
             return cfrTransInventories;
@@ -46,7 +46,7 @@ public class CfrTransService {
             FormulaEvaluator evaluator =
                     workbook.getCreationHelper().createFormulaEvaluator();
 //            lấy data trans
-            cfrTransInventories = getDataTrans(sheet, documentType, month, evaluator, reportName);
+            cfrTransInventories = getDataTrans(sheet, documentType, month, evaluator, reportName, userName);
             if (cfrTransInventories.isEmpty()) {
                 return cfrTransInventories;
             }
@@ -54,6 +54,7 @@ public class CfrTransService {
 //            String transType = cfrTransInventories.get(0).getTransactionType();
             cfrTransInventoryRepository.deleteTransInventoryData(month, documentType, reportName);
 //            sau khi xóa xong se lưu lại
+
             return cfrTransInventoryRepository.saveAll(cfrTransInventories);
 
         } catch (Exception e) {
@@ -61,7 +62,7 @@ public class CfrTransService {
         }
     }
 
-    public List<CfrTransInventory> getDataTrans(Sheet sheet,String documentType, String month, FormulaEvaluator evaluator, String reportName) {
+    public List<CfrTransInventory> getDataTrans(Sheet sheet,String documentType, String month, FormulaEvaluator evaluator, String reportName, String userName) {
         DataFormatter formatter = new DataFormatter();
         List<CfrTransInventory> dataList = new ArrayList<>();
         if ("DATA_PU".equals(documentType)) {
@@ -90,6 +91,7 @@ public class CfrTransService {
                         .customsTypeCode(customsTypeCode)
                         .transactionType("IN")
                         .reportType(reportName)
+                        .createdBy(userName)
                         .build();
 
                 dataList.add(cfrTransInventory);
@@ -119,6 +121,7 @@ public class CfrTransService {
                         .customsTypeCode("MF")
                         .transactionType("OUT")
                         .reportType(reportName)
+                        .createdBy(userName)
                         .build();
 
                 dataList.add(cfrTransInventory);
@@ -150,6 +153,7 @@ public class CfrTransService {
                         .customsTypeCode("OTHER")
                         .transactionType("IN")
                         .reportType(reportName)
+                        .createdBy(userName)
                         .build();
 
                 dataList.add(cfrTransInventory);

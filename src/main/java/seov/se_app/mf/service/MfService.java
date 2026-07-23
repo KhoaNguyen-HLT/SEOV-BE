@@ -6,9 +6,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import seov.se_app.common.service.CommonQueryService;
 import seov.se_app.mf.dto.request.*;
+import seov.se_app.mf.entity.MaterialAnRequest;
 import seov.se_app.mf.entity.MfMaterialRequest;
 import seov.se_app.mf.entity.MaterialRequestDetail;
 import seov.se_app.mf.enums.MaterialRequestStatus;
+import seov.se_app.mf.repository.MaterialAnRequestRepository;
 import seov.se_app.mf.repository.MaterialRequestDetailRepository;
 import seov.se_app.mf.repository.MfMaterialRequestRepository;
 import seov.se_app.pe.entity.BomData;
@@ -19,10 +21,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static seov.se_app.mf.enums.MaterialRequestStatus.SUBMITTED;
@@ -36,6 +35,7 @@ import static seov.se_app.mf.enums.MaterialRequestStatus.SUBMITTED;
     private final BomDataRepository bomDataRepository;
     private final CommonQueryService commonQueryService;
     private final PrintMaterialExcelData printMaterialExcelData;
+    private final MaterialAnRequestRepository materialAnRequestRepository;
 
 
 
@@ -46,18 +46,15 @@ import static seov.se_app.mf.enums.MaterialRequestStatus.SUBMITTED;
 
             Map<String, Object> params = new HashMap<>();
 //            params.put("productionNumber", productionNumber);
-
             return commonQueryService.queryThirdDb(sql, params);
         }
 
 
     public List<Map<String, Object>> getConsumptionData() {
-
         return materialRequestRepository.getConsumptionData();
     }
 
     public List<Map<String, Object>> getProductData() {
-
         return materialRequestRepository.getProductData();
     }
 
@@ -106,6 +103,18 @@ import static seov.se_app.mf.enums.MaterialRequestStatus.SUBMITTED;
 
         materialRequestRepository.save(request);
 
+        List<MaterialAnRequest> products = dto.getProducts().stream()
+                .map(item -> MaterialAnRequest.builder()
+                        .requestNo(requestNo)
+                        .unit(item.getUnit())
+                        .qty(item.getQty())
+                        .itemCode(item.getItemCode())
+                        .remark(item.getRemark())
+                        .build())
+                .toList();
+
+        materialAnRequestRepository.saveAll(products);
+
         List<MaterialRequestDetail> details = dto.getDetails().stream()
                 .map(item -> MaterialRequestDetail.builder()
                         .requestNo(requestNo)
@@ -121,10 +130,21 @@ import static seov.se_app.mf.enums.MaterialRequestStatus.SUBMITTED;
 
         materialRequestDetailRepository.saveAll(details);
 
+
+
         return request;
     }
 
 
+
+    private static final Map<String, Integer> CUSTOM_MODE_ORDER = Map.of(
+            "MAIN", 1,
+            "SUB MATERIAL", 2,
+            "PACKING MATERIAL", 3,
+            "PK MATERIAL - NO NORM", 4,
+            "CONSUMABLE", 5,
+            "E13", 6
+    );
     public List<MaterialProductDetail> getMaterial(
             List<productRequest> request) {
 
@@ -197,12 +217,30 @@ import static seov.se_app.mf.enums.MaterialRequestStatus.SUBMITTED;
                     }
             );
         }
+        List<MaterialProductDetail> result =  new ArrayList<>(materialMap.values());
+
+
+//        sap xep hang theo customMode master va itemCode
+        result.sort(
+                Comparator
+                        .comparingInt((MaterialProductDetail item) -> {
+                            String mode = item.getCustomMode();
+
+                            if (mode == null) {
+                                return Integer.MAX_VALUE;
+                            }
+
+                            return CUSTOM_MODE_ORDER.getOrDefault(
+                                    mode.toUpperCase(Locale.ROOT),
+                                    Integer.MAX_VALUE
+                            );
+                        })
+                        .thenComparing(MaterialProductDetail::getItemCode)
+        );
 
 //return result
-        return new ArrayList<>(materialMap.values());
+        return result;
     }
-
-
 
 
 
@@ -257,7 +295,6 @@ import static seov.se_app.mf.enums.MaterialRequestStatus.SUBMITTED;
 
 
 
-
     @Transactional
     public MfMaterialRequest approvalMaterialRequest(MaterialRequestUpdateDto dto) {
 
@@ -274,12 +311,6 @@ import static seov.se_app.mf.enums.MaterialRequestStatus.SUBMITTED;
 
         return request;
     }
-
-
-
-
-
-
 
 
 
@@ -313,6 +344,10 @@ import static seov.se_app.mf.enums.MaterialRequestStatus.SUBMITTED;
 
     public  List<Map<String, Object>> getHeaderMaterialRequest(String requestNo) {
         return  materialRequestRepository.getHeaderMaterialRequest(requestNo);
+    }
+
+    public  List<Map<String, Object>> getMaterialAnRequest(String requestNo) {
+        return  materialAnRequestRepository.getMaterialAnRequest(requestNo);
     }
 
     public byte[] printMaterialExcelData(String requestNo) throws Exception {

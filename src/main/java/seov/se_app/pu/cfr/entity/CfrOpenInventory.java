@@ -30,5 +30,9 @@ public class CfrOpenInventory extends BaseEntity {
     private String reportType;
     private String reportMonth;
     private String remark;
+    private String createdBy;
+    private String updatedBy;
+
+
 
 }
