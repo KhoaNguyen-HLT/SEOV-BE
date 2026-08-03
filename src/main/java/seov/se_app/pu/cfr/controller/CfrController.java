@@ -46,16 +46,16 @@ public class CfrController {
                     .replace(".xls", "");
             baseName = baseName.substring(5);
 
-            switch (fileName) {
+            switch (baseName) {
 
-                case "Masterlist_PU" -> {
+                case "masterlist_pu" -> {
                     List<CfrMaterial> materials = cfrService.saveMaterialData(file,reportName, userName);
                     if (!materials.isEmpty()) {
                         success = true;
                     }
                 }
 
-                case "CFR_PU" -> {
+                case "cfr_pu" -> {
                     List<CfrOpenInventory> openInventories = cfrService.saveOpenInventory(file, reportName, userName);
                     if (!openInventories.isEmpty()) {
                         success = true;

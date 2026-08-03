@@ -25,7 +25,7 @@ void deleteTransInventoryData( String month, String documentType, String reportN
 
     @Query(value = """
     select A.*, (A.tondau_5 + A.qty_nhap_6 + A.qty_nhap_7 -A.qty_xuat_8 -A.qty_xuat_9 -A.qty_xuat_10 -A.qty_xuat_11 ) as toncuoi,
-        K.scrossqty_nhap, K.cross_nhap_gscm, H.cross_toncuoi 
+        coalesce(K.scrossqty_nhap, 0) as scrossqty_nhap, coalesce(K.cross_nhap_gscm, 0) as cross_nhap_gscm, coalesce(H.cross_toncuoi, 0) as cross_toncuoi 
         from 
     (select A.item_code,
            B.item_namev,
@@ -102,14 +102,14 @@ void deleteTransInventoryData( String month, String documentType, String reportN
     @Query(value = """
 
     select A.*, (A.tondau_5 + A.qty_nhap_6 +A.qty_nhap_7 - A.qty_xuat_8 - A.qty_xuat_9 - A.qty_xuat_10 ) as toncuoi,
-    K.crossqty_xuat, K.crossqty_xuat_fgpm, K.cross_toncuoi
+    coalesce(K.crossqty_xuat, 0) as crossqty_xuat, coalesce(K.crossqty_xuat_fgpm, 0) as crossqty_xuat_fgpm , coalesce(K.cross_toncuoi, 0) as cross_toncuoi
     from (select A.item_code , B.item_namev , B.cfr_unit , A.quantity as tondau_5, coalesce(C.qty_nhap_6, 0) as qty_nhap_6  , coalesce(D.qty_nhap_7, 0) as qty_nhap_7,
     0 as qty_xuat_8, coalesce(E.qty_xuat_9, 0) as qty_xuat_9, coalesce(F.qty_xuat_10, 0) as qty_xuat_10
     from (select * from cfr_inventory where report_type = '15a' and report_month <= :month ) A\s
     left join\s
     material_data  B on A.item_code = B.item_code\s
     left join
-    (select A.item_code,sum(A.quantity)  as qty_nhap_6  from cfr_inventory_transaction A where month <= :month and  A.document_type = 'IVT_MF' and A.report_type = '15a'  group by A.item_code ) C
+    (select A.item_code,sum(A.quantity)  as qty_nhap_6  from cfr_inventory_transaction A where month <= :month and  A.document_type = 'FG_MF' and A.report_type = '15a'  group by A.item_code ) C
     on A.item_code = C.item_code
     left join
     (select A.item_code,sum(A.quantity)  as qty_nhap_7  from cfr_inventory_transaction A where month <= :month and A.customs_type_code = 'G13' and A.document_type = 'DATA_PU' and A.report_type = '15a'  group by A.item_code ) D
@@ -121,26 +121,27 @@ void deleteTransInventoryData( String month, String documentType, String reportN
     (select A.item_code,sum(A.quantity)  as qty_xuat_10  from cfr_inventory_transaction A where month <= :month and A.document_type in ('OTHER_MF', 'DATA_PU') and  customs_type_code in ('OTHER','H21')  and A.report_type = '15a' group by A.item_code ) F
     on A.item_code = F.item_code) A
     left join
-        (select A.item_code ,A.crossqty_xuat,
+        (
+        select C.item_code,
         case
-        	when B.crossqty_xuat_fgpm is null then 0
-        	else B.crossqty_xuat_fgpm
+            when A.crossqty_xuat  is null then 0
+            else A.crossqty_xuat
+        end as crossqty_xuat,
+        case
+            when B.crossqty_xuat_fgpm is null then 0
+            else B.crossqty_xuat_fgpm
         end as crossqty_xuat_fgpm,
-        case
-        	when C.sum is null then 0
-        	else C.sum
-        end as cross_toncuoi
-        from (select A.item_code , sum(A.quantity) as crossqty_xuat  from cfr_cross_inout A where
-        customs_type_code = 'E42' and A.report_type = '15a' and A.transaction_type = 'OUT' and  A."period" = '2026-04' and A."month" <= :month
-        group by A.item_code) A
+        C.sum  cross_toncuoi from 
+        (select A.item_code , sum(A.quantity)  from cfr_cross_inventory A where
+        A.document_type in ('FG_PM', 'FG_MF') and A.report_type ='15a' and A."period" = '2026-04' and A.report_month = '2026-06' group by item_code) C
+        left join
+        (select A.item_code , sum(A.quantity) as crossqty_xuat  from cfr_cross_inout A where
+        customs_type_code = 'E42' and A.report_type = '15a' and A.transaction_type = 'OUT' and  A."period" = '2026-04' and A."month" <= '2026-06'
+        group by A.item_code) A on C.item_code = A.item_code 
         left join
         (select A.item_code , sum(A.quantity) as crossqty_xuat_fgpm  from cfr_cross_inout A where
-        customs_type_code = 'FG_PM' and A.report_type = '15a' and A.transaction_type  = 'OUT' and A."period" = '2026-04' and A."month" <= :month group by A.item_code) B
-        on A.item_code = B.item_code
-        left join
-        (select A.item_code , sum(A.quantity)  from cfr_cross_inventory A where
-        A.document_type in ('FG_PM', 'FG_MF') and A.report_type ='15a' and A."period" = '2026-04' and A.report_month =  :month group by item_code) C
-        on A.item_code = C.item_code) K
+        customs_type_code = 'FG_PM' and A.report_type = '15a' and A.transaction_type  = 'OUT' and A."period" = '2026-04' and A."month" <= '2026-06' group by A.item_code) B
+        on C.item_code = B.item_code) K
         on A.item_code = K.item_code
     """, nativeQuery = true)
     List<Map<String, Object>> getData15a(@Param("month") String month);
@@ -223,9 +224,9 @@ void deleteTransInventoryData( String month, String documentType, String reportN
     List<Map<String, Object>> checkExistedData(@Param("month") String month, @Param("reportName") String reportName);
 
     @Query(value = """
-     select A.* from (select A.document_type, A."month" , A.report_type , A.created_by, B.name, to_char(A.created_at , 'DD/MM/YYYY HH24:MI:SS') as datetime  from cfr_inventory_transaction A 
+     select A.* from (select A.document_type, A."month" , A.report_type , A.created_by, B.name, to_char(A.created_at , 'DD/MM/YYYY HH24:MI') as datetime  from cfr_inventory_transaction A 
     left join users B on A.created_by = B.username
-    ) A group by A.document_type, A."month" , A.report_type , A.created_by, A.datetime, A.name
+    ) A where A.report_type = :reportName group by A.document_type, A."month" , A.report_type , A.created_by, A.datetime, A.name
     order by A.report_type,A.document_type, A."month"
     """, nativeQuery = true)
     List<Map<String, Object>> getHisData(@Param("reportName") String reportName);

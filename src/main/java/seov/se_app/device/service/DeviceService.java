@@ -24,8 +24,6 @@ public class DeviceService {
     @Autowired
     private printExcelData printExcelData;
 
-    @Autowired
-    private SimpMessagingTemplate messagingTemplate;
     public Device createRequest(DeviceCreateRequest request){
         LocalDateTime now = LocalDateTime.now();
         Device device = deviceMapper.todevice(request);
@@ -41,26 +39,10 @@ public class DeviceService {
 
         return deviceRepository.save(device);
     }
-//
-//    public void getUser1() {
-//        List<User> list = userRepository.findAll();
-//        messagingTemplate.convertAndSend("/topic/users", list);
-//    }
-//
-//
     public List<Device> getDevices(DeviceGetRequest request){
         return deviceRepository.getDevices(request.getLocation(), request.getFromDate(), request.getToDate());
     }
-//    public User getUserid(Long username){
-//        return userRepository.findAllById(username);
-//    }
-//
-//    public List<User> getUserListCustom(String username){
-//        return userRepository.getUserListCustom(username);
-//    }
-//
-//
-//
+
     public Device deleteDevice(Long id) {
         Device device = deviceRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Not found"));

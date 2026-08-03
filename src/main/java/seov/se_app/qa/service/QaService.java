@@ -28,8 +28,6 @@ import java.util.Map;
 public class QaService {
 
     @Autowired
-    private SimpMessagingTemplate messagingTemplate;
-    @Autowired
     private IqcRlmDataRepository iqcRlmDataRepository;
     @Autowired
     private IqcRlmDataHisRepository iqcRlmDataHisRepository;

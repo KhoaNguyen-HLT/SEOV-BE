@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
+//import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import seov.se_app.pu.cfr.entity.CfrMaterial;
@@ -25,7 +25,7 @@ import java.util.*;
 @RequiredArgsConstructor
 public class CfrService {
 
-    private final SimpMessagingTemplate messagingTemplate;
+//    private final SimpMessagingTemplate messagingTemplate;
     private final CfrMaterialsRepository cfrMaterialsRepository;
     private final CfrOpenInventoryRepository cfrOpenInventoryRepository;
     private final CfrTransInventoryRepository cfrTransInventoryRepository;

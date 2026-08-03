@@ -21,8 +21,6 @@ import java.util.List;
 public class CfrTrans15aService {
 
     @Autowired
-    private SimpMessagingTemplate messagingTemplate;
-    @Autowired
     private CfrMaterialsRepository cfrMaterialsRepository;
     @Autowired
     private CfrOpenInventoryRepository cfrOpenInventoryRepository;

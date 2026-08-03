@@ -15,6 +15,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -25,6 +26,8 @@ import java.util.List;
     private final PmspShippingPlanDetailRepository pmpsShippingPlanDetailRepository;
     private final CompanyCalendarRepository companyCalendarRepository;
     private final PmspPurchaseOrderRepository pmspPurchaseOrderRepository;
+    private final PmspMaterialStandardRepository pmspMaterialStandardRepository;
+
     private final PmspPurchaseOrderAllocationRepository pmspPurchaseOrderAllocationRepository;
 
 
@@ -43,21 +46,23 @@ import java.util.List;
         List<PmpsShippingPlanDetail> details = new ArrayList<>();
 
         for (PmspMaterialRequirement materialRequirement : materialRequirements) {
-            LocalDate deliveryDate = companyCalendarRepository.getDeliveryDate(materialRequirement.getDemandDate(), "SP01");
+            String supplier = pmspMaterialStandardRepository.findSupplierByMaterialCode(materialRequirement.getMaterialCode());
+
+            LocalDate deliveryDate = companyCalendarRepository.getDeliveryDate(materialRequirement.getDemandDate(), supplier);
 
             PmpsShippingPlanDetail planDetail = new PmpsShippingPlanDetail();
             planDetail.setSpNo(spNo);
             planDetail.setMaterialCode(materialRequirement.getMaterialCode());
             planDetail.setNeedDate(materialRequirement.getDemandDate());
             planDetail.setDeliveryDate(deliveryDate);
-            planDetail.setSupplierCode("SP01");
+            planDetail.setSupplierCode(supplier);
             planDetail.setDeliveryQty(materialRequirement.getShippingQty());
 
             details.add(planDetail);
 
         }
         pmpsShippingPlanDetailRepository.saveAll(details);
-        allocate(spNo);
+//        allocate(spNo);
 
         return spNo;
 
@@ -152,5 +157,13 @@ import java.util.List;
     }
 
 
+    public List<Map<String, Object>> getShippingPlanData(String supplier, String date) {
+        return pmpsShippingPlanRepository.getShippingPlanData(date);
     }
+
+
+
+
+
+}
 

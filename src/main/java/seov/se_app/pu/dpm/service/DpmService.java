@@ -6,7 +6,7 @@ import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellReference;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
+//import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import seov.se_app.common.component.ExcelCellReader;
@@ -34,7 +34,7 @@ import java.util.Optional;
 public class DpmService {
 
     @Autowired
-    private SimpMessagingTemplate messagingTemplate;
+//    private SimpMessagingTemplate messagingTemplate;
     private final DpmGscmDataRepository dpmGscmDataRepository;
     private final DpmShippingPlanDataRepository dpmShippingPlanDataRepository;
     private final DataFormatter formatter = new DataFormatter();

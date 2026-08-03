@@ -29,6 +29,12 @@ public class PmspMaterialStandard extends BaseEntity{
     private String materialCode;
 
     /**
+     * supplier
+     */
+    @Column(name = "supplier", length = 100)
+    private String supplier;
+
+    /**
      * Tồn kho tối thiểu
      */
     @Column(name = "min_qty", nullable = false, precision = 18, scale = 3)
@@ -39,6 +45,31 @@ public class PmspMaterialStandard extends BaseEntity{
      */
     @Column(name = "max_qty", nullable = false, precision = 18, scale = 3)
     private BigDecimal maxQty;
+
+    /**
+     * MOQ
+     */
+    @Column(name = "moq", nullable = false, precision = 18, scale = 3)
+    private BigDecimal moq;
+
+
+    /**
+     * DSI
+     */
+    @Column(name = "dsi", nullable = false, precision = 18, scale = 3)
+    private BigDecimal dsi;
+
+    /**
+     * Min day
+     */
+    @Column(name = "min_day", nullable = false)
+    private Integer minDay;
+
+    /**
+     * max day
+     */
+    @Column(name = "max_day", nullable = false)
+    private Integer maxDay;
 
     /**
      * số ngày giao hàng

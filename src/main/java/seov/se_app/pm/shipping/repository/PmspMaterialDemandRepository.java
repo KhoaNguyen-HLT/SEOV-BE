@@ -16,11 +16,12 @@ public interface PmspMaterialDemandRepository extends JpaRepository<PmspMaterial
     /**
      * Lấy danh sách NVL có nhu cầu trong khoảng thời gian
      */
-    @Query("""
-            SELECT DISTINCT d.materialCode
-            FROM PmspMaterialDemand d
-            WHERE d.demandDate BETWEEN :fromDate AND :toDate
-           """)
+    @Query(value = """
+    select A.* from (SELECT DISTINCT d.material_code 
+      FROM pmsp_material_demand d
+      WHERE d.demand_date  BETWEEN :fromDate AND :toDate) A
+    inner join pmsp_material_standard B on A.material_code = B.material_code 
+    """, nativeQuery = true)
     List<String> findMaterialCodes(
             @Param("fromDate") LocalDate fromDate,
             @Param("toDate") LocalDate toDate
@@ -32,8 +33,8 @@ public interface PmspMaterialDemandRepository extends JpaRepository<PmspMaterial
      */
     List<PmspMaterialDemand> findByMaterialCodeAndDemandDateBetween(
             String materialCode,
-            LocalDate fromDate,
-            LocalDate toDate
+            @Param("fromDate") LocalDate fromDate,
+            @Param("toDate") LocalDate toDate
     );
 
 }

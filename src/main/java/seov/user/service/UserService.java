@@ -30,8 +30,8 @@ public class UserService {
     private UserRepository userRepository;
     @Autowired
     private UserMapper userMapper;
-    @Autowired
-    private SimpMessagingTemplate messagingTemplate;
+//    @Autowired
+//    private SimpMessagingTemplate messagingTemplate;
     private final DepartmentRepository departmentRepository;
     private final PositionRepository positionRepository;
     private final roleRepository roleRepository;
@@ -71,7 +71,7 @@ public class UserService {
 
     public void getUser1() {
         List<User> list = userRepository.findAll();
-        messagingTemplate.convertAndSend("/topic/users", list);
+//        messagingTemplate.convertAndSend("/topic/users", list);
     }
 
 

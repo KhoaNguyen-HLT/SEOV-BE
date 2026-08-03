@@ -79,6 +79,7 @@ import static seov.se_app.mf.enums.MaterialRequestStatus.SUBMITTED;
     @Transactional
     public MfMaterialRequest saveRequest(MaterialRequestSaveDto dto) {
         String zCodeString = null;
+        List<productRequest> productData  = dto.getProducts();
         if (dto.getDetails() == null || dto.getDetails().isEmpty()) {
             throw new RuntimeException("Chi tiết yêu cầu NVL không được trống");
         }
@@ -103,17 +104,33 @@ import static seov.se_app.mf.enums.MaterialRequestStatus.SUBMITTED;
 
         materialRequestRepository.save(request);
 
-        List<MaterialAnRequest> products = dto.getProducts().stream()
-                .map(item -> MaterialAnRequest.builder()
-                        .requestNo(requestNo)
-                        .unit(item.getUnit())
-                        .qty(item.getQty())
-                        .itemCode(item.getItemCode())
-                        .remark(item.getRemark())
-                        .build())
-                .toList();
 
-        materialAnRequestRepository.saveAll(products);
+        if(productData == null||productData.isEmpty()) {
+            if(dto.getProductionNumber() != null&&!dto.getProductionNumber().isEmpty())
+            {
+                MaterialAnRequest products = MaterialAnRequest.builder()
+                        .requestNo(requestNo)
+                        .qty(dto.getQtyRequest())
+                        .itemCode(dto.getProductionNumber())
+                        .remark(dto.getRemark())
+                        .build();
+                materialAnRequestRepository.save(products);
+            }
+
+        } else {
+            List<MaterialAnRequest> products = dto.getProducts().stream()
+                    .map(item -> MaterialAnRequest.builder()
+                            .requestNo(requestNo)
+                            .unit(item.getUnit())
+                            .qty(item.getQty())
+                            .itemCode(item.getItemCode())
+                            .remark(item.getRemark())
+                            .build())
+                    .toList();
+
+            materialAnRequestRepository.saveAll(products);
+        }
+
 
         List<MaterialRequestDetail> details = dto.getDetails().stream()
                 .map(item -> MaterialRequestDetail.builder()
@@ -202,7 +219,7 @@ import static seov.se_app.mf.enums.MaterialRequestStatus.SUBMITTED;
                                     bom.getCustomMode()
                             );
                             detail.setUnit(
-                                    bom.getEngUnit()
+                                    bom.getGscmEng()
                             );
                             detail.setQty(needQty);
                             return detail;

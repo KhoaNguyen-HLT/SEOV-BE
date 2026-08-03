@@ -1,7 +1,7 @@
 package seov.se_app.material.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
+//import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import seov.se_app.material.dto.request.MaterialRqNoRequest;
 import seov.se_app.material.entity.InventoryTransactionFlow;

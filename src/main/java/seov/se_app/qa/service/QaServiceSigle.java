@@ -24,8 +24,8 @@ import java.util.*;
 @Service
 public class QaServiceSigle {
 
-    @Autowired
-    private SimpMessagingTemplate messagingTemplate;
+//    @Autowired
+//    private SimpMessagingTemplate messagingTemplate;
     @Autowired
     private IqcRlmDataRepository iqcRlmDataRepository;
     @Autowired

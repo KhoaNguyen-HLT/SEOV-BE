@@ -13,5 +13,13 @@ import java.util.Optional;
 public interface PmspMaterialStandardRepository extends JpaRepository<PmspMaterialStandard, Long> {
 
     Optional<PmspMaterialStandard> findByMaterialCode(String materialCode);
+    @Query(value = """
+    SELECT supplier
+    FROM pmsp_material_standard
+    WHERE material_code = :materialCode
+    LIMIT 1
+    """, nativeQuery = true)
+    String findSupplierByMaterialCode(@Param("materialCode") String materialCode);
+
 
 }

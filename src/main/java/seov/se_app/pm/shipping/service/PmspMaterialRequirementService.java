@@ -14,6 +14,7 @@ import seov.se_app.pm.shipping.repository.PmspMaterialStandardRepository;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -29,89 +30,104 @@ public class PmspMaterialRequirementService {
     @Transactional
     public void calculateMaterialRequirement(
     ) {
-        LocalDate planDate = LocalDate.of(2026, 7, 17);
-        // Lấy danh sách NVL có nhu cầu trong khoảng thời gian kế hoạch
-        List<String> materialCodes =
-                materialDemandRepository
-                        .findMaterialCodes(
-                                planDate.plusDays(1),
-                                planDate.plusDays(90)
-                        );
+
+            LocalDate date = LocalDate.now();
+            LocalDate pDate = date.plusDays(90);
+
+        List<PmspMaterialRequirement> requirements = new ArrayList<>();
 
 
-        for (String materialCode : materialCodes) {
-            PmspMaterialStandard standard =
-                    pmspMaterialStandardRepository.findByMaterialCode(materialCode)
-                            .orElseThrow(() -> new RuntimeException("Material standard not found"));
-            BigDecimal minQty = standard.getMinQty();
-            BigDecimal maxQty = standard.getMaxQty();
-            Integer leadTime = standard.getLeadTime();
-            // 1. Lấy tồn đầu kỳ
-            BigDecimal stock =
-                    pmspIvtSnapshotRepository
-                            .findQuantityByMaterialCodeAndSnapshotDate(
-                                    materialCode
-                            );
-
-            if (stock == null) {
-//                stock = BigDecimal.ZERO;
-                continue;
-            }
-
-            // 2. Lấy nhu cầu theo ngày
-            List<PmspMaterialDemand> demands =
+            // Lấy danh sách NVL có nhu cầu trong khoảng thời gian kế hoạch
+            List<String> materialCodes =
                     materialDemandRepository
-                            .findByMaterialCodeAndDemandDateBetween(
-                                    materialCode,
-                                    planDate.plusDays(1),
-                                    planDate.plusDays(90)
+                            .findMaterialCodes(
+                                    date,pDate
                             );
 
-            // 3. Tính tồn chạy theo ngày
-            for (PmspMaterialDemand demand : demands) {
+//        xóa dữ liệu đã tính toán cũ.
+//            requirementRepository.deleteAllInBatch();
+        requirementRepository.truncateTable();
+
+            for (String materialCode : materialCodes) {
+                PmspMaterialStandard standard =
+                        pmspMaterialStandardRepository.findByMaterialCode(materialCode)
+                                .orElseThrow(() -> new RuntimeException("Material standard not found:" + materialCode ));
+                BigDecimal minQty = standard.getMinQty();
+                BigDecimal maxQty = standard.getMaxQty();
+//                Integer leadTime = standard.getLeadTime();
+                BigDecimal moq = standard.getMoq();
+                // 1. Lấy tồn đầu kỳ
+                BigDecimal stock =
+                        pmspIvtSnapshotRepository
+                                .findQuantityByMaterialCodeAndSnapshotDate(
+                                        materialCode
+                                );
+
+                if (stock == null) {
+//                stock = BigDecimal.ZERO;
+                    continue;
+                }
+
+                // 2. Lấy nhu cầu theo ngày
+                List<PmspMaterialDemand> demands =
+                        materialDemandRepository
+                                .findByMaterialCodeAndDemandDateBetween(
+                                        materialCode,
+                                        date,
+                                        pDate
+                                );
+
+                // 3. Tính tồn chạy theo ngày
+                for (PmspMaterialDemand demand : demands) {
 //             lấy tồn kho
-                BigDecimal openingQty = stock;
+                    BigDecimal openingQty = stock;
 //           lây gia tri can sản xuat
-                BigDecimal demandQty = demand.getDemandQty();
+                    BigDecimal demandQty = demand.getDemandQty();
 //           lay gia tri cuoi ngay
-                BigDecimal closingQty =
-                        openingQty.subtract(demandQty);
-                BigDecimal shippingQty = BigDecimal.ZERO;
+                    BigDecimal closingQty =
+                            openingQty.subtract(demandQty);
+                    BigDecimal shippingQty = BigDecimal.ZERO;
 
 //             nếu tồn cuối ngày mà < min
-                if (closingQty.compareTo(minQty) < 0) {
-                    shippingQty =
-                            maxQty.subtract(closingQty);
+                    if (closingQty.compareTo(minQty) < 0) {
+                        shippingQty =
+                                maxQty.subtract(closingQty);
 //              lam tron xuong de chia het cho moq
-                    shippingQty = shippingQty
-                            .divideToIntegralValue(BigDecimal.valueOf(80))
-                            .multiply(BigDecimal.valueOf(80));
+                        shippingQty = shippingQty
+                                .divideToIntegralValue(moq)
+                                .multiply(moq);
 
-                    closingQty = closingQty.add(shippingQty);
+                        closingQty = closingQty.add(shippingQty);
+                    }
+                    PmspMaterialRequirement requirement =
+                            new PmspMaterialRequirement();
+
+                    requirement.setDemandDate(
+                            demand.getDemandDate()
+                    );
+
+                    requirement.setMaterialCode(materialCode);
+
+                    requirement.setOpeningQty(openingQty);
+
+                    requirement.setDemandQty(demandQty);
+
+                    requirement.setClosingQty(closingQty);
+
+                    requirement.setShippingQty(shippingQty);
+                    requirement.setPlanDate(date);
+
+                    requirements.add(requirement);
+                    if (requirements.size() == 5000) {
+                        requirementRepository.saveAll(requirements);
+                        requirements.clear();
+                    }
+                    stock = closingQty;
+
                 }
-                PmspMaterialRequirement requirement =
-                        new PmspMaterialRequirement();
-
-                requirement.setDemandDate(
-                        demand.getDemandDate()
-                );
-
-                requirement.setMaterialCode(materialCode);
-
-                requirement.setOpeningQty(openingQty);
-
-                requirement.setDemandQty(demandQty);
-
-                requirement.setClosingQty(closingQty);
-
-                requirement.setShippingQty(shippingQty);
-
-                requirementRepository.save(requirement);
-
-                stock = closingQty;
-
-
             }
+        if (!requirements.isEmpty()) {
+            requirementRepository.saveAll(requirements);
         }
     }
 }

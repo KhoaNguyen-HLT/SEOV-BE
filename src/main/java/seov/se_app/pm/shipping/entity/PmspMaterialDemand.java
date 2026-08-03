@@ -38,4 +38,5 @@ public class PmspMaterialDemand extends BaseEntity{
     @Column(name = "pic", length = 50)
     private String pic;
 
+
 }

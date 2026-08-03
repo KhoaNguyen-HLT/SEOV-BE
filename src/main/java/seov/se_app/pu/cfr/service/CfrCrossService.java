@@ -26,8 +26,6 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class CfrCrossService {
 
-    @Autowired
-    private SimpMessagingTemplate messagingTemplate;
     private final CfrCrossInOutRepository cfrCrossInOutRepository;
     private final CfrCrossInventoryRepository cfrCrossInventoryRepository;
     private final ExcelCellReader excel;
@@ -292,7 +290,7 @@ public List<CfrCrossInventory> saveCrossIvtData(MultipartFile file, String docum
 
 
                 String itemCode = formatter.formatCellValue(row.getCell(1)).trim();
-                BigDecimal quantity =  excel.getFormulaBigDecimal(row.getCell(8), evaluator);
+                BigDecimal quantity =  excel.getFormulaBigDecimal(row.getCell(5), evaluator);
 
                 // skip row null or ZERO quantity number now
                 if (itemCode.isEmpty() || "End".equals(itemCode) || quantity == null
@@ -352,11 +350,16 @@ public List<CfrCrossInventory> saveCrossIvtData(MultipartFile file, String docum
                 }
 
                 String itemCode = formatter.formatCellValue(row.getCell(1)).trim();
-                BigDecimal quantity =  excel.getFormulaBigDecimal(row.getCell(9), evaluator);
+                BigDecimal quantity = Optional.ofNullable(
+                        excel.getFormulaBigDecimal(row.getCell(10), evaluator)
+                ).orElse(BigDecimal.ZERO);
+
+//                BigDecimal quantityH = Optional.ofNullable(
+//                        excel.getFormulaBigDecimal(row.getCell(7), evaluator)
+//                ).orElse(BigDecimal.ZERO);
 
                 // skip row null or ZERO quantity number now
-                if (itemCode.isEmpty() || "End".equals(itemCode) || quantity == null
-                        || quantity.compareTo(BigDecimal.ZERO) == 0) {
+                if (itemCode.isEmpty() || "End".equals(itemCode) || quantity.compareTo(BigDecimal.ZERO) == 0) {
                     continue;
                 }
 

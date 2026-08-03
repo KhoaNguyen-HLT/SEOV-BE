@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
+//import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import seov.se_app.andon.dto.request.*;
 import seov.se_app.andon.dto.respon.andonDataRespone;
@@ -40,8 +40,8 @@ public class AndonService {
     private JavaMailSender mailSender;
     @Autowired
     private EntityManager entityManager;
-    @Autowired
-    private SimpMessagingTemplate messagingTemplate;
+//    @Autowired
+//    private SimpMessagingTemplate messagingTemplate;
     private final JdbcTemplate jdbcTemplatesc;
     @Autowired
     private andonRepository andonRepository;

@@ -24,8 +24,8 @@ private MachineRepository machineRepository;
 private MachineDataRepository machineDataRepository;
 @Autowired
 public MachineMapper machineMapper;
-@Autowired
-private SimpMessagingTemplate messagingTemplate;
+//@Autowired
+//private SimpMessagingTemplate messagingTemplate;
 
     public Machines createMachine(MachineRequest request){
         Machines machine = machineMapper.toMachine(request);
@@ -34,17 +34,17 @@ private SimpMessagingTemplate messagingTemplate;
         return machineRepository.save(machine);
     }
 
-    public void GetMachineData(){
-        LocalDateTime today = LocalDate.now().atStartOfDay();
-        List<Map<String, Object>> list =  machineDataRepository.findMachinesDataByCreatedAt(today);
-        messagingTemplate.convertAndSend("/topic/users", list);
-    }
+//    public void GetMachineData(){
+//        LocalDateTime today = LocalDate.now().atStartOfDay();
+//        List<Map<String, Object>> list =  machineDataRepository.findMachinesDataByCreatedAt(today);
+//        messagingTemplate.convertAndSend("/topic/users", list);
+//    }
 
 
-    public void getDataTotal(){
-        List<Object[]> list =  machineDataRepository.getDataTotal();
-        messagingTemplate.convertAndSend("/topic/datatotal", list);
-    }
+//    public void getDataTotal(){
+//        List<Object[]> list =  machineDataRepository.getDataTotal();
+//        messagingTemplate.convertAndSend("/topic/datatotal", list);
+//    }
 
     public MachinesData addMachineData(){
         MachinesData machinesData = new MachinesData();
